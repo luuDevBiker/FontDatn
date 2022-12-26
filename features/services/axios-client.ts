@@ -1,0 +1,99 @@
+import axios from "axios";
+import { store } from "@/app/store";
+const https = require("https");
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+const storage =
+  typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
+let AccessToken = "";
+let RefreshToken = "";
+if (storage) {
+  let loginInfo = JSON.parse(storage);
+  if (loginInfo) {
+    AccessToken = loginInfo.Payload?.AccessToken;
+    RefreshToken = loginInfo.Payload?.RefreshToken;
+  }
+}
+
+const axiosClient = axios.create({
+  baseURL: "https://192.168.4.101:59219",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${
+      storage ? JSON.parse(storage).Payload?.AccessToken : null
+    }`,
+  },
+
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: false,
+  }),
+});
+
+axiosClient.interceptors.request.use(
+  function (config) {
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+axiosClient.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  async function (error) {
+    console.log("error ", error);
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      ///const response: IRefreshTokenResponse = (await userApi.userRefreshToken(refreshToken)).data;
+      // const response =  await store.dispatch(userRefreshToken( {RefreshToken:RefreshToken})    );
+      // let refreshTokenResult =  response.payload as IRefreshTokenResponse
+      // AccessToken = refreshTokenResult.AccessToken;
+      // RefreshToken = refreshTokenResult.RefreshToken;
+      // axios.defaults.headers.common['Authorization'] = 'Bearer ' + refreshTokenResult.AccessToken;
+      return axiosClient(originalRequest);
+    }
+    return Promise.reject(error);
+  }
+);
+
+const axiosClient2 = axios.create({
+  baseURL: "https://kpi-api.dpotech.vn",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${
+      storage ? JSON.parse(storage).Payload?.AccessToken : null
+    }`,
+  },
+});
+axiosClient2.interceptors.request.use(
+  function (config) {
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+axiosClient2.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  async function (error) {
+    console.log("error", error);
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      ///const response: IRefreshTokenResponse = (await userApi.userRefreshToken(refreshToken)).data;
+      // const response =  await store.dispatch(userRefreshToken( {RefreshToken:RefreshToken})    );
+      // let refreshTokenResult =  response.payload as IRefreshTokenResponse
+      // AccessToken = refreshTokenResult.AccessToken;
+      // RefreshToken = refreshTokenResult.RefreshToken;
+      // axios.defaults.headers.common['Authorization'] = 'Bearer ' + refreshTokenResult.AccessToken;
+      return axiosClient(originalRequest);
+    }
+    return Promise.reject(error);
+  }
+);
+
+export { axiosClient, axiosClient2 };
