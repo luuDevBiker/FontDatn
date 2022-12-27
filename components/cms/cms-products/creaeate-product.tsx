@@ -172,7 +172,6 @@ export const CreateProduct:NextPageWithLayout=()=>{
             setEditingKey('');
           }
         } catch (errInfo) {
-          console.log('Validate Failed:', errInfo);
         }
     };
 
@@ -263,7 +262,6 @@ export const CreateProduct:NextPageWithLayout=()=>{
 
     const  rowSelection = {
         onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
-          console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         },
         getCheckboxProps: (record: any) => ({
           disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -357,8 +355,6 @@ export const CreateProduct:NextPageWithLayout=()=>{
         }
         setGenerateCode(result.toUpperCase())
     }
-
-console.log(optionProduct,'s')    
    //#region Data Dynamic Product
     useEffect(()=>{
         if(optionProduct!==undefined){
@@ -457,11 +453,9 @@ console.log(optionProduct,'s')
    //#endregion
  
    const handleRemoveOptionsValue = (index:number) => {
-    console.log("lislistt",index)
 
     const list = [...dataProduct];
     list.splice(index, 1);
-     console.log("list",list)
 };  
 
     const handleOnsubmit=(record:any)=>{
@@ -470,26 +464,10 @@ console.log(optionProduct,'s')
             ...record,
             varian:[...dataProduct]
         }
-        console.log('value',payload)
-        
-        // const variant:IVariant={
-        //     barCode:'dsdsd',
-        //     price
-        // }
-        // const payload:IAddProduct={
-        //     productName:record.productName,
-        //     categoryId:'3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        //     decription:record.decription,
-        //     productId:'d',
-        //     varian
-        // }
         dispatch(addNewProduct(payload)).unwrap().then().then((res:any)=>{
-
         })
     }
-    console.log("product",dataProduct)
 
-   
     return(
         <WrapperCMSProduct>           
             <Form

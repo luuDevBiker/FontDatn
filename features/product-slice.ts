@@ -36,9 +36,9 @@ export const addNewProduct = createAsyncThunk(
 
 export const getProductDetails = createAsyncThunk(
   GET_DETAILS,
-  async (id: string, { rejectWithValue }) => {
+  async (obj: any, { rejectWithValue }) => {
     try {
-      const response = await productApi.getProductDetails(id);
+      const response = await productApi.getProductDetails(obj.id,obj.key);
       return response.data;
     } catch (err: any) {
       if (!err.response) {

@@ -55,7 +55,6 @@ export const Home: NextPageWithLayout = (prop) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log("Home Component");
     dispatch(getListProduct())
       .unwrap()
       .then()
@@ -63,7 +62,6 @@ export const Home: NextPageWithLayout = (prop) => {
         setData(res);
       });
   }, []);
-  console.log("Home data", initId);
   const handleHover = (value: any) => {
     setInitId(value.productId);
     setHover(false);
@@ -78,40 +76,13 @@ export const Home: NextPageWithLayout = (prop) => {
   };
   return (
     <div>
-      {/* <BoxSlider>
-                <Carousel autoplay>
-                    <WrapperImage>
-                        <BoxContent>
-                            <div>
-
-                            </div>
-                            <span>
-                                Choose a cute pet for you
-                            </span>
-                        </BoxContent>
-                        <img src={Carosel.src} width={'100%'} height={'700px'}></img> 
-                    </WrapperImage>
-                </Carousel>
-            </BoxSlider> */}
-
-      {/* <QuickShow
-                    Decription="Ok"
-                    Name="Ok"
-                    Price=""
-                    Tag=""
-                    changeActive={setOpenPopup(false)}
-                    handleAction={console.log(1)}
-                    
-            ></QuickShow> */}
       <ProductCategory />
-      {/* <Footer/> */}
-
       <Confirm
         buttonLeft={""}
         buttonRight={""}
         changeActive={(e: any) => setIsConfirm(e)}
         content={""}
-        handleAction={() => console.log(1)}
+        handleAction={() => {}}
         title={""}
         stateButton={false}
         wrapper={

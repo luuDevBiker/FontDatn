@@ -32,7 +32,6 @@ export const SignIn = () => {
   const dispatch = useAppDispatch();
 
   const onFinish = (values: any) => {
-    console.log(typeof values);
     let payload: IUserSignInPayload = { ...values };
     payload.remember = false;
     dispatch(userSignIn(payload))

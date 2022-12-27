@@ -95,8 +95,6 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
   const dispatch = useAppDispatch();
   const { loginInfo } = useAppSelector(selectUser);
   const handlerLogin = (Value: any) => {
-    console.log("Value", Value);
-
     let payload: any;
     dispatch(userSignIn(Value))
       .unwrap()
@@ -170,7 +168,6 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
             </MenuItemTop>
             {Object.keys(loginInfo).length > 0 ? (
               <div
-                onClick={() => console.log(loginInfo)}
               >{`Xin chào: ${loginInfo?.Profile?.DisplayName}`}</div>
             ) : (
               <Dropdown overlay={menu}>
@@ -192,7 +189,10 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
           {/* start search */}
           <StyleSearch>
             <Input
-              style={{border: '1px none none', borderRadius: '30px 0px 0px 30px'}}
+              style={{
+                border: "1px none none",
+                borderRadius: "30px 0px 0px 30px",
+              }}
               bordered={false}
               placeholder={"Nhập tên sản phẩm, từ khóa cần tìm kiếm"}
             />
@@ -229,7 +229,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
         buttonRight={""}
         changeActive={(e: any) => setIsConfirm(e)}
         content={""}
-        handleAction={() => console.log(1)}
+        handleAction={() => {}}
         title={""}
         stateButton={false}
         wrapper={

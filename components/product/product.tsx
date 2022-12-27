@@ -72,10 +72,8 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
       .then()
       .then((res) => {
         setData(res);
-        console.log("Product data 1", data);
       });
   }, []);
-  console.log("Product data 2", data);
   const handleHover = (value: any) => {
     setInitId(value.productId);
     setHover(false);
@@ -91,6 +89,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
   return (
     <div>
       <Row gutter={10}>
+        {/* left menu */}
         <Col span={4}>
           <LeftMenu>
             {listMenu.map((item, index) => (
@@ -103,6 +102,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
             ))}
           </LeftMenu>
         </Col>
+        {/* Slide show */}
         <Col span={14}>
           <Carousel effect="fade" autoplay>
             {ListCarousel.map((item, index) => (
@@ -126,6 +126,8 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
             </Col>
           </Row>
         </Col>
+
+        {/* Right */}
         <Col span={6}>
           <Row gutter={[15, 15]}>
             <Col span={24}>
@@ -158,65 +160,72 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
           </Row>
         </Col>
       </Row>
+
       <WrapperProductMain>
         <Row gutter={[20, 20]}>
           {data &&
-            data.Payload.map((item: any, index: number) => (
-              <Col span={6}>
-                <WraperProduct>
-                  <div className="image">
-                    <Image
-                      preview={false}
-                      className="img"
-                      src={
-                        "https://hanoicomputercdn.com/media/product/250_67192_demo_pcgm523_v4.jpg"
-                      }
-                    ></Image>
-                  </div>
-                  <div className="rate">
-                    <Rate allowHalf defaultValue={item.rate} />
-                    <div>{item.product_code}</div>
-                  </div>
-                  <div className="name">
-                    {item.Name.slice(0, 121).toUpperCase()}
-                  </div>
-                  <del className="del">
-                    {item.ProductVariants[0].Price.toLocaleString("vi")}
-                    <sup>đ</sup>
-                  </del>
-                  <span className="sale">
-                    &#10088;Tiết kiệm: {item.sale}%&#10089;
-                  </span>
-                  <div className="price">
-                    {item.ProductVariants[0].Price.toLocaleString("price")}
-                    <sup>đ</sup>
-                  </div>
-                  <div className="rate">
-                    <div style={{ color: "#2cc067", fontSize: "13px" }}>
-                      <CheckOutlined style={{ marginRight: "5px" }} />
-                      Còn hàng
+            data.Payload.map((item: any, index: number) => {
+              return item.ProductVariants.map((variant: any, index: number) => (
+                <Col span={6}>
+                  <WraperProduct>
+                    <div className="image">
+                      <Image
+                        preview={false}
+                        className="img"
+                        src={
+                          "https://hanoicomputercdn.com/media/product/250_67192_demo_pcgm523_v4.jpg"
+                        }
+                      ></Image>
                     </div>
-                    <ShoppingCartOutlined
-                      className="svg"
-                      style={{ fontSize: "16px" }}
-                    />
-                  </div>
-                  <ButtonAddtoCartCustom
-                    onClick={() => {
-                      if (typeof window !== "undefined") {
-                        localStorage.setItem("product", JSON.stringify(item));
-                      }
-                      router.push({
-                        pathname: `/product-details/${item.Id}`,
-                        query: { id: item.Id },
-                      });
-                    }}
-                  >
-                    Xem chi tiết sản phẩm
-                  </ButtonAddtoCartCustom>
-                </WraperProduct>
-              </Col>
-            ))}
+                    <div className="rate">
+                      <Rate allowHalf defaultValue={item.rate} />
+                      <div>{variant.Skuid}</div>
+                    </div>
+                    <div className="name">
+                      {item.Name.slice(0, 121).toUpperCase()}
+                    </div>
+                    <del className="del">
+                      {variant.Price.toLocaleString("vi")}
+                      <sup>đ</sup>
+                    </del>
+                    <span className="sale">
+                      &#10088;Tiết kiệm: {item.Sale ? item.Sale : 5}%&#10089;
+                    </span>
+                    <div className="price">
+                      {((variant.Price / 100) * 95).toLocaleString("price")}
+                      <sup>đ</sup>
+                    </div>
+                    <div className="rate">
+                      <div style={{ color: "#2cc067", fontSize: "13px" }}>
+                        <CheckOutlined style={{ marginRight: "5px" }} />
+                        {variant.Quantity == 0 ? "Hết hàng" : "Còn hàng"}
+                      </div>
+                      {/* button add to card */}
+                      <ShoppingCartOutlined
+                        onClick={() => {
+                          alert("Mua hang");
+                        }}
+                        className="svg"
+                        style={{ fontSize: "16px" }}
+                      />
+                    </div>
+                    <ButtonAddtoCartCustom
+                      onClick={() => {
+                        if (typeof window !== "undefined") {
+                          localStorage.setItem("product", JSON.stringify(item));
+                        }
+                        router.push({
+                          pathname: `/product-details/${item.Id}`,
+                          query: { id: item.Id, key: variant.Id },
+                        });
+                      }}
+                    >
+                      Xem chi tiết sản phẩm
+                    </ButtonAddtoCartCustom>
+                  </WraperProduct>
+                </Col>
+              ));
+            })}
         </Row>
       </WrapperProductMain>
     </div>

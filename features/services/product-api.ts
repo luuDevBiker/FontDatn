@@ -17,10 +17,10 @@ class ProductApi {
     });
   }
 
-  getProductDetails(id: string) {
+  getProductDetails(key: string, id: string) {
     return axiosClient({
       method: "get",
-      url: `msa-product/odata/Products(${id})`,
+      url: `msa-product/odata/Products(${key})/GetVariant(id=${id})`,
     });
   }
 }

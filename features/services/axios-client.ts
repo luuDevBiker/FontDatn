@@ -16,7 +16,7 @@ if (storage) {
 }
 
 const axiosClient = axios.create({
-  baseURL: "https://192.168.4.101:59219",
+  baseURL: "https://localhost:44321",
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${
@@ -42,16 +42,9 @@ axiosClient.interceptors.response.use(
     return response;
   },
   async function (error) {
-    console.log("error ", error);
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      ///const response: IRefreshTokenResponse = (await userApi.userRefreshToken(refreshToken)).data;
-      // const response =  await store.dispatch(userRefreshToken( {RefreshToken:RefreshToken})    );
-      // let refreshTokenResult =  response.payload as IRefreshTokenResponse
-      // AccessToken = refreshTokenResult.AccessToken;
-      // RefreshToken = refreshTokenResult.RefreshToken;
-      // axios.defaults.headers.common['Authorization'] = 'Bearer ' + refreshTokenResult.AccessToken;
       return axiosClient(originalRequest);
     }
     return Promise.reject(error);
@@ -80,16 +73,9 @@ axiosClient2.interceptors.response.use(
     return response;
   },
   async function (error) {
-    console.log("error", error);
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      ///const response: IRefreshTokenResponse = (await userApi.userRefreshToken(refreshToken)).data;
-      // const response =  await store.dispatch(userRefreshToken( {RefreshToken:RefreshToken})    );
-      // let refreshTokenResult =  response.payload as IRefreshTokenResponse
-      // AccessToken = refreshTokenResult.AccessToken;
-      // RefreshToken = refreshTokenResult.RefreshToken;
-      // axios.defaults.headers.common['Authorization'] = 'Bearer ' + refreshTokenResult.AccessToken;
       return axiosClient(originalRequest);
     }
     return Promise.reject(error);

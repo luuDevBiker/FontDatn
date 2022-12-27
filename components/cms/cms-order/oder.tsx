@@ -82,7 +82,6 @@ export const Oders=()=>{
     };
 
     const onChangeLimit = (checkedValues: CheckboxValueType[]) => {
-        console.log()
         if(checkedValues[0]==='LimitsTime'||checkedValues[1]==='LimitsTime'){
             setHide(true)
         }else{

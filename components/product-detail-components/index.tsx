@@ -55,21 +55,20 @@ import {
 } from "./ProductdetailStyled";
 import { BreadcrumbStyle } from "@/styles/DashBoardStyled";
 import { useRouter } from "next/router";
+import { stringify } from "querystring";
 
 export const ProductDetailComponents: NextPageWithLayout = (prop) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { productDetails } = useAppSelector(selectProduct);
 
-  const { id } = router.query;
-  const product = localStorage.getItem("product") ?? "";
+  const { key,id } = router.query;
   const [data, setData] = useState<any>();
   useEffect(() => {
-    dispatch(getProductDetails(id as string))
+    dispatch(getProductDetails({id,key}))
       .unwrap()
       .then()
       .then((res) => {
-        console.log(res);
         setData(res);
       });
   }, []);
@@ -132,7 +131,6 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                       <Col span={12}>
                         {data.Payload.ProductVariants[0].OptionValues.map(
                           (val: any, i: number) => {
-                            console.log("Kaka", val.Name);
                             if (i < 8) {
                               return (
                                 <li>
@@ -146,7 +144,6 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                       <Col span={12}>
                         {data.Payload.ProductVariants[0].OptionValues.map(
                           (val: any, i: number) => {
-                            console.log("Kaka", val.Name);
                             if (i > 8) {
                               return (
                                 <li>
