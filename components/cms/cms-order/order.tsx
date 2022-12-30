@@ -25,7 +25,7 @@ interface IAllValues{
     PhoneNumber: string | undefined;
   }
 
-export const Oders=()=>{
+export const Orders=()=>{
     const [value, setValue] = useState(1);
     const [note,setNote]=useState<string>('Khách hàng phải nhập mã thanh toán này khi thanh toán')
     const [title,setTitle]=useState<string>('Mã giảm giá')

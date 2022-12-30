@@ -189,7 +189,6 @@ export const CreateProduct:NextPageWithLayout=()=>{
         {
             dataIndex: 'stt',
             title: 'STT',
-            align:"center",
             width:60,
             render: (text:any, object:any, index:number) =>  index + 1
         },    

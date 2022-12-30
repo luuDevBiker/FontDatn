@@ -1,5 +1,5 @@
-import { Oders } from "@/components/cms/cms-order/oder";
-import { CmsOder } from "@/components/cms/cms-order/view-oder";
+import { Orders } from "@/components/cms/cms-order/order";
+import { CmsOder } from "@/components/cms/cms-order/view-order";
 import { CmsProduct } from "@/components/cms/cms-products/cms-product";
 import React, { useState } from "react";
 import { ProductDetail } from "../../../../components/home/product-detail";
@@ -14,7 +14,7 @@ const OderPages:NextPageWithLayout =()=>{
 
     return(
         <React.Fragment>
-            <Oders/>
+            <Orders/>
         </React.Fragment>
     )
 };

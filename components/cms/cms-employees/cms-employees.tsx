@@ -110,13 +110,13 @@ export const CmsEmployees: NextPageWithLayout = () => {
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
-        <h5>Sản phẩm</h5>
+        <h5>Nhân Viên</h5>
 
         <div>
-          {/* <ButtonExport type="default">
-                            <img src={ExportIcon.src} alt="" />
-                            <div>Export</div>              
-                        </ButtonExport> */}
+          <ButtonExport type="default">
+            <img src={ExportIcon.src} alt="" />
+            <div>Export</div>
+          </ButtonExport>
           <Button
             type="primary"
             size="large"
@@ -126,7 +126,7 @@ export const CmsEmployees: NextPageWithLayout = () => {
           </Button>
         </div>
       </HeadingTitle>
-      <div>Tất cả sản phẩm</div>
+      <div>Tất cả nhân viên</div>
       <div>
         <WrapProduct>
           <Table columns={columns} dataSource={data} />

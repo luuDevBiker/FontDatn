@@ -172,14 +172,14 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
                       <Image
                         preview={false}
                         className="img"
-                        src={
-                          "https://hanoicomputercdn.com/media/product/250_67192_demo_pcgm523_v4.jpg"
-                        }
+                        src={variant.Images[0].Url}
+                        width={270}
+                        height={320}
                       ></Image>
                     </div>
                     <div className="rate">
-                      <Rate allowHalf defaultValue={item.rate} />
-                      <div>{variant.Skuid}</div>
+                      <Rate allowHalf value={5.0} />
+                      <div>{variant.SkuId}</div>
                     </div>
                     <div className="name">
                       {item.Name.slice(0, 121).toUpperCase()}
@@ -189,14 +189,20 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
                       <sup>đ</sup>
                     </del>
                     <span className="sale">
-                      &#10088;Tiết kiệm: {item.Sale ? item.Sale : 5}%&#10089;
+                      &#10088;Tiết kiệm: {variant.Sale ? variant.Sale : 5}
+                      %&#10089;
                     </span>
                     <div className="price">
                       {((variant.Price / 100) * 95).toLocaleString("price")}
                       <sup>đ</sup>
                     </div>
                     <div className="rate">
-                      <div style={{ color: "#2cc067", fontSize: "13px" }}>
+                      <div
+                        style={{
+                          color: variant.Quantity == 0 ? "#d40d0d" : "#2cc067",
+                          fontSize: "13px",
+                        }}
+                      >
                         <CheckOutlined style={{ marginRight: "5px" }} />
                         {variant.Quantity == 0 ? "Hết hàng" : "Còn hàng"}
                       </div>

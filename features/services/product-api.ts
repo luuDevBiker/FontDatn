@@ -6,13 +6,13 @@ class ProductApi {
   getListProduct() {
     return axiosClient({
       method: "get",
-      url: "msa-product/api/Products",
+      url: "msa-product/odata/Products",
     });
   }
   addProduct(payload: IAddProduct) {
     return axiosClient({
       method: "post",
-      url: "/api/ProductDetails/Buss/pro",
+      url: "msa-product/odata/Products",
       data: payload,
     });
   }

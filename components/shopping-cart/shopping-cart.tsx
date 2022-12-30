@@ -19,8 +19,9 @@ import { Col, Row, Image, Space, Input, Button } from "antd";
 import IconVoucher from "@/assets/icon/teenyicons_discount-outline.svg";
 import { Confirm } from "../popup-confirm/confirm";
 import { useState } from "react";
-
+import { useRouter } from "next/router";
 export const ShoppingCart = () => {
+  const router = useRouter();
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
@@ -121,7 +122,7 @@ export const ShoppingCart = () => {
               </CartItem>
             </BoxBody>
           </Box>
-          <Button type="primary">{`< Quay lại mua hàng`}</Button>
+          <Button onClick={()=> router.push("/")} type="primary">{`< Quay lại mua hàng`}</Button>
         </Col>
         <Col span={8}>
           <WrapProduct>

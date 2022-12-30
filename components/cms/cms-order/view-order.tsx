@@ -99,7 +99,7 @@ export const CmsOder: NextPageWithLayout = () => {
           <Button
             type="primary"
             size="large"
-            onClick={() => router.push("/cms/cms-oder/oder-details")}
+            onClick={() => router.push("/cms/cms-order/order-details")}
           >
             +&nbsp;&nbsp;Tạo đơn hàng
           </Button>

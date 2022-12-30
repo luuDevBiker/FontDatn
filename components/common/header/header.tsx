@@ -95,7 +95,6 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
   const dispatch = useAppDispatch();
   const { loginInfo } = useAppSelector(selectUser);
   const handlerLogin = (Value: any) => {
-    let payload: any;
     dispatch(userSignIn(Value))
       .unwrap()
       .then((res: any) => {

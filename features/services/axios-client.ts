@@ -20,7 +20,7 @@ const axiosClient = axios.create({
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${
-      storage ? JSON.parse(storage).Payload?.AccessToken : null
+      storage ? JSON.parse(storage).AccessToken : null
     }`,
   },
 

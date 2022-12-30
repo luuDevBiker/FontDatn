@@ -76,9 +76,9 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
   return data != undefined && data ? (
     <ProductDetailWrapper>
       <BreadcrumbStyle>
+        <Breadcrumb.Item>{data.Payload.Brand}</Breadcrumb.Item>
+        <Breadcrumb.Item>{data.Payload.Categoty}</Breadcrumb.Item>
         <Breadcrumb.Item>{data.Payload.Name}</Breadcrumb.Item>
-        <Breadcrumb.Item>PC Gaming, Streaming</Breadcrumb.Item>
-        <Breadcrumb.Item>Máy Tính Chơi Game HACOM</Breadcrumb.Item>
       </BreadcrumbStyle>
       <ProductDetailContent>
         <TitleProduct level={4}>{data.Payload.Name}</TitleProduct>
@@ -87,7 +87,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
             <Row gutter={[16, 16]}>
               <Col span={10}>
                 <Image
-                  src="https://hanoicomputercdn.com/media/product/68083_pcgm_gaming_falcon_f08_10.jpg"
+                  src={data.Payload.ProductVariants[0].Images[0].Url}
                   height={300}
                   width={"100%"}
                 />
@@ -95,13 +95,12 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                   grid={{
                     gutter: 10,
                   }}
-                  dataSource={ListImageDetail}
+                  dataSource={data.Payload.ProductVariants[0].Images}
                   renderItem={(item: any, index) => (
                     <ListItemImage key={index}>
                       <Card>
                         <Image
-                          preview={false}
-                          src={item.image}
+                          src={item.Thumbnail}
                           height={90}
                           width={90}
                         />
@@ -134,7 +133,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                             if (i < 8) {
                               return (
                                 <li>
-                                  {val.Name}: {val.Value}
+                                  <b>{val.Name}:</b> {val.Value}
                                 </li>
                               );
                             }
@@ -147,7 +146,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                             if (i > 8) {
                               return (
                                 <li>
-                                  {val.Name}: {val.Value}
+                                  <b>{val.Name}:</b> {val.Value}
                                 </li>
                               );
                             }
@@ -183,7 +182,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                     </StylePriceItem>
                   </StylePrice>
                   <Typography.Text style={{ color: "red" }}>
-                    Tặng thẻ Viettel 50.000đ tại SR HBT, Đống Đa, Hoàn Kiếm
+                    Tặng thẻ Viettel 50.000đ tại FComputer Phố Trịnh Văn Bô
                     (THEK439) từ nay đến khi hết quà tặng
                   </Typography.Text>
                   <CardGift
@@ -217,7 +216,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                       </li>
                       <li>
                         <span className="color-red">
-                          GIAO HÀNG 2H – HACOM FASTER
+                          GIAO HÀNG 2H – FComputer
                         </span>{" "}
                         (trừ ghế, bàn, màn chiếu). Chi tiết xem tại đây.
                       </li>

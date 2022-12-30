@@ -1,5 +1,5 @@
 import { CmsProduct } from "@/components/cms/cms-products/cms-product";
-import { CreateProduct } from "@/components/cms/cms-products/creaeate-product";
+import { CreateProduct } from "@/components/cms/cms-products/create-product";
 import React, { useState } from "react";
 
 import { MainLayoutHome } from "../../../../components/layout/main-layout/main-layout";

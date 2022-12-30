@@ -69,29 +69,8 @@ export const CmsProduct: NextPageWithLayout = () => {
       },
       {
         title: "Sản phẩm",
-        dataIndex: "productName",
-      },
-      {
-        title: "Loại",
-        dataIndex: "type",
-      },
-      {
-        title: "Nhãn hiệu",
-        dataIndex: "brand",
-      },
-      {
-        title: "Có thể bán",
-        dataIndex: "sales",
-      },
-      {
-        title: "Trạng thái",
-        dataIndex: "status",
-      },
-      {
-        title: "Ngày nhập",
-        dataIndex: "creatAt",
-        render: (text: string) => moment(text).format("DD/MM/YYYY"),
-      },
+        dataIndex: "Name",
+      }
     ],
     []
   );
@@ -101,23 +80,9 @@ export const CmsProduct: NextPageWithLayout = () => {
       .unwrap()
       .then()
       .then((res: any) => {
-        setData(res);
+        setData(res.Payload);
       });
   }, []);
-
-  // const data: DataType[] = [];
-  // for (let i = 0; i < 46; i++) {
-  //     data.push({
-  //         key: i,
-  //         image: `London, Park Lane no. ${i}`,
-  //         product: `Sản phẩm` + i,
-  //         type: `Áo`,
-  //         brand: `Gucci`,
-  //         sales: `London, Park Lane no. ${i}`,
-  //         status: `Đang bán`,
-  //         import: `20/01/2002`,
-  //     });
-  // }
 
   return (
     <WrapperCMSProduct>
@@ -139,7 +104,7 @@ export const CmsProduct: NextPageWithLayout = () => {
         </div>
       </HeadingTitle>
       <WrapProduct>
-        <div>Tất cả sản phẩm</div>
+        <div>Tất cả sản phẩm hiện có</div>
         <div>
           <Table
             rowSelection={rowSelection}
