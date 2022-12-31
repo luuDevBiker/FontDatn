@@ -59,8 +59,6 @@ export const Home: NextPageWithLayout = (prop) => {
       .unwrap()
       .then()
       .then((res) => {
-        console.log(res.Payload);
-        
         setData(res);
       });
   }, []);

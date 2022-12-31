@@ -71,10 +71,12 @@ export const CreateProduct: NextPageWithLayout = () => {
   //#endregion
 
   //#region state prevew images
+  const [indexImgs, setIndexImgs] = useState(0);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [Images, setImages] = useState<any>([]);
   //#endregion
 
   const handleCancel = () => setPreviewOpen(false);
@@ -94,8 +96,62 @@ export const CreateProduct: NextPageWithLayout = () => {
       file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
     );
   };
-  //#endregion
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
+    setFileList(newFileList);
+  const uploadFile = (options: any) => {
+    const { onSuccess, onError, file } = options;
+    if (file) {
+      let formData = new FormData();
+      let files = file;
+      formData.append("media", files);
+      formData.append("key", "000027c23a82224c791a5fa2f82e5c9a");
+      axios
+        .post("https://thumbsnap.com/api/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then(async (res) => {
+          console.log(res);
 
+          let dataImg = res.data.data;
+          if (res.status == 200) {
+            const fileImage: UploadFile = {
+              uid: dataImg.id,
+              name: file.fileName,
+              status: "done",
+              url: dataImg.media,
+            } as UploadFile;
+            await setImageWithIndex(fileImage);
+          } else {
+            message.error({
+              content: "Thêm ảnh lỗi",
+              className: "erroNotFound-class",
+              style: {
+                marginTop: "3vh",
+              },
+            });
+          }
+        });
+    }
+  };
+
+  const setImageWithIndex = (prop: UploadFile) => {
+    if (indexImgs + 1 > Images.length) {
+      let images = [...Images, [prop]];
+      setImages([...images]);
+      setFileList([...fileList, prop]);
+    } else {
+      let images = Images;
+      images[indexImgs] = [...images[indexImgs], prop];
+      setImages(images);
+      setFileList([...fileList, prop]);
+    }
+  };
+
+  const setIndex = (index: number) => {
+    Images[index] === undefined ? setFileList([]) : setFileList(Images[index]);
+    setIndexImgs(index);
+  };
+  //#endregion
   //#region Utilities method
 
   const string2 = moment().format("DD/MM/YY");
@@ -103,7 +159,6 @@ export const CreateProduct: NextPageWithLayout = () => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   //#endregion
-
   //#region Chuyển tiếng việt qua tiếng anh
   function removeVietnameseTones(str: string) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -137,17 +192,22 @@ export const CreateProduct: NextPageWithLayout = () => {
     return str;
   }
   //#endregion
-
   //#region Custom methood
-
   const handleOnsubmit = (payload: any) => {
-    payload.Options = listOption;    dispatch(addNewProduct(payload))
+    payload.Options = listOption;
+    payload.ProductVariants.map((el: any, index: number) => {
+      el.Images = Images[index];
+    });
+    console.log(payload);
+
+    dispatch(addNewProduct(payload))
       .unwrap()
       .then()
       .then((res: any) => {});
   };
   //#region Options
   const addNewOptions = () => {
+    form.setFieldsValue({ InputOptionName: "" });
     var displayOrder = listOption.length;
     setListOption([
       ...listOption,
@@ -165,15 +225,12 @@ export const CreateProduct: NextPageWithLayout = () => {
     setListOption(list);
   };
   //#endregion
-
   //#region Variant
   const onCreateVariant = () => {
     setIsProductVriant(true);
   };
   //#endregion
-
   //#endregion
-
   //#region UseEffect
   useEffect(() => {}, []);
   //#endregion
@@ -259,8 +316,9 @@ export const CreateProduct: NextPageWithLayout = () => {
                   <WrapperOptions>
                     <OptionWrapp>
                       <div className="border">
-                        <Form.Item label="Tên thuộc tính" name={"OptionName"}>
+                        <Form.Item label="Tên thuộc tính">
                           <Input
+                            name={"InputOptionName"}
                             value={option}
                             onChange={onChangeInputOptionName}
                             placeholder="Hãy nhập tên thuộc tính : ( Ram, CPU, MainBoard...) "
@@ -380,18 +438,25 @@ export const CreateProduct: NextPageWithLayout = () => {
                               );
                             }}
                           </Form.List>
-                          <WrapProduct>
+                          <WrapProduct key={key} onClick={() => setIndex(key)}>
                             <div className="title">Media</div>
                             <BoxMedia>
                               <Upload
+                                onPreview={handlePreview}
+                                onChange={handleChange}
+                                fileList={
+                                  indexImgs == key ? fileList : Images[key]
+                                }
                                 listType="picture-card"
+                                customRequest={uploadFile}
+                                className="upload-list-inline"
+                                name="file"
+                                multiple
                               >
-                                {fileList[key].length >= 1 ? null : (
-                                  <div>
-                                    <PlusOutlined />
-                                    <div style={{ marginTop: 8 }}>Upload</div>
-                                  </div>
-                                )}
+                                <div>
+                                  <PlusOutlined />
+                                  <div style={{ marginTop: 8 }}>Upload</div>
+                                </div>
                               </Upload>
                               <Modal
                                 open={previewOpen}

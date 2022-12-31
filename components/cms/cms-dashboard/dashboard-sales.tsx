@@ -95,7 +95,6 @@ export const DashboardSales:NextPageWithLayout=()=>{
         const evt = this.context.event;
   
         if (evt.data) {
-          // items: 数组对象，当前 tooltip 显示的每条内容
           const { items } = evt.data;
           const pointGeometries = view.geometries.filter((geom) => geom.type === 'point');
           each(pointGeometries, (pointGeometry) => {

@@ -57,9 +57,7 @@ export const CreateEmployees: NextPageWithLayout = () => {
       .then()
       .then((res: any) => {
         message.success({
-          // content: t("EntityNotFoundException"),
           content: "Tạo mới nhân viên thành công",
-          // content: localization.wh,
           className: "erroNotFound-class",
           style: {
             marginTop: "3vh",
@@ -133,17 +131,8 @@ export const CreateEmployees: NextPageWithLayout = () => {
             scrollToFirstError
           >
             <WrapProduct>
-              <Form.Item label="Họ tên" name={"fullname"}>
-                <Input placeholder="Họ tên" />
-              </Form.Item>
-              <Form.Item label="Username" name={"userName"}>
-                <Input placeholder="Username" />
-              </Form.Item>
               <Form.Item label="Password" name={"passWord"}>
                 <Input placeholder="Password" />
-              </Form.Item>
-              <Form.Item label="Email" name={"email"}>
-                <Input placeholder="Email" />
               </Form.Item>
               <Form.Item label="Số điện thoại" name={"phoneNumber"}>
                 <Input placeholder="Số điện thoại" />

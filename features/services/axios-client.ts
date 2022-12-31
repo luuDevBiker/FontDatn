@@ -19,9 +19,7 @@ const axiosClient = axios.create({
   baseURL: "https://localhost:44321",
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${
-      storage ? JSON.parse(storage).AccessToken : null
-    }`,
+    Authorization: `Bearer ${storage ? JSON.parse(storage).AccessToken : null}`,
   },
 
   httpsAgent: new https.Agent({

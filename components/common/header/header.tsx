@@ -53,7 +53,7 @@ import Logo_Computer from "../../../assets/images/F-Computer.png";
 import { Confirm } from "@/components/popup-confirm/confirm";
 import { WrapperSigin } from "@/styles/AuthStyled";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { userSignIn } from "@/features/user-slice";
+import { userSignIn, logout } from "@/features/user-slice";
 import { selectUser } from "@/features/user-slice";
 function getItem(
   label: React.ReactNode,
@@ -93,7 +93,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
   const router = useRouter();
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const { loginInfo } = useAppSelector(selectUser);
+  const { loginInfo }: any = useAppSelector(selectUser);
   const handlerLogin = (Value: any) => {
     dispatch(userSignIn(Value))
       .unwrap()
@@ -101,13 +101,23 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
         router.push("/");
       });
   };
-
   const handleOpenPopup = () => {
     setIsConfirm(true);
+  };
+  const onHandleLoguot = () => {
+    dispatch(logout())
+      .unwrap()
+      .then((res: any) => {
+        router.push("/");
+      });
   };
   const onClick: MenuProps["onClick"] = (e) => {
     router.push(e.key);
   };
+  console.log();
+
+  const storage =
+    typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
   const menu = (
     <Menu style={{ width: 200 }}>
       <Menu.Item
@@ -131,6 +141,21 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
         onClick={handleOpenPopup}
       >
         Đăng nhập
+      </Menu.Item>
+    </Menu>
+  );
+  const userLogined = (
+    <Menu style={{ width: 200 }}>
+      <Menu.Item
+        style={{
+          backgroundColor: "#fdd835",
+          textAlign: "center",
+          fontWeight: 600,
+          margin: "5px 20px 10px",
+        }}
+        onClick={onHandleLoguot}
+      >
+        Đăng xuất
       </Menu.Item>
     </Menu>
   );
@@ -166,8 +191,13 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
               Khuyễn mại
             </MenuItemTop>
             {Object.keys(loginInfo).length > 0 ? (
-              <div
-              >{`Xin chào: ${loginInfo?.Profile?.DisplayName}`}</div>
+              <Dropdown overlay={userLogined}>
+                <div>
+                  {" "}
+                  <UserOutlined />
+                  {`Xin chào: ${loginInfo.Profile?.DisplayName}`}
+                </div>
+              </Dropdown>
             ) : (
               <Dropdown overlay={menu}>
                 <div>

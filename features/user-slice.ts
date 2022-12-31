@@ -1,10 +1,16 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import userApi from "./services/user-api";
 import type { RootState } from "@/app/store";
-import { ICreateEmployees, IUserSignInPayload } from "@/models/user";
-
+import {
+  IInitialUserState,
+  ILoginResponse,
+  IRegisterResponse,
+  ICreateEmployees,
+  IUserSignInPayload,
+} from "@/models/user";
 export const USER_SIGNIN: string = "auth/signin";
 export const USER_SLICE_NAME: string = "user";
+export const LOGOUT = 'user/logout'
 export const CREATEEMPLOYEES: string = "create_employees";
 export const GET_CONFIGURATION: string = "configuration/get-configuration";
 
@@ -22,7 +28,9 @@ export const userSignIn = createAsyncThunk(
     }
   }
 );
-
+export const logout = createAsyncThunk(LOGOUT, async () => {
+  return true
+})
 export const createEmployees = createAsyncThunk(
   CREATEEMPLOYEES,
   async (payload: ICreateEmployees, { rejectWithValue }) => {
@@ -52,9 +60,22 @@ export const getConfigurations = createAsyncThunk(
   }
 );
 
-const initialState = {
-  loginInfo: {},
+const storage =
+  typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
+const initialState: IInitialUserState = {
+  loginInfo: storage
+    ? (JSON.parse(storage) as ILoginResponse)
+    : ({} as ILoginResponse),
+  register: {} as IRegisterResponse,
+  sendOtp: {} as ILoginResponse,
+  otp: null,
+  loading: false,
+  error: false,
+  newRefreshToken: {} as ILoginResponse,
+  isAuthentication: storage ? true : false,
+  token:""
 };
+
 const userSlice = createSlice({
   name: USER_SLICE_NAME,
   initialState,
@@ -67,31 +88,39 @@ const userSlice = createSlice({
         //   state.loading = true;
       })
       .addCase(userSignIn.fulfilled, (state, { payload }) => {
-        //   state.loading = false;
-        //   state.loginInfo = payload as ILoginResponse;
-        //   state.isAuthentication = true;
+          state.loading = false;
+          state.loginInfo = payload as ILoginResponse;
+          state.isAuthentication = true;
         if (typeof window !== "undefined") {
           localStorage.setItem("u", JSON.stringify(payload));
         }
         state.loginInfo = payload;
-        //   state.token=payload.Token
+          state.token=payload.Token
       })
       .addCase(userSignIn.rejected, (state, { payload }) => {
-        //   state.loading = false;
-        //   state.error = true;
-        //   state.token=payload as ILoginResponseNotActive
+          state.loading = false;
+          state.error = true;
       })
 
       .addCase(getConfigurations.pending, (state) => {
-        //   state.loading = true;
+          state.loading = true;
       })
       .addCase(getConfigurations.fulfilled, (state, { payload }) => {
-        //   state.loading = false;
-        //   state.loginInfo = payload as ILoginResponse;
-        //   state.isAuthentication = true;
-        //   state.token=payload.Token
+          state.loading = false;
+          state.loginInfo = payload as ILoginResponse;
+          state.isAuthentication = true;
+          state.token=payload.Token
+      })
+      .addCase(logout.fulfilled, (state, { payload }) => {
+        state.isAuthentication = false;
+        state.loading = false;
+        state.loginInfo = {} as ILoginResponse;
+        if (typeof window !== 'undefined') {
+          localStorage.clear()
+        }
       })
       .addCase(getConfigurations.rejected, (state, { payload }) => {});
+      
   },
 });
 
