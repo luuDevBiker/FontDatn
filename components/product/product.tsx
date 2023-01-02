@@ -47,6 +47,7 @@ import { SP } from "next/dist/shared/lib/utils";
 import { useAppDispatch } from "@/app/hooks";
 import { getListProduct } from "@/features/product-slice";
 import { Footer } from "../footer/footer";
+import { IProduct } from "@/models/product";
 import {
   ButtonAddtoCartCustom,
   LeftMenu,
@@ -63,7 +64,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [initId, setInitId] = useState<string>("");
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<IProduct[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -71,7 +72,8 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
       .unwrap()
       .then()
       .then((res) => {
-        setData(res);
+        setData(res.Payload as IProduct[]);
+        console.log(res.Payload as IProduct[]);
       });
   }, []);
   const handleHover = (value: any) => {
@@ -164,7 +166,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
       <WrapperProductMain>
         <Row gutter={[20, 20]}>
           {data &&
-            data.Payload.map((item: any, index: number) => {
+            data.map((item: any, index: number) => {
               return item.ProductVariants.map((variant: any, index: number) => (
                 <Col span={6}>
                   <WraperProduct>
@@ -178,7 +180,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
                       ></Image>
                     </div>
                     <div className="rate">
-                      <Rate allowHalf value={5.0} />
+                      <Rate allowHalf disabled value={variant.Rate}/>
                       <div>{variant.SkuId}</div>
                     </div>
                     <div className="name">
@@ -188,10 +190,14 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
                       {variant.Price.toLocaleString("vi")}
                       <sup>đ</sup>
                     </del>
-                    <span className="sale">
-                      &#10088;Tiết kiệm: {variant.Sale ? variant.Sale : 5}
-                      %&#10089;
-                    </span>
+                    {variant.Sale > 0 ? (
+                      <span className="sale">
+                        &#10088;Tiết kiệm: {variant.Sale ? variant.Sale : 5}
+                        %&#10089;
+                      </span>
+                    ) : (
+                      <></>
+                    )}
                     <div className="price">
                       {((variant.Price / 100) * 95).toLocaleString("price")}
                       <sup>đ</sup>

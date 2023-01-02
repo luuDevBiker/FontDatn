@@ -1,27 +1,38 @@
-export interface IAddProduct{
-    productId:string,
-    productName:string,
-    decription:string,
-    categoryId:string,
-    // creatAt:string,
-    // modifiedAt:string,
-    varian:[IVariant],
-}
-export interface IVariant{
-    productVariantId:string,
-    productId:string,
-    productVariantName:string,
-    barCode:string,
-    quantity:string,
-    sku:string,
-    price:string,
-    importPrice:string,
-    createAt:string,
-    modifiedAt:string,
-    option:[IOption],
+import type { UploadFile } from "antd/es/upload/interface";
 
+export interface IProduct {
+  Id: String;
+  Name: String;
+  Description: String;
+  Category: String;
+  Brand: String;
+  Options: [IOption];
+  ProductVariants: [IVariant];
 }
-export interface IOption{
-    optionsName:string,
-    optionValue:string
+export interface IVariant {
+  Id: String;
+  ProductId: String;
+  Price: Number;
+  ImportPrice: Number;
+  Images: [IImage];
+  OptionValues:[IOptionValue]
+}
+export interface IOption {
+  DisplayOrder: Number;
+  Name: String;
+}
+export interface IImage {
+  Uid:String;
+  Name:String;
+  Url: String;
+  Status:String;
+}
+export interface IOptionValue {
+    Id: String;
+    OptionId: String;
+    ProductVariantId: String;
+    Name: String;
+    Value: String;
+    DisplayOrder: Number;
+    IsDeleted: Boolean;
 }

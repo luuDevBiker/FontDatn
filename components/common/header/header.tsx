@@ -55,6 +55,8 @@ import { WrapperSigin } from "@/styles/AuthStyled";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { userSignIn, logout } from "@/features/user-slice";
 import { selectUser } from "@/features/user-slice";
+import jwt_decode from "jwt-decode";
+
 function getItem(
   label: React.ReactNode,
   key: React.Key,
@@ -98,7 +100,16 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
     dispatch(userSignIn(Value))
       .unwrap()
       .then((res: any) => {
-        router.push("/");
+        var tokeDecode: any = jwt_decode(res.AccessToken);
+        let role =
+          tokeDecode[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          ];
+        if (role === "Users") {
+          router.push("/");
+        } else {
+          router.push("/cms/cms-dashboard");
+        }
       });
   };
   const handleOpenPopup = () => {
@@ -111,10 +122,6 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
         router.push("/");
       });
   };
-  const onClick: MenuProps["onClick"] = (e) => {
-    router.push(e.key);
-  };
-  console.log();
 
   const storage =
     typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
@@ -159,13 +166,28 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
       </Menu.Item>
     </Menu>
   );
+  useEffect(() => {
+    // if (storage) {
+    //   let user = JSON.parse(storage);
+    //   let tokeDecode: any = jwt_decode(user.AccessToken);
+    //   let role =
+    //     tokeDecode[
+    //       "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+    //     ];
+    //   if (role === "Users") {
+    //     router.push("/");
+    //   } else {
+    //     router.push("/cms/cms-dashboard");
+    //   }
+    // }
+  },[]);
   return (
     <React.Fragment>
       <HeaderWrapper className="site-layout-background" style={{ padding: 0 }}>
         <HeaderTop>
           <HeaderItem>
             <MenuItemTop>
-              <PhoneOutlined /> + 0125.134.555
+              <PhoneOutlined /> +84 344 029 828
             </MenuItemTop>
             <MenuItemTop>
               <MenuItemAnimate>Khách cá nhân</MenuItemAnimate>

@@ -13,34 +13,21 @@ import { useRouter } from "next/router";
 import { useAppDispatch } from "@/app/hooks";
 import { getListProduct } from "@/features/product-slice";
 import moment from "moment";
+import Modal from "antd/lib/modal/Modal";
+import EditProduct from "./cms-products-modals/edit-product";
+import { IProduct } from "@/models/product";
 
-interface DataType {
-  key: React.Key;
-  image: string;
-  product: string;
-  type: string;
-  brand: string;
-  sales: string;
-  status: string;
-  import: string;
-}
 export const CmsProduct: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>();
-
-  const start = () => {
-    setLoading(true);
-    // ajax request after empty completing
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
-  };
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [detail, setDetail] = useState<IProduct>({} as IProduct);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    console.log(newSelectedRowKeys);
+
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -48,32 +35,41 @@ export const CmsProduct: NextPageWithLayout = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const hasSelected = selectedRowKeys.length > 0;
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
 
-  const columns: ColumnsType<DataType> = useMemo(
-    () => [
-      {
-        title: "Ảnh",
-        dataIndex: "image",
-        render: () => (
-          <React.Fragment>
-            <Image
-              preview={false}
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"
-              alt=""
-              width={"35px"}
-              height={"100%"}
-            />
-          </React.Fragment>
-        ),
-      },
-      {
-        title: "Sản phẩm",
-        dataIndex: "Name",
-      }
-    ],
-    []
-  );
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const columns = [
+    {
+      title: "Sản phẩm",
+      dataIndex: "Name",
+      editTable: true,
+      key:"Name"
+    },
+    {
+      title: "Hãng",
+      dataIndex: "Brand",
+      key:"Brand"
+    },
+    {
+      title: "Loại sản phẩm",
+      dataIndex: "Category",
+      key:"Category"
+    },
+    {
+      title: "Mô tả",
+      dataIndex: "Description",
+      key:"Description"
+    },
+  ];
 
   useEffect(() => {
     dispatch(getListProduct())
@@ -107,11 +103,27 @@ export const CmsProduct: NextPageWithLayout = () => {
         <div>Tất cả sản phẩm hiện có</div>
         <div>
           <Table
+            rowKey={(record) => record.Id}
             rowSelection={rowSelection}
             columns={columns}
             dataSource={data}
+            onRow={(r) => ({
+              onClick: () => {
+                setIsModalOpen(true);
+                setDetail(r);
+              },
+            })}
           />
         </div>
+        <Modal
+          title="Chi tiết sản phẩm"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={"90%"}
+        >
+          <EditProduct {...detail}/>
+        </Modal>
       </WrapProduct>
     </WrapperCMSProduct>
   );
