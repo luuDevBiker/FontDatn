@@ -25,7 +25,15 @@ const props: UploadProps = {
     if (status !== "uploading") {
     }
     if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
+      message.success({
+        // content: t("EntityNotFoundException"),
+        content: "Đăng nhập thành công",
+        // content: localization.wh,
+        className: "erroNotFound-class",
+        style: {
+          marginTop: "3vh",
+        },
+      });
     } else if (status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }

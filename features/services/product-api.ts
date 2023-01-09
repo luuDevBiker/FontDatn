@@ -1,4 +1,4 @@
-import { IAddProduct } from "@/models/product";
+import { IProduct } from "@/models/product";
 import { axiosClient } from "./axios-client";
 
 class ProductApi {
@@ -9,14 +9,20 @@ class ProductApi {
       url: "msa-product/odata/Products",
     });
   }
-  addProduct(payload: IAddProduct) {
+  addProduct(payload: IProduct) {
     return axiosClient({
       method: "post",
       url: "msa-product/odata/Products",
       data: payload,
     });
   }
-
+  updateProduct(id:any,payload: IProduct) {
+    return axiosClient({
+      method: "put",
+      url: `/msa-product/odata/Products(${id})`,
+      data: payload,
+    });
+  }
   getProductDetails(key: string, id: string) {
     return axiosClient({
       method: "get",

@@ -43,8 +43,7 @@ export const ShoppingCart = () => {
                       preview={false}
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"
                       alt=""
-                      width={"100%"}
-                      height={"83%"}
+                      height={"70%"}
                     />
                   </Col>
                   <Col span={8}>
@@ -71,8 +70,7 @@ export const ShoppingCart = () => {
                       preview={false}
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"
                       alt=""
-                      width={"100%"}
-                      height={"83%"}
+                      height={"70%"}
                     />
                   </Col>
                   <Col span={8}>
@@ -99,8 +97,7 @@ export const ShoppingCart = () => {
                       preview={false}
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"
                       alt=""
-                      width={"100%"}
-                      height={"83%"}
+                      height={"70%"}
                     />
                   </Col>
                   <Col span={8}>

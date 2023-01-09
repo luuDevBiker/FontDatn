@@ -20,12 +20,13 @@ const axiosClient = axios.create({
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${storage ? JSON.parse(storage).AccessToken : null}`,
-  },
-
+  },  
   httpsAgent: new https.Agent({
     rejectUnauthorized: false,
   }),
 });
+
+console.log(`Bearer ${storage ? JSON.parse(storage).AccessToken : null}`);
 
 axiosClient.interceptors.request.use(
   function (config) {

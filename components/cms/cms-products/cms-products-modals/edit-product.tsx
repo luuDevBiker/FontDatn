@@ -41,7 +41,7 @@ import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import type { ColumnsType } from "antd/es/table";
 import moment from "moment";
 import { useAppDispatch } from "@/app/hooks";
-import { addNewProduct } from "@/features/product-slice";
+import { updateProduct } from "@/features/product-slice";
 import { IProduct, IVariant, IOption, IImage } from "@/models/product";
 import FormItem from "antd/es/form/FormItem";
 import axios from "axios";
@@ -104,9 +104,9 @@ const EditProduct = (props: IProduct) => {
         imagesVariant = [...imagesVariant, fileImage];
       });
       dataImages = [...dataImages, imagesVariant];
-      imagesVariant = []
+      imagesVariant = [];
     });
-    setImages(dataImages)
+    setImages(dataImages);
   }, [props]);
   console.log(Images);
   //#endregion
@@ -154,6 +154,7 @@ const EditProduct = (props: IProduct) => {
                 marginTop: "3vh",
               },
             });
+            setPreviewOpen(false);
           }
         });
     }
@@ -179,14 +180,26 @@ const EditProduct = (props: IProduct) => {
   //#endregion
   //#region Custom methood
   const handleOnsubmit = (payload: any) => {
+    payload.Id = props.Id;
     payload.Options = listOption;
     payload.ProductVariants.map((el: any, index: number) => {
       el.Images = Images[index];
     });
-    dispatch(addNewProduct(payload))
+    dispatch(updateProduct(payload as IProduct))
       .unwrap()
       .then()
-      .then((res: any) => {});
+      .then((res: any) => {
+        if(res.StatusCode === 200){
+          message.success({
+            content: "Cập nhật thành công",
+            className: "erroNotFound-class",
+            style: {
+              marginTop: "3vh",
+            },
+          });
+          
+        }
+      });
   };
   //#region Options
   const addNewOptions = () => {
@@ -306,19 +319,19 @@ const EditProduct = (props: IProduct) => {
                   {listOption &&
                     listOption.map((el, index) => {
                       return (
-                        <OptionWrapp>
-                          <div className="border">
+                        <span style={{width:"15%",display:"inline-block",margin:"0px 15% 0px 15%"}}>
+                          <span className="border" style={{float:"left"}}>
                             <Tag>{el.Name}</Tag>
-                          </div>
-                          <div>
+                          </span>
+                          <span style={{float:"right"}}>
                             {
                               <DeleteOutlined
                                 style={{ paddingLeft: "15px" }}
                                 onClick={() => handleRemoveOptions(index)}
                               />
                             }
-                          </div>
-                        </OptionWrapp>
+                          </span>
+                        </span>
                       );
                     })}
                 </div>
@@ -334,7 +347,7 @@ const EditProduct = (props: IProduct) => {
                 <>
                   {fields.map(({ key, name }) => {
                     console.log(key);
-                    
+
                     return (
                       <WrapProduct>
                         <Form.Item

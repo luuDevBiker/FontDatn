@@ -62,7 +62,6 @@ const ItemInput = Input;
 
 export const CreateProduct: NextPageWithLayout = () => {
   //#region states product
-  const [isOptions, setIsOptions] = useState(false);
   const [isProductVariant, setIsProductVriant] = useState(false);
   const [option, setOption] = useState("");
   const [listOption, setListOption] = useState<Option[]>([]);
@@ -159,6 +158,18 @@ export const CreateProduct: NextPageWithLayout = () => {
   //#endregion
   //#region Custom methood
   const handleOnsubmit = (payload: any) => {
+    console.log(1);
+
+    if (!payload.ProductVariants) {
+      message.warning({
+        content: "Chưa thêm chi tiểt sản phẩm !",
+        duration: 3,
+        style: {
+          marginTop: "3vh",
+        },
+      });
+      return;
+    }
     payload.Options = listOption;
     payload.ProductVariants.map((el: any, index: number) => {
       el.Images = Images[index];
@@ -167,8 +178,22 @@ export const CreateProduct: NextPageWithLayout = () => {
 
     dispatch(addNewProduct(payload))
       .unwrap()
-      .then()
-      .then((res: any) => {});
+      .then(() => {
+        message.loading({ content: "Đang thực hiện yêu cầu", duration: 3 });
+      })
+      .then((res: any) => {
+        if (res.Status === 200) {
+          message.success({ content: "Tạo sản phẩm thành công", duration: 2 });
+        } else {
+          message.error({
+            content: "Tạo sản phẩm thất bại",
+            duration: 2,
+            style: {
+              marginTop: "3vh",
+            },
+          });
+        }
+      });
   };
   //#region Options
   const addNewOptions = () => {
@@ -192,6 +217,16 @@ export const CreateProduct: NextPageWithLayout = () => {
   //#endregion
   //#region Variant
   const onCreateVariant = () => {
+    if (listOption.length === 0) {
+      message.warning({
+        content: "Chưa thêm thuộc tính !",
+        duration: 3,
+        style: {
+          marginTop: "3vh",
+        },
+      });
+      return;
+    }
     setIsProductVriant(true);
   };
   //#endregion
@@ -241,14 +276,32 @@ export const CreateProduct: NextPageWithLayout = () => {
           <Col span={7}>
             <WrapProduct>
               <div className="title">Phân loại sản phẩm</div>
-              <Form.Item label="Danh mục sản phẩm" name={"Categoty"}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: "Thêm loại sản phẩm phân loại sản phẩm",
+                  },
+                ]}
+                label="Danh mục sản phẩm"
+                name={"Categoty"}
+              >
                 <Select>
                   <Option value="LAP-TOP">LAP TOP</Option>
                   <Option value="PC-GAMMING">PC GAMMING</Option>
                   <Option value="PC-DO-HOA">PC ĐỒ HỌA</Option>
                 </Select>
               </Form.Item>
-              <Form.Item label="Thương hiệu" name="Brand">
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: "Thêm thương hiệu sản phẩm phân loại sản phẩm",
+                  },
+                ]}
+                label="Thương hiệu"
+                name="Brand"
+              >
                 <Select>
                   <Option value="ACER">ACER</Option>
                   <Option value="SAMSUNG">SAMSUNG</Option>
@@ -261,74 +314,56 @@ export const CreateProduct: NextPageWithLayout = () => {
               </Form.Item>
             </WrapProduct>
           </Col>
-          {isOptions ? (
-            <></>
-          ) : (
-            <Col span={5} onClick={() => setIsOptions(true)}>
-              <Button>Thêm thuộc tính cho sản phẩm</Button>
-            </Col>
-          )}
-
-          {/* Product variants */}
-
-          {
-            isOptions ? (
-              //#region create options
-              <Col xs={24} sm={17} md={17} xxl={17} xl={17}>
-                <WrapProduct>
-                  <WrapperOptions>
-                    <OptionWrapp>
-                      <div className="border">
-                        <Form.Item label="Tên thuộc tính">
-                          <Input
-                            name={"InputOptionName"}
-                            value={option}
-                            onChange={onChangeInputOptionName}
-                            placeholder="Hãy nhập tên thuộc tính : ( Ram, CPU, MainBoard...) "
-                          />
-                        </Form.Item>
-                      </div>
-                      <div className="btn-box">
-                        <PlusOutlined
-                          onClick={addNewOptions}
-                          style={{ marginLeft: "6px" }}
-                        />
-                      </div>
-                    </OptionWrapp>
-                    <div>
-                      {listOption.map((el, index) => {
-                        return (
-                          <OptionWrapp>
-                            <div className="border">
-                              <Tag>{el.Name}</Tag>
-                            </div>
-                            <div>
-                              {
-                                <DeleteOutlined
-                                  style={{ paddingLeft: "15px" }}
-                                  onClick={() => handleRemoveOptions(index)}
-                                />
-                              }
-                            </div>
-                          </OptionWrapp>
-                        );
-                      })}
-                    </div>
-                    {!isProductVariant ? (
-                      <Button onClick={onCreateVariant} className="addnew">
-                        Tạo chi tiết sản phẩm
-                      </Button>
-                    ) : (
-                      <></>
-                    )}
-                  </WrapperOptions>
-                </WrapProduct>
-              </Col>
-            ) : (
-              <></>
-            )
-            //#endregion
-          }
+          <Col xs={24} sm={17} md={17} xxl={17} xl={17}>
+            <WrapProduct>
+              <WrapperOptions>
+                <OptionWrapp>
+                  <div className="border">
+                    <Form.Item label="Tên thuộc tính">
+                      <Input
+                        name={"InputOptionName"}
+                        value={option}
+                        onChange={onChangeInputOptionName}
+                        placeholder="Hãy nhập tên thuộc tính : ( Ram, CPU, MainBoard...) "
+                      />
+                    </Form.Item>
+                  </div>
+                  <div className="btn-box">
+                    <PlusOutlined
+                      onClick={addNewOptions}
+                      style={{ marginLeft: "6px" }}
+                    />
+                  </div>
+                </OptionWrapp>
+                <div>
+                  {listOption.map((el, index) => {
+                    return (
+                      <OptionWrapp>
+                        <div className="border">
+                          <Tag>{el.Name}</Tag>
+                        </div>
+                        <div>
+                          {
+                            <DeleteOutlined
+                              style={{ paddingLeft: "15px" }}
+                              onClick={() => handleRemoveOptions(index)}
+                            />
+                          }
+                        </div>
+                      </OptionWrapp>
+                    );
+                  })}
+                </div>
+                {!isProductVariant ? (
+                  <Button onClick={onCreateVariant} className="addnew">
+                    Tạo chi tiết sản phẩm
+                  </Button>
+                ) : (
+                  <></>
+                )}
+              </WrapperOptions>
+            </WrapProduct>
+          </Col>
           {isProductVariant ? (
             <Col xs={24} sm={17} md={17} xxl={17} xl={17}>
               <Form.List name="ProductVariants">

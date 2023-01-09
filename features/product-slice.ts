@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import productApi from "./services/product-api";
 import type { RootState } from "@/app/store";
-import { IAddProduct } from "@/models/product";
+import { IProduct } from "@/models/product";
 
 export const GET_PRODUCT: string = "product/get_product";
 export const ADD_PRODUCT: string = "product/add_product";
+export const UPDATE_PRODUCT: string = "product/update_product";
 export const GET_DETAILS: string = "product/get_details";
 export const PRODUCt: string = "productSLice";
 
@@ -21,9 +22,24 @@ export const getListProduct = createAsyncThunk(GET_PRODUCT, async () => {
 
 export const addNewProduct = createAsyncThunk(
   ADD_PRODUCT,
-  async (payload: IAddProduct, { rejectWithValue }) => {
+  async (payload: IProduct, { rejectWithValue }) => {
     try {
       const response = await productApi.addProduct(payload);
+      return response.data;
+    } catch (err: any) {
+      if (!err.response) {
+        throw err;
+      }
+      throw rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  UPDATE_PRODUCT,
+  async (payload: IProduct, { rejectWithValue }) => {
+    try {
+      const response = await productApi.updateProduct(payload.Id,payload);
       return response.data;
     } catch (err: any) {
       if (!err.response) {

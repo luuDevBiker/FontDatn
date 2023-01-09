@@ -118,7 +118,6 @@ export const CmsProduct: NextPageWithLayout = () => {
         <Modal
           title="Chi tiết sản phẩm"
           open={isModalOpen}
-          onOk={handleOk}
           onCancel={handleCancel}
           width={"90%"}
         >
