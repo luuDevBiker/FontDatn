@@ -18,7 +18,7 @@ export const Grid:NextPageWithLayout=()=>{
                         </div>
                         <div className="content">
                             <div className="main-title">
-                                <p>Nâng mũi Lightly</p>
+                                <p>PC Gamming chiến mọi loại game</p>
                             </div>
                             <div className="main-content">
                                 {data[0].Content}
@@ -69,65 +69,65 @@ export const Grid:NextPageWithLayout=()=>{
 const data=[
     {
         id:1,
-        image:'https://media.suckhoe123.vn/uploads/202102/1-nang-mui-lightly-trong-moi-truong-vo-khuan-an-toan-chi-5-ngay-dep-tu-nhien-van-dep-kip-don-tet.jpg',
-        Title:'Nâng mũi',
-        TitleDetail:'Nâng mũi Lightly',
-        Content:'Công nghệ nâng mũi hiện đại, độc quyền tại Thu Cúc giúp tái cấu trúc toàn bộ mũi thông qua kỹ thuật nâng sống mũi bằng sụn sinh học và sử dụng vách ngăn, sụn tự thân để giảm căng tức vùng đầu mũi'
+        image:'https://product.hstatic.net/1000026716/product/titan_plus_i4090_1b77124e50cd4ec997aee054a436322a.jpg',
+        Title:'PC Gamming',
+        TitleDetail:'PC Gamming chiến mọi loại game',
+        Content:'PC gamming cấu hình khủng cân mọi tựa game từ quốc dân đến chuyên nghiệp, sắm ngay cho mình một bộ PC như ý tại F-ShopComputer'
     },
     {
         id:2,
-        image:'https://media.suckhoe123.vn/uploads/202102/1-nang-mui-lightly-trong-moi-truong-vo-khuan-an-toan-chi-5-ngay-dep-tu-nhien-van-dep-kip-don-tet.jpg',
-        Title:'Cắt mí',
-        TitleDetail:'Nâng mũi Lightly',
-        Content:'Công nghệ nâng mũi hiện đại, độc quyền tại Thu Cúc giúp tái cấu trúc toàn bộ mũi thông qua kỹ thuật nâng sống mũi bằng sụn sinh học và sử dụng vách ngăn, sụn tự thân để giảm căng tức vùng đầu mũi'
+        image:'https://product.hstatic.net/1000026716/product/titan_plus_i4090_1b77124e50cd4ec997aee054a436322a.jpg',
+        Title:'PC Gamming',
+        TitleDetail:'PC Gamming chiến mọi loại game',
+        Content:'PC gamming cấu hình khủng cân mọi tựa game từ quốc dân đến chuyên nghiệp, sắm ngay cho mình một bộ PC như ý tại F-ShopComputer'
     },
     {
         id:2,
-        image:'https://media.suckhoe123.vn/uploads/202102/1-nang-mui-lightly-trong-moi-truong-vo-khuan-an-toan-chi-5-ngay-dep-tu-nhien-van-dep-kip-don-tet.jpg',
-        Title:'Cắt mí',
-        TitleDetail:'Nâng mũi Lightly',
-        Content:'Công nghệ nâng mũi hiện đại, độc quyền tại Thu Cúc giúp tái cấu trúc toàn bộ mũi thông qua kỹ thuật nâng sống mũi bằng sụn sinh học và sử dụng vách ngăn, sụn tự thân để giảm căng tức vùng đầu mũi'
+        image:'https://product.hstatic.net/1000026716/product/titan_plus_i4090_1b77124e50cd4ec997aee054a436322a.jpg',
+        Title:'PC Gamming',
+        TitleDetail:'PC Gamming chiến mọi loại game',
+        Content:'PC gamming cấu hình khủng cân mọi tựa game từ quốc dân đến chuyên nghiệp, sắm ngay cho mình một bộ PC như ý tại F-ShopComputer'
     },
     {
         id:2,
-        image:'https://media.suckhoe123.vn/uploads/202102/1-nang-mui-lightly-trong-moi-truong-vo-khuan-an-toan-chi-5-ngay-dep-tu-nhien-van-dep-kip-don-tet.jpg',
-        Title:'Cắt mí',
-        TitleDetail:'Nâng mũi Lightly',
-        Content:'Công nghệ nâng mũi hiện đại, độc quyền tại Thu Cúc giúp tái cấu trúc toàn bộ mũi thông qua kỹ thuật nâng sống mũi bằng sụn sinh học và sử dụng vách ngăn, sụn tự thân để giảm căng tức vùng đầu mũi'
+        image:'https://product.hstatic.net/1000026716/product/titan_plus_i4090_1b77124e50cd4ec997aee054a436322a.jpg',
+        Title:'PC Gamming',
+        TitleDetail:'PC Gamming chiến mọi loại game',
+        Content:'PC gamming cấu hình khủng cân mọi tựa game từ quốc dân đến chuyên nghiệp, sắm ngay cho mình một bộ PC như ý tại F-ShopComputer'
     },
     {
         id:2,
-        image:'https://media.suckhoe123.vn/uploads/202102/1-nang-mui-lightly-trong-moi-truong-vo-khuan-an-toan-chi-5-ngay-dep-tu-nhien-van-dep-kip-don-tet.jpg',
-        Title:'Cắt mí',
-        TitleDetail:'Nâng mũi Lightly',
-        Content:'Công nghệ nâng mũi hiện đại, độc quyền tại Thu Cúc giúp tái cấu trúc toàn bộ mũi thông qua kỹ thuật nâng sống mũi bằng sụn sinh học và sử dụng vách ngăn, sụn tự thân để giảm căng tức vùng đầu mũi'
+        image:'https://product.hstatic.net/1000026716/product/titan_plus_i4090_1b77124e50cd4ec997aee054a436322a.jpg',
+        Title:'PC Gamming',
+        TitleDetail:'PC Gamming chiến mọi loại game',
+        Content:'PC gamming cấu hình khủng cân mọi tựa game từ quốc dân đến chuyên nghiệp, sắm ngay cho mình một bộ PC như ý tại F-ShopComputer'
     },
     {
         id:2,
-        image:'https://media.suckhoe123.vn/uploads/202102/1-nang-mui-lightly-trong-moi-truong-vo-khuan-an-toan-chi-5-ngay-dep-tu-nhien-van-dep-kip-don-tet.jpg',
-        Title:'Cắt mí',
-        TitleDetail:'Nâng mũi Lightly',
-        Content:'Công nghệ nâng mũi hiện đại, độc quyền tại Thu Cúc giúp tái cấu trúc toàn bộ mũi thông qua kỹ thuật nâng sống mũi bằng sụn sinh học và sử dụng vách ngăn, sụn tự thân để giảm căng tức vùng đầu mũi'
+        image:'https://product.hstatic.net/1000026716/product/titan_plus_i4090_1b77124e50cd4ec997aee054a436322a.jpg',
+        Title:'PC Gamming',
+        TitleDetail:'PC Gamming chiến mọi loại game',
+        Content:'PC gamming cấu hình khủng cân mọi tựa game từ quốc dân đến chuyên nghiệp, sắm ngay cho mình một bộ PC như ý tại F-ShopComputer'
     },
     {
         id:2,
-        image:'https://media.suckhoe123.vn/uploads/202102/1-nang-mui-lightly-trong-moi-truong-vo-khuan-an-toan-chi-5-ngay-dep-tu-nhien-van-dep-kip-don-tet.jpg',
-        Title:'Cắt mí',
-        TitleDetail:'Nâng mũi Lightly',
-        Content:'Công nghệ nâng mũi hiện đại, độc quyền tại Thu Cúc giúp tái cấu trúc toàn bộ mũi thông qua kỹ thuật nâng sống mũi bằng sụn sinh học và sử dụng vách ngăn, sụn tự thân để giảm căng tức vùng đầu mũi'
+        image:'https://product.hstatic.net/1000026716/product/titan_plus_i4090_1b77124e50cd4ec997aee054a436322a.jpg',
+        Title:'PC Gamming',
+        TitleDetail:'PC Gamming chiến mọi loại game',
+        Content:'PC gamming cấu hình khủng cân mọi tựa game từ quốc dân đến chuyên nghiệp, sắm ngay cho mình một bộ PC như ý tại F-ShopComputer'
     },
     {
         id:2,
-        image:'https://media.suckhoe123.vn/uploads/202102/1-nang-mui-lightly-trong-moi-truong-vo-khuan-an-toan-chi-5-ngay-dep-tu-nhien-van-dep-kip-don-tet.jpg',
-        Title:'Cắt mí',
-        TitleDetail:'Nâng mũi Lightly',
-        Content:'Công nghệ nâng mũi hiện đại, độc quyền tại Thu Cúc giúp tái cấu trúc toàn bộ mũi thông qua kỹ thuật nâng sống mũi bằng sụn sinh học và sử dụng vách ngăn, sụn tự thân để giảm căng tức vùng đầu mũi'
+        image:'https://product.hstatic.net/1000026716/product/titan_plus_i4090_1b77124e50cd4ec997aee054a436322a.jpg',
+        Title:'PC Gamming',
+        TitleDetail:'PC Gamming chiến mọi loại game',
+        Content:'PC gamming cấu hình khủng cân mọi tựa game từ quốc dân đến chuyên nghiệp, sắm ngay cho mình một bộ PC như ý tại F-ShopComputer'
     },
     {
         id:2,
-        image:'https://media.suckhoe123.vn/uploads/202102/1-nang-mui-lightly-trong-moi-truong-vo-khuan-an-toan-chi-5-ngay-dep-tu-nhien-van-dep-kip-don-tet.jpg',
-        Title:'Cắt mí',
-        TitleDetail:'Nâng mũi Lightly',
-        Content:'Công nghệ nâng mũi hiện đại, độc quyền tại Thu Cúc giúp tái cấu trúc toàn bộ mũi thông qua kỹ thuật nâng sống mũi bằng sụn sinh học và sử dụng vách ngăn, sụn tự thân để giảm căng tức vùng đầu mũi'
+        image:'https://product.hstatic.net/1000026716/product/titan_plus_i4090_1b77124e50cd4ec997aee054a436322a.jpg',
+        Title:'PC Gamming',
+        TitleDetail:'PC Gamming chiến mọi loại game',
+        Content:'PC gamming cấu hình khủng cân mọi tựa game từ quốc dân đến chuyên nghiệp, sắm ngay cho mình một bộ PC như ý tại F-ShopComputer'
     },
 ]

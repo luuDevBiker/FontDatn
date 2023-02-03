@@ -1,38 +1,47 @@
 import type { UploadFile } from "antd/es/upload/interface";
 
 export interface IProduct {
-  Id: String;
-  Name: String;
-  Description: String;
-  Category: String;
-  Brand: String;
+  Id: string;
+  Name: string;
+  Description: string;
+  Category: string;
+  Brand: string;
   Options: [IOption];
   ProductVariants: [IVariant];
 }
 export interface IVariant {
-  Id: String;
-  ProductId: String;
-  Price: Number;
-  ImportPrice: Number;
+  Id: string;
+  ProductId: string;
+  Price: number;
+  ImportPrice: number;
   Images: [IImage];
-  OptionValues:[IOptionValue]
+  OptionValues: [IOptionValue];
 }
 export interface IOption {
-  DisplayOrder: Number;
-  Name: String;
+  DisplayOrder: number;
+  Name: string;
 }
 export interface IImage {
-  Uid:String;
-  Name:String;
-  Url: String;
-  Status:String;
+  Uid: string;
+  Name: string;
+  Url: string;
+  Status: string;
 }
 export interface IOptionValue {
-    Id: String;
-    OptionId: String;
-    ProductVariantId: String;
-    Name: String;
-    Value: String;
-    DisplayOrder: Number;
-    IsDeleted: Boolean;
+  Id: string;
+  OptionId: string;
+  ProductVariantId: string;
+  Name: string;
+  Value: string;
+  DisplayOrder: number;
+  IsDeleted: boolean;
+}
+export interface ICartItem {
+  Id: string;
+  Items: [IItemAdd];
+}
+
+export interface IItemAdd {
+  ProductVariantId: string;
+  Quantity: number
 }

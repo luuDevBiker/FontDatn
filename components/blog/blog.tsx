@@ -1,5 +1,4 @@
 import { BoxBlog, Container, WrapperBlog, WrapperHeader } from "@/styles/BlogStyled"
-import { Color } from "@/utils/common"
 import { Col, Row ,Image, Tooltip} from "antd"
 import { useRouter } from "next/router"
 

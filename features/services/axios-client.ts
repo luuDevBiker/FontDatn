@@ -26,8 +26,6 @@ const axiosClient = axios.create({
   }),
 });
 
-console.log(`Bearer ${storage ? JSON.parse(storage).AccessToken : null}`);
-
 axiosClient.interceptors.request.use(
   function (config) {
     return config;

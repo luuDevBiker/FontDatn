@@ -12,7 +12,6 @@ const HomePages: NextPageWithLayout = () => {
   return (
     <div>
       <Home />
-      {/* <CmsProduct /> */}
     </div>
   );
 };

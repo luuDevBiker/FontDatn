@@ -10,6 +10,8 @@ import {
   Input,
   Button,
   Radio,
+  message,
+  Checkbox,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../../models/common";
@@ -41,13 +43,14 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import Carosel from "../../assets/layout/adorable-white-dog-isolated-blue.jpg";
-import { ListCarousel, listMenu, product, productList } from "@/utils/data";
+import { ListCarousel, listMenu, productList } from "@/utils/data";
 import { Confirm } from "../popup-confirm/confirm";
 import { SP } from "next/dist/shared/lib/utils";
 import { useAppDispatch } from "@/app/hooks";
 import { getListProduct } from "@/features/product-slice";
 import { Footer } from "../footer/footer";
-import { IProduct } from "@/models/product";
+import { IProduct, ICartItem, IItemAdd } from "@/models/product";
+import { addTocart } from "@/features/shopping-slice";
 import {
   ButtonAddtoCartCustom,
   LeftMenu,
@@ -67,26 +70,100 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
   const [data, setData] = useState<IProduct[]>([]);
   const dispatch = useAppDispatch();
 
+  const user: any = localStorage.getItem("u");
+  const cartId: any = JSON.parse(user)?.CartId;
   useEffect(() => {
     dispatch(getListProduct())
       .unwrap()
       .then()
       .then((res) => {
         setData(res.Payload as IProduct[]);
-        console.log(res.Payload as IProduct[]);
       });
   }, []);
-  const handleHover = (value: any) => {
-    setInitId(value.productId);
-    setHover(false);
-  };
 
-  const handleOpenPopup = () => {
-    setIsConfirm(true);
-  };
+  const addCartItem = (id: any) => {
+    let dataAdd: any = {
+      Id: cartId,
+      Items: {
+        ProductVariantId: id,
+        Quantity: 1,
+      },
+    };
 
-  const handleMouseOut = () => {
-    setHover(true);
+    if (!user) {
+      // let itemsCart: any = localStorage.getItem("itemsCart");
+      // itemsCart = JSON.parse(itemsCart);
+      // message.warning({
+      //   content:
+      //     "Đã thêm sản phẩm vào bộ nhớ tạm, hãy đăng nhập để lưu vào giỏ hàng",
+      //   duration: 3,
+      //   style: {
+      //     marginTop: "6vh",
+      //     float: "right",
+      //   },
+      // });
+      // var item = itemsCart.find(
+      //   (el: any) => el.ProductVariantId === dataAdd.Items.ProductVariantId
+      // );
+      // console.log(item);
+
+      // if (item) {
+      //   dataAdd.Items.Quantity = dataAdd.Items.Quantity + item.Quantity;
+
+      //   let newItemsCart = itemsCart.map((el: any) => {
+      //     if (el.ProductVariantId != dataAdd.Items.ProductVariantId) {
+      //       return el;
+      //     } else {
+      //       return dataAdd.Items;
+      //     }
+      //   });
+      //   itemsCart =
+      //     itemsCart.length === 0 ? [dataAdd.Items] : [...newItemsCart];
+      // }
+      // else{
+      //   itemsCart = [...itemsCart,dataAdd.Items]
+      // }
+      // console.log(itemsCart.length);
+
+      // var cart = [...itemsCart];
+      // localStorage.setItem("itemsCart", JSON.stringify(cart));
+
+      message.warning({
+        content: "Bạn chưa đăng nhập",
+        duration: 3,
+        style: {
+          marginTop: "3vh",
+          float: "right",
+        },
+      });
+      return;
+    }
+
+    dispatch(addTocart(dataAdd))
+      .unwrap()
+      .then()
+      .then((res) => {
+        if (res?.status === 200) {
+          message.success({
+            content: "Thêm sản phẩm thành công vào giỏ hàng!",
+            duration: 3,
+            style: {
+              marginTop: "6vh",
+              float: "right",
+            },
+          });
+        }
+      })
+      .catch((err) => {
+        message.error({
+          content: "Xảy ra lỗi khi thêm sản phẩm! " + err.message,
+          duration: 3,
+          style: {
+            marginTop: "6vh",
+            float: "right",
+          },
+        });
+      });
   };
   return (
     <div>
@@ -180,7 +257,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
                       ></Image>
                     </div>
                     <div className="rate">
-                      <Rate allowHalf disabled value={variant.Rate}/>
+                      <Rate allowHalf disabled value={variant.Rate} />
                       <div>{variant.SkuId}</div>
                     </div>
                     <div className="name">
@@ -213,19 +290,18 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
                         {variant.Quantity == 0 ? "Hết hàng" : "Còn hàng"}
                       </div>
                       {/* button add to card */}
-                      <ShoppingCartOutlined
-                        onClick={() => {
-                          alert("Mua hang");
-                        }}
-                        className="svg"
-                        style={{ fontSize: "16px" }}
-                      />
+                      <Button
+                        disabled={variant.Quantity <= 0}
+                        onClick={() => addCartItem(variant.Id)}
+                      >
+                        <ShoppingCartOutlined
+                          className="svg"
+                          style={{ fontSize: "16px" }}
+                        />
+                      </Button>
                     </div>
                     <ButtonAddtoCartCustom
                       onClick={() => {
-                        if (typeof window !== "undefined") {
-                          localStorage.setItem("product", JSON.stringify(item));
-                        }
                         router.push({
                           pathname: `/product-details/${item.Id}`,
                           query: { id: item.Id, key: variant.Id },

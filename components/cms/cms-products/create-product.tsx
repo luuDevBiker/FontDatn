@@ -33,17 +33,11 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-import { AnyARecord } from "dns";
-import { Color, OptionProduct } from "@/utils/common";
 const { TextArea } = Input;
 const { Option } = Select;
-import type { CustomTagProps } from "rc-select/lib/BaseSelect";
-import type { ColumnsType } from "antd/es/table";
 import moment from "moment";
 import { useAppDispatch } from "@/app/hooks";
 import { addNewProduct } from "@/features/product-slice";
-import { IProduct, IVariant } from "@/models/product";
-import FormItem from "antd/es/form/FormItem";
 import axios from "axios";
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -158,8 +152,6 @@ export const CreateProduct: NextPageWithLayout = () => {
   //#endregion
   //#region Custom methood
   const handleOnsubmit = (payload: any) => {
-    console.log(1);
-
     if (!payload.ProductVariants) {
       message.warning({
         content: "Chưa thêm chi tiểt sản phẩm !",
@@ -174,16 +166,17 @@ export const CreateProduct: NextPageWithLayout = () => {
     payload.ProductVariants.map((el: any, index: number) => {
       el.Images = Images[index];
     });
-    console.log(payload);
 
     dispatch(addNewProduct(payload))
       .unwrap()
-      .then(() => {
-        message.loading({ content: "Đang thực hiện yêu cầu", duration: 3 });
-      })
-      .then((res: any) => {
-        if (res.Status === 200) {
+      .then((res) => {
+        console.log(res);
+        if (res?.StatusCode === 200) {
           message.success({ content: "Tạo sản phẩm thành công", duration: 2 });
+          form.resetFields();
+          setIndex(-1);
+          setListOption([]);
+          setImages([]);
         } else {
           message.error({
             content: "Tạo sản phẩm thất bại",
@@ -193,7 +186,8 @@ export const CreateProduct: NextPageWithLayout = () => {
             },
           });
         }
-      });
+      })
+      .then((res: any) => {});
   };
   //#region Options
   const addNewOptions = () => {
@@ -284,7 +278,7 @@ export const CreateProduct: NextPageWithLayout = () => {
                   },
                 ]}
                 label="Danh mục sản phẩm"
-                name={"Categoty"}
+                name={"Category"}
               >
                 <Select>
                   <Option value="LAP-TOP">LAP TOP</Option>
@@ -354,7 +348,7 @@ export const CreateProduct: NextPageWithLayout = () => {
                     );
                   })}
                 </div>
-                {!isProductVariant ? (
+                {listOption.length > 0 ? (
                   <Button onClick={onCreateVariant} className="addnew">
                     Tạo chi tiết sản phẩm
                   </Button>

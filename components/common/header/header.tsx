@@ -112,6 +112,9 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
         }
       });
   };
+
+  const count = localStorage.getItem("countItemInCart");
+
   const handleOpenPopup = () => {
     setIsConfirm(true);
   };
@@ -189,15 +192,6 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
             <MenuItemTop>
               <PhoneOutlined /> +84 344 029 828
             </MenuItemTop>
-            <MenuItemTop>
-              <MenuItemAnimate>Khách cá nhân</MenuItemAnimate>
-            </MenuItemTop>
-            <MenuItemTop>
-              <MenuItemAnimate>Khách doanh nghiệp</MenuItemAnimate>
-            </MenuItemTop>
-            <MenuItemTop>
-              <MenuItemAnimate>Bán hàng</MenuItemAnimate>
-            </MenuItemTop>
           </HeaderItem>
           <HeaderItem>
             <MenuItemTop>
@@ -258,7 +252,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
             />
             <MenuAvatarWrapper>
               <UserMenu>
-                <Badge count={"10"} size="small" showZero>
+                <Badge count={count === "undefined"?0:count} size="small" showZero>
                   <ShoppingCartOutlined
                     onClick={() => router.push("/shopping-cart")}
                     className="cssSVG"

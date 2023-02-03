@@ -7,7 +7,7 @@ import {
 } from "@/styles/CmsProductStylead";
 import Table, { ColumnsType } from "antd/lib/table";
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, Image } from "antd";
+import { Button, Image, Tag } from "antd";
 import ExportIcon from "@/assets/icon/ExportIcon.svg";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/app/hooks";
@@ -52,22 +52,22 @@ export const CmsProduct: NextPageWithLayout = () => {
       title: "Sản phẩm",
       dataIndex: "Name",
       editTable: true,
-      key:"Name"
+      key: "Name",
     },
     {
       title: "Hãng",
       dataIndex: "Brand",
-      key:"Brand"
+      key: "Brand",
     },
     {
       title: "Loại sản phẩm",
       dataIndex: "Category",
-      key:"Category"
+      key: "Category",
     },
     {
       title: "Mô tả",
       dataIndex: "Description",
-      key:"Description"
+      key: "Description",
     },
   ];
 
@@ -83,13 +83,11 @@ export const CmsProduct: NextPageWithLayout = () => {
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
-        <h5>Sản phẩm</h5>
-
         <div>
-          <ButtonExport type="default">
-            <img src={ExportIcon.src} alt="" />
-            <div>Export</div>
-          </ButtonExport>
+          <h5 className="mx-2">Sản phẩm</h5>
+          <Tag>Quản lý sản phẩm</Tag> <Tag>Quản lý sản phẩm</Tag>
+        </div>
+        <div>
           <Button
             type="primary"
             size="large"
@@ -121,7 +119,7 @@ export const CmsProduct: NextPageWithLayout = () => {
           onCancel={handleCancel}
           width={"90%"}
         >
-          <EditProduct {...detail}/>
+          <EditProduct {...detail} />
         </Modal>
       </WrapProduct>
     </WrapperCMSProduct>

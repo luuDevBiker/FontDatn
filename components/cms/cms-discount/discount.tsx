@@ -21,12 +21,6 @@ import {
   DatePicker,
 } from "antd";
 import React, { useState } from "react";
-import type { RcFile, UploadProps } from "antd/es/upload";
-import type { UploadFile } from "antd/es/upload/interface";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Modal, Upload } from "antd";
-import { AnyARecord } from "dns";
-import { Color, OptionProduct } from "@/utils/common";
 import {
   Box,
   BoxBody,

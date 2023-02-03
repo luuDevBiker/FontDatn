@@ -33,8 +33,6 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-import { AnyARecord } from "dns";
-import { Color, OptionProduct } from "@/utils/common";
 const { TextArea } = Input;
 const { Option } = Select;
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
@@ -45,6 +43,8 @@ import { updateProduct } from "@/features/product-slice";
 import { IProduct, IVariant, IOption, IImage } from "@/models/product";
 import FormItem from "antd/es/form/FormItem";
 import axios from "axios";
+import { useRouter } from "next/router";
+
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -54,6 +54,7 @@ const getBase64 = (file: RcFile): Promise<string> =>
   });
 
 const EditProduct = (props: IProduct) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<Boolean>(true);
   //#region states product
@@ -104,7 +105,7 @@ const EditProduct = (props: IProduct) => {
         imagesVariant = [...imagesVariant, fileImage];
       });
       dataImages = [...dataImages, imagesVariant];
-      imagesVariant = [];
+      console.log(dataImages);
     });
     setImages(dataImages);
   }, [props]);
@@ -123,8 +124,10 @@ const EditProduct = (props: IProduct) => {
     );
   };
   const handleCancel = () => setPreviewOpen(false);
+
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
     setFileList(newFileList);
+
   const uploadFile = (options: any) => {
     const { onSuccess, onError, file } = options;
     if (file) {
@@ -172,12 +175,8 @@ const EditProduct = (props: IProduct) => {
       setFileList([...fileList, prop]);
     }
   };
-
-  const setIndex = (index: number) => {
-    Images[index] === undefined ? setFileList([]) : setFileList(Images[index]);
-    setIndexImgs(index);
-  };
   //#endregion
+
   //#region Custom methood
   const handleOnsubmit = (payload: any) => {
     payload.Id = props.Id;
@@ -189,7 +188,9 @@ const EditProduct = (props: IProduct) => {
       .unwrap()
       .then()
       .then((res: any) => {
-        if(res.StatusCode === 200){
+        console.log(res);
+
+        if (res.StatusCode === 200) {
           message.success({
             content: "Cập nhật thành công",
             className: "erroNotFound-class",
@@ -197,7 +198,10 @@ const EditProduct = (props: IProduct) => {
               marginTop: "3vh",
             },
           });
-          
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         }
       });
   };
@@ -319,11 +323,17 @@ const EditProduct = (props: IProduct) => {
                   {listOption &&
                     listOption.map((el, index) => {
                       return (
-                        <span style={{width:"15%",display:"inline-block",margin:"0px 15% 0px 15%"}}>
-                          <span className="border" style={{float:"left"}}>
+                        <span
+                          style={{
+                            width: "15%",
+                            display: "inline-block",
+                            margin: "0px 15% 0px 15%",
+                          }}
+                        >
+                          <span className="border" style={{ float: "left" }}>
                             <Tag>{el.Name}</Tag>
                           </span>
-                          <span style={{float:"right"}}>
+                          <span style={{ float: "right" }}>
                             {
                               <DeleteOutlined
                                 style={{ paddingLeft: "15px" }}
@@ -346,8 +356,6 @@ const EditProduct = (props: IProduct) => {
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name }) => {
-                    console.log(key);
-
                     return (
                       <WrapProduct>
                         <Form.Item
@@ -415,14 +423,17 @@ const EditProduct = (props: IProduct) => {
                             );
                           }}
                         </Form.List>
-                        <WrapProduct key={key} onClick={() => setIndex(key)}>
+                        <WrapProduct
+                          key={key}
+                          onClick={() => setIndexImgs(key)}
+                        >
                           <div className="title">Media</div>
                           <BoxMedia>
                             <Upload
                               onPreview={handlePreview}
                               onChange={handleChange}
                               fileList={
-                                indexImgs == key ? fileList : Images[key]
+                                indexImgs !== key ? fileList : Images[key]
                               }
                               listType="picture-card"
                               customRequest={uploadFile}
