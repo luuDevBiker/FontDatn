@@ -48,6 +48,8 @@ export const ShoppingCart = () => {
   const [phone, setPhone] = useState<any>();
   const [address, setAddress] = useState<any>();
   const [receiverName, setReceiverName] = useState<any>();
+  const [noteOrder, setNoteOrder] = useState<any>();
+
 
   const dispatch = useAppDispatch();
 
@@ -65,6 +67,9 @@ export const ShoppingCart = () => {
         .unwrap()
         .then()
         .then((res: any) => {
+          if (res.StatusCode !== 200) {
+            return;
+          }
           let cart = res.Payload;
           setItem(cart);
           setIdCart(cart.Id);
@@ -168,6 +173,7 @@ export const ShoppingCart = () => {
         Phone: phone,
         Payments: totalOrder,
         Items: itemsOrder,
+        Note:noteOrder
       },
     };
     dispatch(payment(payload))
@@ -190,9 +196,8 @@ export const ShoppingCart = () => {
       });
   };
 
-  const updateQuantity = (indexItem: number) => {};
   const changeQuantity = (e: any) => {
-    console.log(RegexValidation.REGEXNUMBER.test(e.target.value));
+
   };
 
   const checkboxChange = (e: any) => {
@@ -226,6 +231,9 @@ export const ShoppingCart = () => {
     }
     if (selectIndex === -4) {
       setReceiverName(e.target.value);
+    }
+    if (selectIndex === -5) {
+      setNoteOrder(e.target.value);
     }
   };
 
@@ -289,7 +297,7 @@ export const ShoppingCart = () => {
                       <Col span={2}>
                         <Input
                           onChange={changeQuantity}
-                          type="text"
+                          type="number"
                           placeholder={el.Quantity}
                         />
                       </Col>
@@ -372,6 +380,14 @@ export const ShoppingCart = () => {
               }}
               onChange={infoChange}
               placeholder="Tên người nhận"
+              style={{ marginTop: "2px" }}
+            />
+                                    <Input
+              onClick={() => {
+                setSelectIndex(-5);
+              }}
+              onChange={infoChange}
+              placeholder="Ghi chú đơn hàng"
               style={{ marginTop: "2px" }}
             />
             <br />

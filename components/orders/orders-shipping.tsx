@@ -19,11 +19,7 @@ import { Button, Image, Tag, Modal, Row, Col, Input, message } from "antd";
 import ExportIcon from "@/assets/icon/ExportIcon.svg";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/app/hooks";
-import {
-  getOrders,
-  confirmOrder,
-  updateStatusOrder,
-} from "@/features/order-slice";
+import { getOrders, confirmOrder, updateStatusOrder } from "@/features/order-slice";
 
 interface DataType {
   key: React.Key;
@@ -35,7 +31,7 @@ interface DataType {
   status: string;
   import: string;
 }
-export const CmsOder: NextPageWithLayout = () => {
+export const OrdersShipping: NextPageWithLayout = () => {
   //#region State
   const router = useRouter();
 
@@ -51,7 +47,7 @@ export const CmsOder: NextPageWithLayout = () => {
   const [indexNoteSelect, setIndexNoteSelect] = useState<number>(-1);
   const [note, setNote] = useState<string>();
   const [noteOrder, setNoteOrder] = useState<string>();
-  const [currStatus, setCurrStatus] = useState<string>("");
+
   const { TextArea } = Input;
   const dispatch = useAppDispatch();
   //#endregion
@@ -65,8 +61,6 @@ export const CmsOder: NextPageWithLayout = () => {
       .unwrap()
       .then()
       .then((res: any) => {
-        console.log(res);
-
         setData(res.Payload);
         setLoading(false);
       });
@@ -92,11 +86,9 @@ export const CmsOder: NextPageWithLayout = () => {
 
   //#region viewDetail: set data and state view order detail and on edit
   const viewDetail = (data: any) => {
-    let status = data.StatusOrder;
-    setCanEdit(status === 0 ? true : status === 2 ? true : false);
-    let textModalOk =
-      status === 0 ? "Xác nhận" : status === 2 ? "Giao hàng" : "";
-    setCurrStatus(textModalOk);
+    console.log(data.Id);
+    
+    setCanEdit(data.StatusOrder === 2 ? true : false);
     setItems(data.Items);
     setRecordOrder(data?.OrderDetails);
     setOpenEdit(true);
@@ -104,9 +96,7 @@ export const CmsOder: NextPageWithLayout = () => {
   };
 
   const updateNote = (value: any) => {
-    let note = value.target.value;
-    console.log(indexNoteSelect);
-
+    setNote(value.target.value);
     if (indexNoteSelect !== -1) {
       let newItemsUpdate = items.map((el: any, index: number) => {
         if (index === indexNoteSelect) {
@@ -115,8 +105,6 @@ export const CmsOder: NextPageWithLayout = () => {
         }
         return el;
       });
-      console.log(newItemsUpdate);
-
       setItems(newItemsUpdate);
     }
   };
@@ -125,32 +113,25 @@ export const CmsOder: NextPageWithLayout = () => {
     setIndexNoteSelect(index);
   };
 
-  const updateOrder = (status: number, id: any) => {
-    let payload =
-      status === 2
-        ? {
-            Id: orderId,
-            Payload: {
-              StatusOrder: status,
-              Items: items,
-              Note: note,
-            },
-          }
-        : {
-            Id: id,
-            Payload: {
-              StatusOrder: status,
-            },
-          };
-    console.log(payload);
+  const updateOrderStatus = () => {
+    let payload = {
+      Id: orderId,
+      Payload: {
+        StatusOrder: 3
+      }
+    };
 
-    dispatch(status === 2 ? confirmOrder(payload) : updateStatusOrder(payload))
+    console.log(payload);
+    
+
+    dispatch(updateStatusOrder(payload))
       .unwrap()
       .then()
       .then((res: any) => {
+        console.log(res);
         if (res.StatusCode === 200) {
           message.success({
-            content: "Đã xác nhận đơn hàng",
+            content: "Đã nhận giao đơn hàng",
             duration: 3,
             style: {
               marginTop: "3vh",
@@ -280,11 +261,11 @@ export const CmsOder: NextPageWithLayout = () => {
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
-        <h5>Quản lý hóa đơn</h5>
+        <h5>Sản phẩm</h5>
       </HeadingTitle>
 
       <WrapProduct>
-        <div>Tất cả hóa đơn</div>
+        <div>Tất cả sản phẩm</div>
         <div>
           <Table
             rowSelection={rowSelection}
@@ -297,19 +278,12 @@ export const CmsOder: NextPageWithLayout = () => {
       <Modal
         title="Xác nhận đơn hàng"
         open={openEdit}
-        onOk={() => {
-          currStatus === "Xác nhận"
-            ? updateOrder(2, orderId)
-            : currStatus === "Giao hàng"
-            ? updateOrder(3, orderId)
-            : console.log("update status order");
-        }}
+        onOk={() => updateOrderStatus()}
         onCancel={() => setOpenEdit(false)}
         width={"70%"}
-        okText={currStatus}
+        okText="Xác nhận đi giao"
         cancelButtonProps={{ style: { display: cantEdit ? "none" : "" } }}
         okButtonProps={{ style: { display: cantEdit ? "" : "none" } }}
-        destroyOnClose
       >
         <WrapperCMSProduct>
           {recordOrder?.map((el: any, indexItem: number) => (
@@ -345,7 +319,7 @@ export const CmsOder: NextPageWithLayout = () => {
                 </Col>
                 <Col span={12}>{el.OptionValues}</Col>
                 <Col span={8}>
-                  {el.Note === null || el.Note === undefined ? (
+                  {el.Note ? (
                     <TextArea
                       onClick={() => {
                         setItemNoteValueIndex(indexItem);
@@ -354,13 +328,7 @@ export const CmsOder: NextPageWithLayout = () => {
                       placeholder={`Nhập EMEI và thông tin của sản phẩm ${el.Name}`}
                     />
                   ) : (
-                    <TextArea
-                      onClick={() => {
-                        setItemNoteValueIndex(indexItem);
-                      }}
-                      onChange={updateNote}
-                      placeholder={`${el.Note}`}
-                    />
+                    <TextArea disabled={true} value={el.Note} />
                   )}
                 </Col>
               </Row>
@@ -376,6 +344,6 @@ export const CmsOder: NextPageWithLayout = () => {
         </WrapperCMSProduct>
       </Modal>
     </WrapperCMSProduct>
-  );
+  ); 
   //#endregion
 };

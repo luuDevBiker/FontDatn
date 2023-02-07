@@ -169,9 +169,9 @@ export const CreateProduct: NextPageWithLayout = () => {
 
     dispatch(addNewProduct(payload))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         console.log(res);
-        if (res?.StatusCode === 200) {
+        if (res.StatusCode === 200) {
           message.success({ content: "Tạo sản phẩm thành công", duration: 2 });
           form.resetFields();
           setIndex(-1);
@@ -187,7 +187,9 @@ export const CreateProduct: NextPageWithLayout = () => {
           });
         }
       })
-      .then((res: any) => {});
+      .then((res: any) => {
+        console.log(res);
+      });
   };
   //#region Options
   const addNewOptions = () => {
