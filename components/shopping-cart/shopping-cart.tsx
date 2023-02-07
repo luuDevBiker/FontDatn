@@ -50,7 +50,6 @@ export const ShoppingCart = () => {
   const [receiverName, setReceiverName] = useState<any>();
   const [noteOrder, setNoteOrder] = useState<any>();
 
-
   const dispatch = useAppDispatch();
 
   const storage = localStorage.getItem("u");
@@ -58,10 +57,8 @@ export const ShoppingCart = () => {
   useEffect(() => {
     let user = storage ? JSON.parse(storage)?.Profile?.Id : null;
     setProfileId(user);
-    if (!reload) {
-      return;
-    }
-    if (storage) {
+
+    if (storage && reload) {
       let id = JSON.parse(storage)?.CartId;
       dispatch(getCart(id))
         .unwrap()
@@ -77,7 +74,8 @@ export const ShoppingCart = () => {
           localStorage.setItem("countItemInCart", cart?.ItemDetails.length);
           setReload(false);
         });
-    } else {
+    }
+    if (!storage) {
       message.warning({
         content: "Bạn chưa đăng nhập",
         duration: 3,
@@ -86,8 +84,9 @@ export const ShoppingCart = () => {
           float: "right",
         },
       });
+      return;
     }
-  }, [item]);
+  }, [item,itemsOrder]);
 
   const delItemInCart = (key: any, id: any) => {
     var payload = { key: key, id: id };
@@ -173,7 +172,7 @@ export const ShoppingCart = () => {
         Phone: phone,
         Payments: totalOrder,
         Items: itemsOrder,
-        Note:noteOrder
+        Note: noteOrder,
       },
     };
     dispatch(payment(payload))
@@ -182,7 +181,7 @@ export const ShoppingCart = () => {
       .then((res: any) => {
         if (res?.status === 200) {
           message.success({
-            content: "Đặt hàng thành !",
+            content: "Đặt hàng thành công!",
             duration: 3,
             style: {
               marginTop: "3vh",
@@ -196,12 +195,60 @@ export const ShoppingCart = () => {
       });
   };
 
-  const changeQuantity = (e: any) => {
+  const changeQuantity = (event: any) => {
+    let value = parseInt(event.target.value) as number;
+    let max = parseInt(event.target.max) as number;
 
+    value = isNaN(value) ? 1 : value;
+
+    if (max < value || value < 0) {
+      message.error({
+        content: "Kiểm tra số lượng",
+        duration: 1,
+        style: {
+          marginTop: "3vh",
+          float: "right",
+        },
+      });
+      value = max;
+    }
+
+    if (selectIndex !== -1) {
+      let newItemsUpdate = { ...item };
+      let productVariantId = "";
+      newItemsUpdate.ItemDetails = item?.ItemDetails.map(
+        (el: any, indexItem: number) => {
+          if (indexItem === selectIndex) {
+            el.Quantity = value;
+            productVariantId = el.ProductVariantId;
+            return el;
+          }
+          return el;
+        }
+      );
+      console.log(productVariantId);
+
+      setItem(newItemsUpdate);
+      let newOrderItems = itemsOrder ;
+      console.log(newOrderItems);
+      
+      newOrderItems = newOrderItems?.map((el: any, indexItem: number) => {
+        if (el.ProductVariantId === productVariantId) {
+          el.Quantity = value;
+          return el;
+        }
+        return el;
+      });
+      console.log(newOrderItems);
+      
+      setItemsOrder(newOrderItems);
+    }
   };
 
   const checkboxChange = (e: any) => {
     let value = e.target.value;
+    console.log(value);
+
     if (e.target.checked === true) {
       setItemsOrder([
         ...itemsOrder,
@@ -238,12 +285,12 @@ export const ShoppingCart = () => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper style={{width:"95%"}}>
       <Button
         onClick={() => router.push("/")}
         type="primary"
       >{`< Quay lại mua hàng`}</Button>
-      <Row gutter={[20, 20]}>
+      <Row gutter={[5, 20]}>
         <Col span={18}>
           <Box>
             <BoxHeader>
@@ -270,7 +317,7 @@ export const ShoppingCart = () => {
                       <Col span={1}>
                         <Checkbox value={el} onChange={checkboxChange} />
                       </Col>
-                      <Col span={5}>
+                      <Col span={3}>
                         <Image
                           preview={false}
                           src={el.Url}
@@ -294,8 +341,11 @@ export const ShoppingCart = () => {
                           </div>
                         </Space>
                       </Col>
-                      <Col span={2}>
+                      <Col span={4}>
+                        {"số lượng: "}{el.Quantity}
                         <Input
+                          min={1}
+                          max={el.CurrentQuantity}
                           onChange={changeQuantity}
                           type="number"
                           placeholder={el.Quantity}
@@ -374,7 +424,7 @@ export const ShoppingCart = () => {
               placeholder="nhập số điện thoại"
               style={{ marginTop: "2px" }}
             />
-                        <Input
+            <Input
               onClick={() => {
                 setSelectIndex(-4);
               }}
@@ -382,7 +432,7 @@ export const ShoppingCart = () => {
               placeholder="Tên người nhận"
               style={{ marginTop: "2px" }}
             />
-                                    <Input
+            <Input
               onClick={() => {
                 setSelectIndex(-5);
               }}

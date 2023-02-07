@@ -14,6 +14,7 @@ import {
   SyncOutlined,
   PlusCircleOutlined,
   DeleteColumnOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import {
   Box,
@@ -52,6 +53,7 @@ import {
   getOrdersProfileById,
   updateStatusOrder,
   updateOrder,
+  deleteItemOrder,
 } from "@/features/order-slice";
 import { getCart } from "@/features/shopping-slice";
 
@@ -232,23 +234,6 @@ export const Orders: NextPageWithLayout = () => {
     setOpenEdit(false);
   };
 
-  const deleteItemOrder = (index: number) => {
-    var newRecordsOrder = recordOrder.filter((el: any, indexItem: number) => {
-      if (indexItem !== index) return el;
-    });
-    if (newRecordsOrder.length === 0) {
-      message.warning({
-        content: "Đơn hàng cần ít nhất một sản phẩm",
-        duration: 1,
-        style: {
-          marginTop: "3vh",
-          float: "right",
-        },
-      });
-      return;
-    }
-    setRecordOrder(newRecordsOrder);
-  };
   //#endregion
 
   //#region update quantity item edit detail order
@@ -256,8 +241,8 @@ export const Orders: NextPageWithLayout = () => {
     let value = parseInt(event.target.value) as number;
     let max = parseInt(event.target.max) as number;
 
-    value = isNaN(value)? 1 : value;
-    
+    value = isNaN(value) ? 1 : value;
+
     if (max < value || value < 0) {
       message.error({
         content: "Kiểm tra số lượng",
@@ -344,6 +329,43 @@ export const Orders: NextPageWithLayout = () => {
     setOrder(newOrder);
   };
 
+  //#endregion
+
+  //#region delete item in order
+
+  const deleteItemOrder = (index: number) => {
+    let newOrder = { ...order };
+
+    var newRecordsOrder = recordOrder.filter((el: any, indexItem: number) => {
+      if (indexItem !== index) return el;
+    });
+    var newItems = order.Items.filter((el: any, indexItem: number) => {
+      if (indexItem !== index) return el;
+    });
+
+    var newItemsDetails = order.OrderDetails.filter(
+      (el: any, indexItem: number) => {
+        if (indexItem !== index) return el;
+      }
+    );
+
+    newOrder.OrderDetails = newItemsDetails;
+    newOrder.Items = newItems;
+
+    if (newRecordsOrder.length === 0) {
+      message.warning({
+        content: "Đơn hàng cần ít nhất một sản phẩm",
+        duration: 1,
+        style: {
+          marginTop: "3vh",
+          float: "right",
+        },
+      });
+      return;
+    }
+    setRecordOrder(newRecordsOrder);
+    setOrder(newOrder);
+  };
   //#endregion
 
   //#region Colums: colums of table
@@ -482,6 +504,15 @@ export const Orders: NextPageWithLayout = () => {
     <WrapperCMSProduct>
       <HeadingTitle>
         <h5>Hóa đơn của bạn</h5>
+        <Button
+          onClick={() => {
+            router.push({
+              pathname: "/",
+            });
+          }}
+        >
+          <HomeOutlined /> Tiếp tục mua hàng
+        </Button>
       </HeadingTitle>
 
       <WrapProduct>

@@ -167,6 +167,19 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
       >
         Đăng xuất
       </Menu.Item>
+      <Menu.Item
+        style={{
+          backgroundColor: "#fdd835",
+          textAlign: "center",
+          fontWeight: 600,
+          margin: "5px 20px 10px",
+        }}
+        onClick={()=> router.push({
+          pathname:"/orders"
+        })}
+      >
+        Đơn hàng của tôi
+      </Menu.Item>
     </Menu>
   );
   useEffect(() => {

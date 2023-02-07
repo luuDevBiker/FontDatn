@@ -10,6 +10,8 @@ export const GET_ORDERS_BY_PROFILE_ID: string = "/getOrdersByProfileIDId";
 export const CONFIRM_ORDER: string = "/confirmOrder";
 export const UPDATE_STATUS_ORDER: string = "/updateStatusOrder";
 export const UPDATE_ORDER: string = "/updateOrder";
+export const Delete_Item_ORDER: string = "/deleteItemOrder";
+
 
 const storage =
   typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
@@ -59,6 +61,14 @@ export const getOrdersProfileById = createAsyncThunk(GET_ORDERS_BY_PROFILE_ID, a
     console.log("updateOrder",payload);
     try {
       const response = await OrderApi.updateOrder(payload.Id,payload);
+      return response.data;
+    } catch (error: any) {}
+  });
+
+  export const deleteItemOrder = createAsyncThunk(Delete_Item_ORDER, async (payload : any) => {
+    console.log("updateOrder",payload);
+    try {
+      const response = await OrderApi.deleteItemInOrder(payload.Id,payload.ProductVariantId);
       return response.data;
     } catch (error: any) {}
   });

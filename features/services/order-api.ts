@@ -45,6 +45,14 @@ class OrderApi {
       data: payload
     })
   }
+  
+  deleteItemInOrder(key:any,id:any){
+    return axiosClient({
+      method: "post",
+      url: `/msa-order/api/Order/${key}/DeleteItem/${id}`
+    })
+  }
+
 }
 
 export default new OrderApi();

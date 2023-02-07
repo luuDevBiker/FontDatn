@@ -58,19 +58,18 @@ export const CmsOder: NextPageWithLayout = () => {
 
   //#region useEffect: load data
   useEffect(() => {
-    if (!loading) {
-      return;
-    }
-    dispatch(getOrders())
-      .unwrap()
-      .then()
-      .then((res: any) => {
-        console.log(res);
+    if (loading) {
+      dispatch(getOrders())
+        .unwrap()
+        .then()
+        .then((res: any) => {
+          console.log(res);
 
-        setData(res.Payload);
-        setLoading(false);
-      });
-  }, [loading]);
+          setData(res.Payload);
+          setLoading(false);
+        });
+    }
+  }, [loading, items]);
   //#endregion
 
   //#region  onSelectChange: set data record selected
@@ -105,7 +104,6 @@ export const CmsOder: NextPageWithLayout = () => {
 
   const updateNote = (value: any) => {
     let note = value.target.value;
-    console.log(indexNoteSelect);
 
     if (indexNoteSelect !== -1) {
       let newItemsUpdate = items.map((el: any, index: number) => {
@@ -115,9 +113,16 @@ export const CmsOder: NextPageWithLayout = () => {
         }
         return el;
       });
-      console.log(newItemsUpdate);
+      let newRecordsOrder = recordOrder.map((el: any, index: number) => {
+        if (index === indexNoteSelect) {
+          el.Note = note;
+          return el;
+        }
+        return el;
+      });
 
       setItems(newItemsUpdate);
+      setRecordOrder(newRecordsOrder);
     }
   };
 
@@ -126,6 +131,72 @@ export const CmsOder: NextPageWithLayout = () => {
   };
 
   const updateOrder = (status: number, id: any) => {
+    for (let index = 0; index < items.length; index++) {
+      const element = items[index];
+      let elementCheck = recordOrder.find(
+        (el: any, indexItem: number) => index === indexItem
+      );
+      console.log(elementCheck);
+
+      //#region emei empty
+      if (element.Note === null || element.Note === "") {
+        message.error({
+          content: `${elementCheck.Name} chưa nhập emeis`,
+          duration: 1,
+          style: {
+            marginTop: "3vh",
+            float: "right",
+          },
+        });
+        return;
+      }
+      //#endregion
+
+      let emeis = element.Note.split("\n");
+      let checkEmeis = emeis.filter((el:any)=> el === "")
+
+      //#region emei not validate
+      if (checkEmeis.length > 0) {
+        message.error({
+          content:  `${elementCheck.Name} có emeis sai định dạng`,
+          duration: 1,
+          style: {
+            marginTop: "3vh",
+            float: "right",
+          },
+        });
+        return;
+      }
+      //#endregion
+
+      //#region missing emei
+      if (emeis.length < element.Quantity) {
+        message.error({
+          content:  `${elementCheck.Name} nhập thiếu emeis`,
+          duration: 1,
+          style: {
+            marginTop: "3vh",
+            float: "right",
+          },
+        });
+        return;
+      }
+      //#endregion
+
+      //#region superfluous emei
+      if (emeis.length > element.Quantity) {
+        message.error({
+          content: `${elementCheck.Name} nhập thừa emeis`,
+          duration: 1,
+          style: {
+            marginTop: "3vh",
+            float: "right",
+          },
+        });
+        return;
+      }
+      //#endregion
+    }
     let payload =
       status === 2
         ? {
@@ -345,23 +416,29 @@ export const CmsOder: NextPageWithLayout = () => {
                 </Col>
                 <Col span={12}>{el.OptionValues}</Col>
                 <Col span={8}>
-                  {el.Note === null || el.Note === undefined ? (
+                  <>
+                    <span
+                      style={{
+                        color:
+                          el?.Note?.split("\n").length > el.Quantity
+                            ? "red"
+                            : "",
+                      }}
+                    >
+                      {el?.Note?.split("\n").length === undefined?0:el?.Note?.split("\n").length}/{el.Quantity} EMEIS
+                    </span>
                     <TextArea
                       onClick={() => {
                         setItemNoteValueIndex(indexItem);
                       }}
                       onChange={updateNote}
-                      placeholder={`Nhập EMEI và thông tin của sản phẩm ${el.Name}`}
+                      placeholder={
+                        el.Note === null
+                          ? `Nhập EMEI và thông tin của sản phẩm ${el.Name}`
+                          : `${el.Note}`
+                      }
                     />
-                  ) : (
-                    <TextArea
-                      onClick={() => {
-                        setItemNoteValueIndex(indexItem);
-                      }}
-                      onChange={updateNote}
-                      placeholder={`${el.Note}`}
-                    />
-                  )}
+                  </>
                 </Col>
               </Row>
               <span style={{ float: "right" }}>
