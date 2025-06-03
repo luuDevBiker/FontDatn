@@ -1,24 +1,13 @@
-import { Button, Checkbox, Col, Form, Input, message, Row } from "antd";
-import React from "react";
-import {
-  CloseCircleOutlined,
-  LockOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { Form, Input, message } from "antd";
 import { useRouter } from "next/router";
 import {
-  BoxBody,
-  BoxChange,
-  ButtunSubmit,
+  BoxBody, ButtunSubmit,
   Content,
   ContentBackgound,
-  ContentFooter,
-  SignUpWithFacebook,
-  SignUpWithGoogle,
-  StyledForm,
+  ContentFooter, StyledForm,
   Wrapper,
   WrapperBox,
-  WrapperBox2,
+  WrapperBox2
 } from "../../../styles/AuthStyled";
 import backfround from "../../../assets/layout/login.png";
 import Image from "next/image";
@@ -26,7 +15,7 @@ import { IUserSignInPayload } from "@/models/user";
 import { userSignIn } from "@/features/user-slice";
 import { useAppDispatch } from "@/app/hooks";
 
-export const SignIn = () => {
+const SignIn = () => {
   const router = useRouter();
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
@@ -49,9 +38,8 @@ export const SignIn = () => {
         });
         router.push("/");
       })
-      .catch((error: any) => {});
+      .catch((error: any) => { });
   };
-
   return (
     <div
       style={{ display: "flex", alignItems: "center", flexDirection: "column" }}
@@ -59,7 +47,8 @@ export const SignIn = () => {
       <Wrapper>
         <ContentBackgound></ContentBackgound>
         <WrapperBox>
-          <img
+          <Image
+            alt=""
             style={{
               width: "100%",
               height: "610px",
@@ -106,14 +95,6 @@ export const SignIn = () => {
                   className="signin"
                 />
               </Form.Item>
-              {/* <div className='resetPassword'>
-                  <Form.Item name='remember' valuePropName='checked'>
-                    <Checkbox >Nhớ mật khẩu</Checkbox>
-                  </Form.Item>
-                  <div className='rest' onClick={() => router.push('/auth/forgot-password')}>
-                    Quên mật khẩu
-                    </div>
-                  </div> */}
               <ButtunSubmit htmlType="submit">Đăng nhập</ButtunSubmit>
               <div
                 className="rest"
@@ -121,7 +102,6 @@ export const SignIn = () => {
               >
                 Quên mật khẩu?
               </div>
-
               <ContentFooter>
                 <div>Bạn mới biết đến Pet World?</div>{" "}
                 <span onClick={() => router.push("/auth/sign-up")}>
@@ -135,3 +115,5 @@ export const SignIn = () => {
     </div>
   );
 };
+
+export default SignIn;

@@ -1,35 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Col,
   Rate,
   Row,
   Image,
   Breadcrumb,
-  Card,
-  List,
-  Divider,
+  Card, Divider,
   Space,
   InputNumber,
   Typography,
-  Button,
+  Button
 } from "antd";
 import { NextPageWithLayout } from "../../models/common";
 import "antd/dist/antd.css";
-import Link from "next/link";
 import {
-  CheckOutlined,
-  ExpandOutlined,
-  HeartFilled,
-  ShoppingCartOutlined,
-  UserOutlined,
-  GiftOutlined,
+  CheckOutlined, ShoppingCartOutlined, GiftOutlined
 } from "@ant-design/icons";
-import { ListImageDetail, product } from "@/utils/data";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import {
-  getListProduct,
   getProductDetails,
-  selectProduct,
+  selectProduct
 } from "@/features/product-slice";
 import {
   ButtonAddtoCartCustom,
@@ -55,17 +45,16 @@ import {
 } from "./ProductdetailStyled";
 import { BreadcrumbStyle } from "@/styles/DashBoardStyled";
 import { useRouter } from "next/router";
-import { stringify } from "querystring";
 
 export const ProductDetailComponents: NextPageWithLayout = (prop) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { productDetails } = useAppSelector(selectProduct);
 
-  const { key,id } = router.query;
+  const { key, id } = router.query;
   const [data, setData] = useState<any>();
   useEffect(() => {
-    dispatch(getProductDetails({id,key}))
+    dispatch(getProductDetails({ id, key }))
       .unwrap()
       .then()
       .then((res) => {
@@ -87,6 +76,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
             <Row gutter={[16, 16]}>
               <Col span={10}>
                 <Image
+                  alt=""
                   src={data.Payload.ProductVariants[0].Images[0].Url}
                   height={300}
                   width={"100%"}
@@ -100,6 +90,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                     <ListItemImage key={index}>
                       <Card>
                         <Image
+                          alt=""
                           src={item.Thumbnail}
                           height={90}
                           width={90}
@@ -303,6 +294,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
             <WraperProduct>
               <div className="image">
                 <Image
+                  alt=""
                   preview={false}
                   className="img"
                   src="https://hanoicomputercdn.com/media/product/250_67192_demo_pcgm523_v4.jpg"
@@ -341,6 +333,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
             <WraperProduct>
               <div className="image">
                 <Image
+                  alt=""
                   preview={false}
                   className="img"
                   src="https://hanoicomputercdn.com/media/product/250_67192_demo_pcgm523_v4.jpg"
@@ -379,6 +372,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
             <WraperProduct>
               <div className="image">
                 <Image
+                  alt=""
                   preview={false}
                   className="img"
                   src="https://hanoicomputercdn.com/media/product/250_67192_demo_pcgm523_v4.jpg"
@@ -417,6 +411,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
             <WraperProduct>
               <div className="image">
                 <Image
+                  alt=""
                   preview={false}
                   className="img"
                   src="https://hanoicomputercdn.com/media/product/250_67192_demo_pcgm523_v4.jpg"

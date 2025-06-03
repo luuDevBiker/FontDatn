@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Rate, Row } from "antd";
+import { Col, Image, Rate, Row } from "antd";
 import { NextPageWithLayout } from "../../models/common";
 import { AddtoCart, BoxDecription, WrapperProduct, WrapperProductLeft, WrapperProductRight, WrapperSlider } from "../../styles/HomeStyled";
 import { Carousel } from "react-responsive-carousel";
@@ -8,33 +8,33 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 const colStyles = {
     flexBasis: "20%",
     width: "20%"
-  };
+};
 
-export const ProductDetail:NextPageWithLayout=(prop)=>{
+export const ProductDetail: NextPageWithLayout = (prop) => {
 
-    return(
+    return (
         <React.Fragment>
             <WrapperProduct>
                 <Row >
                     <Col xs={24} sm={24} md={24} xxl={11} xl={11}>
                         <WrapperProductLeft data-wow-delay="0.7s">
                             <Carousel autoPlay >
-                                        <div>
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></img>
-                                        </div>
-                                        <div>
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9G cRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></img>
-                                        </div>
-                                        <div>
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></img>
-                                        </div>
-                                        <div>
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></img>
-                                        </div>
-                                        <div>
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></img>
-                                        </div>
-                                    </Carousel>
+                                <div>
+                                    <Image alt="" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></Image>
+                                </div>
+                                <div>
+                                    <Image alt="" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9G cRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></Image>
+                                </div>
+                                <div>
+                                    <Image alt="" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></Image>
+                                </div>
+                                <div>
+                                    <Image alt="" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></Image>
+                                </div>
+                                <div>
+                                    <Image alt="" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"></Image>
+                                </div>
+                            </Carousel>
                         </WrapperProductLeft>
                     </Col>
                     <Col xs={24} sm={24} md={24} xxl={13} xl={13}>
@@ -46,7 +46,7 @@ export const ProductDetail:NextPageWithLayout=(prop)=>{
                             <div className="priceProduct">
                                 400.000đ <span className="pricemin"><del>300.000đ</del></span>
                             </div>
-                            
+
                             <div className="decription">Sản phẩm được làm từ hạt nguyên cám  Sản phẩm được làm từ hạt nguyên cám nguyên chất Sản phẩm được làm từ hạt nguyên cám nguyên chất Sản phẩm được làm từ hạt nguyên cám nguyên chất Sản phẩm được lnguyên chất</div>
                             <div className="decription">
                                 Trạng thái: <span>Còn hàng</span>
@@ -60,7 +60,7 @@ export const ProductDetail:NextPageWithLayout=(prop)=>{
                         </WrapperProductRight>
                     </Col>
                 </Row>
-                
+
             </WrapperProduct>
         </React.Fragment>
     )

@@ -78,7 +78,7 @@ export const CmsProduct: NextPageWithLayout = () => {
       .then((res: any) => {
         setData(res.Payload);
       });
-  }, []);
+  }, [dispatch]);
 
   return (
     <WrapperCMSProduct>
@@ -115,7 +115,7 @@ export const CmsProduct: NextPageWithLayout = () => {
         </div>
         <Modal
           title="Chi tiết sản phẩm"
-          open={isModalOpen}
+          visible={isModalOpen}
           onCancel={handleCancel}
           width={"90%"}
         >

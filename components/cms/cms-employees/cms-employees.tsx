@@ -90,7 +90,7 @@ export const CmsEmployees: NextPageWithLayout = () => {
         },
       },
     ],
-    []
+    [check]
   );
 
   const data: DataType[] = [];
@@ -114,7 +114,7 @@ export const CmsEmployees: NextPageWithLayout = () => {
 
         <div>
           <ButtonExport type="default">
-            <img src={ExportIcon.src} alt="" />
+            <Image src={ExportIcon.src} alt="" />
             <div>Export</div>
           </ButtonExport>
           <Button

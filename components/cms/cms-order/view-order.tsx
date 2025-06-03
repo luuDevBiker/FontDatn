@@ -1,22 +1,16 @@
 import { NextPageWithLayout } from "@/models/common";
 import {
-  ButtonExport,
   HeadingTitle,
   WrapperCMSProduct,
-  WrapProduct,
+  WrapProduct
 } from "@/styles/CmsProductStylead";
 import {
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  CloseCircleOutlined,
-  ExclamationCircleOutlined,
-  MinusCircleOutlined,
-  SyncOutlined,
+  CheckCircleOutlined, CloseCircleOutlined,
+  ExclamationCircleOutlined, SyncOutlined
 } from "@ant-design/icons";
 import Table, { ColumnsType } from "antd/lib/table";
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, Image, Tag, Modal, Row, Col, Input, message } from "antd";
-import ExportIcon from "@/assets/icon/ExportIcon.svg";
+import { Button, Tag, Modal, Row, Col, Input, message } from "antd";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/app/hooks";
 import {
@@ -69,7 +63,7 @@ export const CmsOder: NextPageWithLayout = () => {
           setLoading(false);
         });
     }
-  }, [loading, items]);
+  }, [dispatch, loading, items]);
   //#endregion
 
   //#region  onSelectChange: set data record selected
@@ -153,12 +147,12 @@ export const CmsOder: NextPageWithLayout = () => {
       //#endregion
 
       let emeis = element.Note.split("\n");
-      let checkEmeis = emeis.filter((el:any)=> el === "")
+      let checkEmeis = emeis.filter((el: any) => el === "")
 
       //#region emei not validate
       if (checkEmeis.length > 0) {
         message.error({
-          content:  `${elementCheck.Name} có emeis sai định dạng`,
+          content: `${elementCheck.Name} có emeis sai định dạng`,
           duration: 1,
           style: {
             marginTop: "3vh",
@@ -172,7 +166,7 @@ export const CmsOder: NextPageWithLayout = () => {
       //#region missing emei
       if (emeis.length < element.Quantity) {
         message.error({
-          content:  `${elementCheck.Name} nhập thiếu emeis`,
+          content: `${elementCheck.Name} nhập thiếu emeis`,
           duration: 1,
           style: {
             marginTop: "3vh",
@@ -200,19 +194,19 @@ export const CmsOder: NextPageWithLayout = () => {
     let payload =
       status === 2
         ? {
-            Id: orderId,
-            Payload: {
-              StatusOrder: status,
-              Items: items,
-              Note: note,
-            },
-          }
+          Id: orderId,
+          Payload: {
+            StatusOrder: status,
+            Items: items,
+            Note: note,
+          },
+        }
         : {
-            Id: id,
-            Payload: {
-              StatusOrder: status,
-            },
-          };
+          Id: id,
+          Payload: {
+            StatusOrder: status,
+          },
+        };
     console.log(payload);
 
     dispatch(status === 2 ? confirmOrder(payload) : updateStatusOrder(payload))
@@ -367,13 +361,13 @@ export const CmsOder: NextPageWithLayout = () => {
 
       <Modal
         title="Xác nhận đơn hàng"
-        open={openEdit}
+        visible={openEdit}
         onOk={() => {
           currStatus === "Xác nhận"
             ? updateOrder(2, orderId)
             : currStatus === "Giao hàng"
-            ? updateOrder(3, orderId)
-            : console.log("update status order");
+              ? updateOrder(3, orderId)
+              : console.log("update status order");
         }}
         onCancel={() => setOpenEdit(false)}
         width={"70%"}
@@ -384,24 +378,24 @@ export const CmsOder: NextPageWithLayout = () => {
       >
         <WrapperCMSProduct>
           {recordOrder?.map((el: any, indexItem: number) => (
-            <WrapProduct style={{ width: "90%" }} title={el.OptionValues}>
+            <WrapProduct key={el.SkuId || indexItem} style={{ width: "90%" }} title={el.OptionValues}>
               <Row gutter={[20, 20]} style={{ margin: "5px 0px" }}>
                 <Col span={8}>
                   <div>
                     {"Name: "}
                     <Tag>
-                      <b> {el.Name} :</b>{" "}
+                      <b>{el.Name} :</b>{" "}
                       <span style={{ color: "#2d41f0" }}>{el.SkuId}</span>
                     </Tag>
                   </div>
                 </Col>
                 <Col span={4}>
-                  {"Thương hiệu: "}{" "}
+                  {"Thương hiệu: "}
                   <span style={{ color: "#2d41f0" }}>{el.Brand}</span>
                 </Col>
                 <Col span={4}>
                   {"Loại: "}
-                  <span style={{ color: "#2d41f0" }}>{el.Caregory}</span>{" "}
+                  <span style={{ color: "#2d41f0" }}>{el.Caregory}</span>
                 </Col>
                 <Col span={4}>
                   {"Giá: "}
@@ -412,7 +406,7 @@ export const CmsOder: NextPageWithLayout = () => {
                 </Col>
                 <Col span={4}>
                   {"Số lượng: "}
-                  <span style={{ color: "#2d41f0" }}>{el.Quantity}</span>{" "}
+                  <span style={{ color: "#2d41f0" }}>{el.Quantity}</span>
                 </Col>
                 <Col span={12}>{el.OptionValues}</Col>
                 <Col span={8}>
@@ -425,7 +419,7 @@ export const CmsOder: NextPageWithLayout = () => {
                             : "",
                       }}
                     >
-                      {el?.Note?.split("\n").length === undefined?0:el?.Note?.split("\n").length}/{el.Quantity} EMEIS
+                      {el?.Note?.split("\n").length ?? 0}/{el.Quantity} EMEIS
                     </span>
                     <TextArea
                       onClick={() => {

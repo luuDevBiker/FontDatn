@@ -1,55 +1,19 @@
 import {
-  Col,
-  Layout,
-  Rate,
-  Row,
-  Image,
-  Tooltip,
-  Carousel,
-  Space,
-  Input,
-  Button,
-  Radio,
-  message,
-  Checkbox,
+  Col, Rate,
+  Row, Carousel,
+  Space, Button, message,
+  Image
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../../models/common";
-import {
-  BoxContent,
-  BoxDecription,
-  Boxheart,
-  BoxNameProduct,
-  BoxPrice,
-  BoxProduct,
-  BoxProductBody,
-  BoxProductHeader,
-  BoxSlider,
-  BoxView,
-  BoxViewer,
-  ButtonAddtoCart,
-  ButtonAddtoCart2,
-  WrapperImage,
-  WrapperPopupBody,
-  WrapperPopupHeader,
-} from "../../styles/HomeStyled";
 import "antd/dist/antd.css";
-import Link from "next/link";
 import {
-  CheckOutlined,
-  ExpandOutlined,
-  HeartFilled,
-  ShoppingCartOutlined,
-  UserOutlined,
+  CheckOutlined, ShoppingCartOutlined
 } from "@ant-design/icons";
-import Carosel from "../../assets/layout/adorable-white-dog-isolated-blue.jpg";
-import { ListCarousel, listMenu, productList } from "@/utils/data";
-import { Confirm } from "../popup-confirm/confirm";
-import { SP } from "next/dist/shared/lib/utils";
+import { ListCarousel, listMenu } from "@/utils/data";
 import { useAppDispatch } from "@/app/hooks";
 import { getListProduct } from "@/features/product-slice";
-import { Footer } from "../footer/footer";
-import { IProduct, ICartItem, IItemAdd } from "@/models/product";
+import { IProduct } from "@/models/product";
 import { addTocart } from "@/features/shopping-slice";
 import {
   ButtonAddtoCartCustom,
@@ -91,43 +55,6 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
     };
 
     if (!user) {
-      // let itemsCart: any = localStorage.getItem("itemsCart");
-      // itemsCart = JSON.parse(itemsCart);
-      // message.warning({
-      //   content:
-      //     "Đã thêm sản phẩm vào bộ nhớ tạm, hãy đăng nhập để lưu vào giỏ hàng",
-      //   duration: 3,
-      //   style: {
-      //     marginTop: "6vh",
-      //     float: "right",
-      //   },
-      // });
-      // var item = itemsCart.find(
-      //   (el: any) => el.ProductVariantId === dataAdd.Items.ProductVariantId
-      // );
-      // console.log(item);
-
-      // if (item) {
-      //   dataAdd.Items.Quantity = dataAdd.Items.Quantity + item.Quantity;
-
-      //   let newItemsCart = itemsCart.map((el: any) => {
-      //     if (el.ProductVariantId != dataAdd.Items.ProductVariantId) {
-      //       return el;
-      //     } else {
-      //       return dataAdd.Items;
-      //     }
-      //   });
-      //   itemsCart =
-      //     itemsCart.length === 0 ? [dataAdd.Items] : [...newItemsCart];
-      // }
-      // else{
-      //   itemsCart = [...itemsCart,dataAdd.Items]
-      // }
-      // console.log(itemsCart.length);
-
-      // var cart = [...itemsCart];
-      // localStorage.setItem("itemsCart", JSON.stringify(cart));
-
       message.warning({
         content: "Bạn chưa đăng nhập",
         duration: 3,
@@ -186,19 +113,22 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
           <Carousel effect="fade" autoplay>
             {ListCarousel.map((item, index) => (
               <div key={index}>
-                <Image preview={false} src={item.image} />
+                <Image
+                  alt="" preview={false} src={item.image} />
               </div>
             ))}
           </Carousel>
           <Row gutter={10}>
             <Col span={12}>
               <Image
+                alt=""
                 preview={false}
                 src="https://hanoicomputercdn.com/media/banner/26_Nov608efd41d1ba4dff0db8d91f71879889.jpg"
               ></Image>
             </Col>
             <Col span={12}>
               <Image
+                alt=""
                 preview={false}
                 src="https://hanoicomputercdn.com/media/banner/26_Novc6fa2f69cd122b688c5b21549796af3d.jpg"
               ></Image>
@@ -212,6 +142,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
             <Col span={24}>
               <div>
                 <Image
+                  alt=""
                   preview={false}
                   src="https://hanoicomputercdn.com/media/banner/26_Novc905ee98c1286b503be72f84ba93b446.jpg"
                   height={"200px"}
@@ -221,6 +152,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
             <Col span={24}>
               <div>
                 <Image
+                  alt=""
                   preview={false}
                   src="https://hanoicomputercdn.com/media/banner/26_Novc905ee98c1286b503be72f84ba93b446.jpg"
                   height={"200px"}
@@ -230,6 +162,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
             <Col span={24}>
               <div>
                 <Image
+                  alt=""
                   preview={false}
                   src="https://hanoicomputercdn.com/media/banner/26_Novc905ee98c1286b503be72f84ba93b446.jpg"
                   height={"200px"}
@@ -245,10 +178,11 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
           {data &&
             data.map((item: any, index: number) => {
               return item.ProductVariants.map((variant: any, index: number) => (
-                <Col span={6}>
+                <Col span={6} key={item.SkuId || index}>
                   <WraperProduct>
                     <div className="image">
                       <Image
+                        alt=""
                         preview={false}
                         className="img"
                         src={variant.Images[0].Url}

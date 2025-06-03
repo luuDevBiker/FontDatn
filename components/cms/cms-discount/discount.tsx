@@ -49,7 +49,7 @@ export const Discount = () => {
   );
   const [title, setTitle] = useState<string>("Mã giảm giá");
   const [form] = Form.useForm();
-  const { getFieldValue, setFieldValue } = form;
+  const { getFieldValue, setFieldsValue } = form;
   const [unit, setUnit] = useState<string>("%");
   const [require, setRequire] = useState<string>("");
   const [checkedEndate, setCheckedEndate] = useState<boolean>(false);
@@ -73,7 +73,7 @@ export const Discount = () => {
       setNote("Khách hàng phải nhập mã thanh toán này khi thanh toán");
       setTitle("Mã giảm giá");
       setCodeValue("");
-      setFieldValue("codeValue", "");
+      setFieldsValue({ "codeValue": "" });
     } else {
       setNote("Mã giảm giá sẽ được hiển thị tự động khi khách hàng thanh toán");
       setTitle("Tên mã giảm giá");
@@ -101,7 +101,7 @@ export const Discount = () => {
     }
   };
 
-  const onFieldsChange = (changedFields: any) => {};
+  const onFieldsChange = (changedFields: any) => { };
   const onChangeEndDate = (e: CheckboxChangeEvent) => {
     setCheckedEndate(e.target.checked);
   };
@@ -237,8 +237,8 @@ export const Discount = () => {
                         if (value.target.value) {
                           setRequireValue(
                             "Yêu cầu số tiền tối thiểu là : " +
-                              value.target.value +
-                              "đ"
+                            value.target.value +
+                            "đ"
                           );
                         } else {
                           setRequireValue("Không yêu cầu giá trị tối thiểu");
@@ -255,7 +255,7 @@ export const Discount = () => {
                         if (value.target.value) {
                           setRequireValue(
                             "Yêu cầu số mặt hàng tối thiểu là : " +
-                              value.target.value
+                            value.target.value
                           );
                         } else {
                           setRequireValue("Không yêu cầu giá trị tối thiểu");
@@ -414,10 +414,10 @@ export const Discount = () => {
                       ? `Giới hạn ${times} lần sử dụng`
                       : times > 0 &&
                         numberUse !== "Không giới hạn số lần sử dụng"
-                      ? `Giới hạn ${times} lần sử dụng cho mỗi người`
-                      : times < 0 && numberUse
-                      ? numberUse
-                      : numberUse}
+                        ? `Giới hạn ${times} lần sử dụng cho mỗi người`
+                        : times < 0 && numberUse
+                          ? numberUse
+                          : numberUse}
                   </li>
                   {startDate && startDate !== "Invalid date" ? (
                     <li>Bắt đầu từ ngày: {startDate}</li>

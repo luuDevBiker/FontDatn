@@ -4,7 +4,6 @@ import { Footer } from "@/components/footer/footer";
 import CountDownTimer from "@/components/landingpages/CountDownTimer";
 import AuthLayout from "@/components/layout/auth-layout/auth-layout";
 import { Confirm } from "@/components/popup-confirm/confirm";
-import { WrapperCMSProduct, WrapProduct } from "@/styles/CmsProductStylead";
 import {
   BackgroundCarousel,
   BackgroundCarousel2,
@@ -14,8 +13,9 @@ import {
   WrapperDeal,
   WrapperNewProduct,
 } from "@/styles/LandingPageStyled";
-import { Button, Carousel, Col, Layout, Rate, Row } from "antd";
-import React, { useState } from "react";
+import { Carousel, Col, Layout, Rate, Row } from "antd";
+import Image from "next/image";
+import { useState } from "react";
 
 export const LandingPage = () => {
   const [isConfirm, setIsConfirm] = useState<boolean>(true);
@@ -37,7 +37,7 @@ export const LandingPage = () => {
           <Row gutter={[20, 20]}>
             <Col span={8}>
               <div className="image_bg">
-                <img
+                <Image
                   src="https://cdn.shopify.com/s/files/1/1215/2782/files/leo_ziggypet_banner1-h1.png"
                   alt=""
                   style={{ width: "100%", height: "auto" }}
@@ -45,21 +45,21 @@ export const LandingPage = () => {
               </div>
             </Col>
             <Col span={8}>
-              <img
+              <Image
                 src="https://cdn.shopify.com/s/files/1/1215/2782/files/leo_ziggypet_banner1-h1.png"
                 alt=""
                 style={{ width: "100%", height: "auto" }}
               />
             </Col>
             <Col span={8}>
-              <img
+              <Image
                 src="https://cdn.shopify.com/s/files/1/1215/2782/files/leo_ziggypet_banner1-h1.png"
                 alt=""
                 style={{ width: "100%", height: "auto" }}
               />
             </Col>
             <Col span={12}>
-              <img
+              <Image
                 src="https://cdn.shopify.com/s/files/1/1215/2782/files/leo_ziggypet_banner4-h1.png"
                 alt=""
                 loading="lazy"
@@ -67,7 +67,7 @@ export const LandingPage = () => {
               />
             </Col>
             <Col span={12}>
-              <img
+              <Image
                 src="https://cdn.shopify.com/s/files/1/1215/2782/files/leo_ziggypet_banner4-h1.png"
                 alt=""
                 loading="lazy"
@@ -91,7 +91,7 @@ export const LandingPage = () => {
           <Col span={12}>
             <WrapperNewProduct>
               <div className="left-product">
-                <img
+                <Image
                   src="	https://htmldemo.net/grano/grano/assets/images/deal/1.jpg"
                   alt=""
                 />
@@ -106,7 +106,7 @@ export const LandingPage = () => {
           <Col span={12}>
             <WrapperNewProduct>
               <div className="left-product">
-                <img
+                <Image
                   src="	https://htmldemo.net/grano/grano/assets/images/deal/1.jpg"
                   alt=""
                 />

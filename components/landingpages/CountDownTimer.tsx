@@ -4,10 +4,10 @@ import CountDownCard from './CountDownCard';
 
 const CountDownTimer = () => {
   //card ref
-  const SecondsCardRef = useRef();
-  const MinutesCardRef = useRef();
-  const HoursCardRef = useRef();
-  const DaysCardRef = useRef();
+  const SecondsCardRef = useRef<HTMLDivElement>(null);
+  const MinutesCardRef = useRef<HTMLDivElement>(null);
+  const HoursCardRef = useRef<HTMLDivElement>(null);
+  const DaysCardRef = useRef<HTMLDivElement>(null);
   //state
   const [days, setDays] = useState<any>(14);
   const [hours, setHours] = useState<number>(0);
@@ -37,9 +37,10 @@ const CountDownTimer = () => {
   }, [minutes, hours]);
   useEffect(() => {
     days === 14 && setDays(13);
-    hours === 0 &&
-      setDays(Number(days) - 1) &&
+    if (hours === 0) {
+      setDays(Number(days) - 1);
       DaysCardRef.current?.classList.toggle('rotate');
+    }
   }, [hours, days]);
   return (
     <div className="countdown__container">

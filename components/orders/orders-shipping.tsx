@@ -87,7 +87,7 @@ export const OrdersShipping: NextPageWithLayout = () => {
   //#region viewDetail: set data and state view order detail and on edit
   const viewDetail = (data: any) => {
     console.log(data.Id);
-    
+
     setCanEdit(data.StatusOrder === 2 ? true : false);
     setItems(data.Items);
     setRecordOrder(data?.OrderDetails);
@@ -122,7 +122,7 @@ export const OrdersShipping: NextPageWithLayout = () => {
     };
 
     console.log(payload);
-    
+
 
     dispatch(updateStatusOrder(payload))
       .unwrap()
@@ -277,7 +277,7 @@ export const OrdersShipping: NextPageWithLayout = () => {
 
       <Modal
         title="Xác nhận đơn hàng"
-        open={openEdit}
+        visible={openEdit}
         onOk={() => updateOrderStatus()}
         onCancel={() => setOpenEdit(false)}
         width={"70%"}
@@ -287,7 +287,11 @@ export const OrdersShipping: NextPageWithLayout = () => {
       >
         <WrapperCMSProduct>
           {recordOrder?.map((el: any, indexItem: number) => (
-            <WrapProduct style={{ width: "90%" }} title={el.OptionValues}>
+            <WrapProduct
+              key={el.SkuId || indexItem}
+              style={{ width: "90%" }}
+              title={el.OptionValues}
+            >
               <Row gutter={[20, 20]} style={{ margin: "5px 0px" }}>
                 <Col span={8}>
                   <div>
@@ -344,6 +348,6 @@ export const OrdersShipping: NextPageWithLayout = () => {
         </WrapperCMSProduct>
       </Modal>
     </WrapperCMSProduct>
-  ); 
+  );
   //#endregion
 };

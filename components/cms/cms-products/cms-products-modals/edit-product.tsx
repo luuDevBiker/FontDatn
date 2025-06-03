@@ -1,4 +1,3 @@
-import { NextPageWithLayout } from "@/models/common";
 import {
   BoxMedia,
   OptionWrapp,
@@ -7,43 +6,29 @@ import {
   WrapProduct,
 } from "@/styles/CmsProductStylead";
 import {
-  Button,
-  Checkbox,
-  Form,
+  Button, Form,
   Input,
   message,
   Row,
   Col,
-  Select,
-  Table,
-  Space,
-  Tag,
-  InputNumber,
-  Typography,
-  Popconfirm,
+  Select, Tag,
+  Image
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 import {
   MinusCircleOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  FundFilled,
-  PlusOutlined,
+  DeleteOutlined, PlusOutlined
 } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-const { TextArea } = Input;
-const { Option } = Select;
-import type { CustomTagProps } from "rc-select/lib/BaseSelect";
-import type { ColumnsType } from "antd/es/table";
-import moment from "moment";
 import { useAppDispatch } from "@/app/hooks";
 import { updateProduct } from "@/features/product-slice";
 import { IProduct, IVariant, IOption, IImage } from "@/models/product";
-import FormItem from "antd/es/form/FormItem";
 import axios from "axios";
 import { useRouter } from "next/router";
+const { TextArea } = Input;
+const { Option } = Select;
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -73,7 +58,6 @@ const EditProduct = (props: IProduct) => {
   //#endregion
   //#region Form
   const [form] = Form.useForm();
-  const { getFieldValue, setFieldValue, setFieldsValue } = form;
   const dataForm = [
     {
       name: ["Name"],
@@ -108,7 +92,7 @@ const EditProduct = (props: IProduct) => {
       console.log(dataImages);
     });
     setImages(dataImages);
-  }, [props]);
+  }, [props, indexImgs]);
   console.log(Images);
   //#endregion
   //#endregion
@@ -324,6 +308,7 @@ const EditProduct = (props: IProduct) => {
                     listOption.map((el, index) => {
                       return (
                         <span
+                          key={el.Name || index}
                           style={{
                             width: "15%",
                             display: "inline-block",
@@ -334,12 +319,10 @@ const EditProduct = (props: IProduct) => {
                             <Tag>{el.Name}</Tag>
                           </span>
                           <span style={{ float: "right" }}>
-                            {
-                              <DeleteOutlined
-                                style={{ paddingLeft: "15px" }}
-                                onClick={() => handleRemoveOptions(index)}
-                              />
-                            }
+                            <DeleteOutlined
+                              style={{ paddingLeft: "15px" }}
+                              onClick={() => handleRemoveOptions(index)}
+                            />
                           </span>
                         </span>
                       );
@@ -357,7 +340,7 @@ const EditProduct = (props: IProduct) => {
                 <>
                   {fields.map(({ key, name }) => {
                     return (
-                      <WrapProduct>
+                      <WrapProduct key={key}>
                         <Form.Item
                           label="Giá nhập"
                           name={[name, "ImportPrice"]}
@@ -447,12 +430,12 @@ const EditProduct = (props: IProduct) => {
                               </div>
                             </Upload>
                             <Modal
-                              open={previewOpen}
+                              visible={previewOpen}
                               title={previewTitle}
                               footer={null}
                               onCancel={handleCancel}
                             >
-                              <img
+                              <Image
                                 alt="example"
                                 style={{ width: "100%" }}
                                 src={previewImage}

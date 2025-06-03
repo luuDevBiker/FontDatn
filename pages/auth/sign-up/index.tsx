@@ -1,27 +1,12 @@
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
-import React from "react";
-import {
-  CloseCircleOutlined,
-  LockOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { Form, Input } from "antd";
 import { useRouter } from "next/router";
 import {
-  BoxBody,
-  BoxChange,
-  ButtunSubmit,
-  Content,
-  ContentBackgound,
-  ContentFooter,
-  ContentFooter2,
-  SignUpWithFacebook,
-  SignUpWithGoogle,
-  StyledForm,
+  BoxBody, ButtunSubmit,
+  Content, ContentFooter2, StyledForm,
   Wrapper,
   WrapperBox,
-  WrapperBox2,
+  WrapperBox2
 } from "../../../styles/AuthStyled";
-import backfround from "../../../assets/layout/login.png";
 import Image from "next/image";
 import AuthLayout from "../../../components/layout/auth-layout/auth-layout";
 
@@ -35,7 +20,8 @@ const SignUp = () => {
     >
       <Wrapper>
         <WrapperBox>
-          <img
+          <Image
+            alt=""
             style={{
               width: "100%",
               height: "610px",

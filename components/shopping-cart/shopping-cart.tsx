@@ -1,20 +1,15 @@
 import {
   Box,
   BoxBody,
-  BoxHeader,
-  ContenRight,
+  BoxHeader
 } from "@/styles/CmsDiscountStyled";
 import { WrapProduct } from "@/styles/CmsProductStylead";
 import {
   CartItem,
   CheckOut,
-  Wrapper,
-  WrapperDiscount,
-  WrapperDiscountLeft,
-  WrapperDiscountRigth,
-  WrapperVoucher,
+  Wrapper
 } from "@/styles/ShoppingCartStyled";
-import { DeleteOutlined, SaveOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import {
   Col,
   Row,
@@ -27,13 +22,10 @@ import {
   message,
 } from "antd";
 import IconVoucher from "@/assets/icon/teenyicons_discount-outline.svg";
-import { Confirm } from "../popup-confirm/confirm";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/app/hooks";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getCart, deleteItemInCart, payment } from "@/features/shopping-slice";
-import { RegexValidation } from "@/utils/common";
-import { userInfo } from "os";
 
 export const ShoppingCart = () => {
   const router = useRouter();
@@ -309,6 +301,7 @@ export const ShoppingCart = () => {
               {item?.ItemDetails?.map((el: any, index: number) => {
                 return (
                   <CartItem
+                  key={el.Name || index}
                     style={{ boxShadow: "2px 1px lightblue" }}
                     className="mt-4"
                     onClick={() => setSelectIndex(index)}
@@ -395,18 +388,9 @@ export const ShoppingCart = () => {
             </CheckOut>
             <CheckOut>
               <div>
-                <img src={IconVoucher.src}></img>
-                {``}
+                <Image alt="" src={IconVoucher.src}></Image>
                 <b>{` F-Computor Shop`}</b>
               </div>
-              {/* <b
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setIsConfirm(true);
-                }}
-              >
-                Chọn Hoặc Nhập Mã
-              </b> */}
             </CheckOut>
             <br />
             <Input

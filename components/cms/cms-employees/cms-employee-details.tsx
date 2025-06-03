@@ -1,13 +1,10 @@
 import { NextPageWithLayout } from "@/models/common";
 import {
-  ButtonExport,
-  HeadingTitle,
   WrapperCMSProduct,
-  WrapProduct,
+  WrapProduct
 } from "@/styles/CmsProductStylead";
-import Table, { ColumnsType } from "antd/lib/table";
-import React, { useEffect, useMemo, useState } from "react";
-import { Button, Col, Form, Image, Input, Row, Select } from "antd";
+import { useEffect, useState } from "react";
+import { Button, Col, Form, Input, Row, Select } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
 import { message, Upload } from "antd";
@@ -38,7 +35,7 @@ const props: UploadProps = {
       message.error(`${info.file.name} file upload failed.`);
     }
   },
-  onDrop(e) {},
+  onDrop(e) { },
 };
 
 export const CreateEmployees: NextPageWithLayout = () => {
@@ -124,7 +121,7 @@ export const CreateEmployees: NextPageWithLayout = () => {
           setProvinceData(res.Payload);
         }
       });
-  }, []);
+  }, [dispatch]);
 
   return (
     <WrapperCMSProduct>

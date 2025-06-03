@@ -1,47 +1,19 @@
 import {
-  Col,
-  Layout,
-  Rate,
-  Row,
-  Image,
-  Tooltip,
-  Carousel,
-  Space,
+  Col, Row,
+  Image, Space,
   Input,
-  Button,
-  Radio,
+  Button
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../../models/common";
 import {
-  BoxContent,
-  BoxDecription,
-  Boxheart,
-  BoxNameProduct,
-  BoxPrice,
-  BoxProduct,
-  BoxProductBody,
-  BoxProductHeader,
-  BoxSlider,
-  BoxView,
-  BoxViewer,
-  ButtonAddtoCart,
-  ButtonAddtoCart2,
-  WrapperImage,
-  WrapperPopupBody,
-  WrapperPopupHeader,
+  ButtonAddtoCart2, WrapperPopupBody,
+  WrapperPopupHeader
 } from "../../styles/HomeStyled";
 import "antd/dist/antd.css";
-import Link from "next/link";
-import { ExpandOutlined, HeartFilled } from "@ant-design/icons";
-import Carosel from "../../assets/layout/adorable-white-dog-isolated-blue.jpg";
-import { QuickShow } from "./popup-show";
-import { product } from "@/utils/data";
 import { Confirm } from "../popup-confirm/confirm";
-import { SP } from "next/dist/shared/lib/utils";
 import { useAppDispatch } from "@/app/hooks";
 import { getListProduct } from "@/features/product-slice";
-import { Footer } from "../footer/footer";
 import { ProductCategory } from "../product/product";
 
 export const Home: NextPageWithLayout = (prop) => {
@@ -82,7 +54,7 @@ export const Home: NextPageWithLayout = (prop) => {
         buttonRight={""}
         changeActive={(e: any) => setIsConfirm(e)}
         content={""}
-        handleAction={() => {}}
+        handleAction={() => { }}
         title={""}
         stateButton={false}
         wrapper={
@@ -118,7 +90,8 @@ export const Home: NextPageWithLayout = (prop) => {
                   <div className="coloring">
                     <div className="flexColoring">
                       <div style={{ width: "50%", padding: "8px" }}>
-                        <img
+                        <Image
+                          alt=""
                           src="https://media.gucci.com/style/Transparent_Center_0_0_250x170/1665396005/715773_FAARB_1041_001_100_0000_Light.png"
                           width={"50px"}
                           height={"100%"}
@@ -132,7 +105,8 @@ export const Home: NextPageWithLayout = (prop) => {
                   <div className="coloring">
                     <div className="flexColoring">
                       <div style={{ width: "50%", padding: "8px" }}>
-                        <img
+                        <Image
+                          alt=""
                           src="https://media.gucci.com/style/Transparent_Center_0_0_250x170/1665396005/715773_FAARB_1041_001_100_0000_Light.png"
                           width={"50px"}
                           height={"100%"}
@@ -146,7 +120,8 @@ export const Home: NextPageWithLayout = (prop) => {
                   <div className="coloring">
                     <div className="flexColoring">
                       <div style={{ width: "50%", padding: "8px" }}>
-                        <img
+                        <Image
+                          alt=""
                           src="https://media.gucci.com/style/Transparent_Center_0_0_250x170/1665396005/715773_FAARB_1041_001_100_0000_Light.png"
                           width={"50px"}
                           height={"100%"}
@@ -160,7 +135,8 @@ export const Home: NextPageWithLayout = (prop) => {
                   <div className="coloring">
                     <div className="flexColoring">
                       <div style={{ width: "50%", padding: "8px" }}>
-                        <img
+                        <Image
+                          alt=""
                           src="https://media.gucci.com/style/Transparent_Center_0_0_250x170/1665396005/715773_FAARB_1041_001_100_0000_Light.png"
                           width={"50px"}
                           height={"100%"}

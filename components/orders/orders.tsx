@@ -112,7 +112,7 @@ export const Orders: NextPageWithLayout = () => {
             setData(res.Payload);
           }
         })
-        .catch((res: any) => {});
+        .catch((res: any) => { });
 
       let idCart = JSON.parse(storage)?.CartId;
       dispatch(getCart(idCart))
@@ -122,11 +122,11 @@ export const Orders: NextPageWithLayout = () => {
           let cart = res.Payload;
           setItem(cart);
         })
-        .catch((res: any) => {});
+        .catch((res: any) => { });
     }
 
     setLoading(false);
-  }, [loading, order]);
+  }, [loading, order, dispatch]);
   //#endregion
 
   //#region  onSelectChange: set data record selected
@@ -493,7 +493,7 @@ export const Orders: NextPageWithLayout = () => {
         ),
       },
     ],
-    []
+    [userUpdateOrder]
   );
 
   //#endregion
@@ -530,7 +530,7 @@ export const Orders: NextPageWithLayout = () => {
         //#region Modal
         <Modal
           title="Chi tiết đơn hàng"
-          open={openEdit}
+          visible={openEdit}
           onOk={() => userUpdateOrder(0, orderId)}
           onCancel={() => onCancelModal()}
           width={"70%"}
@@ -585,8 +585,11 @@ export const Orders: NextPageWithLayout = () => {
                 </Row>
               </WrapProduct>
               {recordOrder?.map((el: any, indexItem: number) => (
-                <WrapProduct style={{ width: "90%" }} title={el.OptionValues}>
-                  {}
+                <WrapProduct
+                  key={el.SkuId || indexItem}
+                  style={{ width: "90%" }}
+                  title={el.OptionValues}
+                >
                   <MinusCircleOutlined
                     hidden={order.StatusOrder === 1 ? false : true}
                     style={{
@@ -706,6 +709,7 @@ export const Orders: NextPageWithLayout = () => {
                         {item?.ItemDetails?.map((el: any, index: number) => {
                           return (
                             <CartItem
+                              key={el.Name || index}
                               onClick={() => setIndex(index)}
                               style={{ boxShadow: "2px 1px lightblue" }}
                               className="mt-4"

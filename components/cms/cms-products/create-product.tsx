@@ -7,38 +7,27 @@ import {
   WrapProduct,
 } from "@/styles/CmsProductStylead";
 import {
-  Button,
-  Checkbox,
-  Form,
+  Button, Form,
   Input,
   message,
   Row,
   Col,
-  Select,
-  Table,
-  Space,
-  Tag,
-  InputNumber,
-  Typography,
-  Popconfirm,
+  Select, Tag, Image
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 import {
   MinusCircleOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  FundFilled,
-  PlusOutlined,
+  DeleteOutlined, PlusOutlined
 } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-const { TextArea } = Input;
-const { Option } = Select;
 import moment from "moment";
 import { useAppDispatch } from "@/app/hooks";
 import { addNewProduct } from "@/features/product-slice";
 import axios from "axios";
+const { TextArea } = Input;
+const { Option } = Select;
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -72,7 +61,6 @@ export const CreateProduct: NextPageWithLayout = () => {
 
   const handleCancel = () => setPreviewOpen(false);
   const [form] = Form.useForm();
-  const { getFieldValue, setFieldValue } = form;
   const dispatch = useAppDispatch();
 
   //#region handlePreview Image
@@ -334,17 +322,15 @@ export const CreateProduct: NextPageWithLayout = () => {
                 <div>
                   {listOption.map((el, index) => {
                     return (
-                      <OptionWrapp>
+                      <OptionWrapp key={el.Name || index}>
                         <div className="border">
                           <Tag>{el.Name}</Tag>
                         </div>
                         <div>
-                          {
-                            <DeleteOutlined
-                              style={{ paddingLeft: "15px" }}
-                              onClick={() => handleRemoveOptions(index)}
-                            />
-                          }
+                          <DeleteOutlined
+                            style={{ paddingLeft: "15px" }}
+                            onClick={() => handleRemoveOptions(index)}
+                          />
                         </div>
                       </OptionWrapp>
                     );
@@ -367,80 +353,63 @@ export const CreateProduct: NextPageWithLayout = () => {
                   <>
                     {fields.map(({ key, name }) => {
                       return (
-                        <WrapProduct>
+                        <WrapProduct key={key}>
                           <Form.Item
                             label="Giá nhập"
                             name={[name, "ImportPrice"]}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Giá nhập không được để trống",
-                              },
-                            ]}
+                            rules={[{ required: true, message: "Giá nhập không được để trống" }]}
                           >
                             <Input placeholder="Điền giá nhập của sản phẩm" />
                           </Form.Item>
+
                           <Form.Item
                             label="Giá bán"
                             name={[name, "Price"]}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Giá bán không được để trống",
-                              },
-                            ]}
+                            rules={[{ required: true, message: "Giá bán không được để trống" }]}
                           >
                             <Input placeholder="Điền giá bán của sản phẩm" />
                           </Form.Item>
+
                           <Form.Item
                             label="Số lượng"
                             name={[name, "Quantity"]}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Số lượng không được để trống",
-                              },
-                            ]}
+                            rules={[{ required: true, message: "Số lượng không được để trống" }]}
                           >
                             <Input placeholder="Điền số lượng của sản phẩm" />
                           </Form.Item>
+
                           <Form.List name={[name, "OptionValues"]}>
-                            {() => {
-                              return (
-                                <Col span={50}>
-                                  {listOption.map((el, index) => {
-                                    return (
-                                      <div key={index}>
-                                        {el.Name}
-                                        <Form.Item
-                                          hidden
-                                          name={[index, "DisplayOrder"]}
-                                          initialValue={el.DisplayOrder}
-                                        ></Form.Item>
-                                        <Form.Item
-                                          hidden
-                                          name={[index, "Name"]}
-                                          initialValue={el.Name}
-                                        ></Form.Item>
-                                        <Form.Item name={[index, "Value"]}>
-                                          <Input placeholder="Value" />
-                                        </Form.Item>
-                                      </div>
-                                    );
-                                  })}
-                                </Col>
-                              );
-                            }}
+                            {() => (
+                              <Col span={50}>
+                                {listOption.map((el, index) => (
+                                  <div key={index}>
+                                    {el.Name}
+                                    <Form.Item
+                                      hidden
+                                      name={[index, "DisplayOrder"]}
+                                      initialValue={el.DisplayOrder}
+                                    />
+                                    <Form.Item
+                                      hidden
+                                      name={[index, "Name"]}
+                                      initialValue={el.Name}
+                                    />
+                                    <Form.Item name={[index, "Value"]}>
+                                      <Input placeholder="Value" />
+                                    </Form.Item>
+                                  </div>
+                                ))}
+                              </Col>
+                            )}
                           </Form.List>
-                          <WrapProduct key={key} onClick={() => setIndex(key)}>
+
+                          <WrapProduct onClick={() => setIndex(key)}>
                             <div className="title">Media</div>
                             <BoxMedia>
                               <Upload
                                 onPreview={handlePreview}
                                 onChange={handleChange}
-                                fileList={
-                                  indexImgs == key ? fileList : Images[key]
-                                }
+                                fileList={indexImgs == key ? fileList : Images[key]}
                                 listType="picture-card"
                                 customRequest={uploadFile}
                                 className="upload-list-inline"
@@ -453,12 +422,12 @@ export const CreateProduct: NextPageWithLayout = () => {
                                 </div>
                               </Upload>
                               <Modal
-                                open={previewOpen}
+                                visible={previewOpen}
                                 title={previewTitle}
                                 footer={null}
                                 onCancel={handleCancel}
                               >
-                                <img
+                                <Image
                                   alt="example"
                                   style={{ width: "100%" }}
                                   src={previewImage}
@@ -466,6 +435,7 @@ export const CreateProduct: NextPageWithLayout = () => {
                               </Modal>
                             </BoxMedia>
                           </WrapProduct>
+
                           <MinusCircleOutlined onClick={() => remove(name)} />
                         </WrapProduct>
                       );
