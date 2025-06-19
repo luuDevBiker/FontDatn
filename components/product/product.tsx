@@ -1,37 +1,26 @@
-import {
-  Col, Rate,
-  Row, Carousel,
-  Space, Button, message,
-  Image
-} from "antd";
+import { Col, Rate, Row, Carousel, Space, Button, message, Image } from "antd";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../../models/common";
 import "antd/dist/antd.css";
-import {
-  CheckOutlined, ShoppingCartOutlined
-} from "@ant-design/icons";
-import { ListCarousel, listMenu } from "@/utils/data";
+import { CheckOutlined, LaptopOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { ListCarousel } from "@/utils/data";
 import { useAppDispatch } from "@/app/hooks";
-import { getListProduct } from "@/features/product-slice";
-import { IProduct } from "@/models/product";
+import { getListProduct, getCategories } from "@/features/product-slice";
+import { IProduct, ICategory } from "@/models/product";
 import { addTocart } from "@/features/shopping-slice";
 import {
   ButtonAddtoCartCustom,
   LeftMenu,
   WraperProduct,
+  WraperProductContainer,
   WrapperProductMain,
 } from "@/styles/ProductWrapperStyled";
 import { useRouter } from "next/router";
 
 export const ProductCategory: NextPageWithLayout = (prop) => {
   const router = useRouter();
-  const [hover, setHover] = useState<boolean>(false);
-  const [openPopub, setOpenPopup] = useState<boolean>(false);
-  const [isConfirm, setIsConfirm] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
-  const [initId, setInitId] = useState<string>("");
   const [data, setData] = useState<IProduct[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const dispatch = useAppDispatch();
 
   const user: any = localStorage.getItem("u");
@@ -41,9 +30,16 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
       .unwrap()
       .then()
       .then((res) => {
-        setData(res.Payload as IProduct[]);
+        setData(res?.Payload as IProduct[]);
       });
-  }, []);
+    if (categories.length === 0) {
+      dispatch(getCategories())
+        .unwrap()
+        .then((res: any) => {
+          setCategories(res.Payload);
+        });
+    }
+  }, [dispatch, data, categories]);
 
   const addCartItem = (id: any) => {
     let dataAdd: any = {
@@ -92,17 +88,20 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
         });
       });
   };
+  if (categories.length === 0 || data.length === 0) {
+    return <></>
+  }
   return (
-    <div>
+    <WraperProductContainer>
       <Row gutter={10}>
         {/* left menu */}
         <Col span={4}>
           <LeftMenu>
-            {listMenu.map((item, index) => (
+            {categories.map((item: ICategory, index: number) => (
               <div className="wrapper" key={index}>
                 <Space>
-                  <item.icon />
-                  <div>{item.name}</div>
+                  <LaptopOutlined />
+                  <div>{item.Name}</div>
                 </Space>
               </div>
             ))}
@@ -113,8 +112,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
           <Carousel effect="fade" autoplay>
             {ListCarousel.map((item, index) => (
               <div key={index}>
-                <Image
-                  alt="" preview={false} src={item.image} />
+                <Image alt="" preview={false} src={item.image} />
               </div>
             ))}
           </Carousel>
@@ -123,14 +121,14 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
               <Image
                 alt=""
                 preview={false}
-                src="https://hanoicomputercdn.com/media/banner/26_Nov608efd41d1ba4dff0db8d91f71879889.jpg"
+                src="https://hanoicomputercdn.com/media/banner/16_Mayfb5c81ed3a220004b71069645f112867.png"
               ></Image>
             </Col>
             <Col span={12}>
               <Image
                 alt=""
                 preview={false}
-                src="https://hanoicomputercdn.com/media/banner/26_Novc6fa2f69cd122b688c5b21549796af3d.jpg"
+                src="https://hanoicomputercdn.com/media/banner/16_May10fb15c77258a991b0028080a64fb42d.png"
               ></Image>
             </Col>
           </Row>
@@ -144,7 +142,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
                 <Image
                   alt=""
                   preview={false}
-                  src="https://hanoicomputercdn.com/media/banner/26_Novc905ee98c1286b503be72f84ba93b446.jpg"
+                  src="https://hanoicomputercdn.com/media/banner/16_May98f8b00aeace4ca57d90782bb4226f86.png"
                   height={"200px"}
                 ></Image>
               </div>
@@ -154,7 +152,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
                 <Image
                   alt=""
                   preview={false}
-                  src="https://hanoicomputercdn.com/media/banner/26_Novc905ee98c1286b503be72f84ba93b446.jpg"
+                  src="https://hanoicomputercdn.com/media/banner/16_May09dd8c2662b96ce14928333f055c5580.png"
                   height={"200px"}
                 ></Image>
               </div>
@@ -185,7 +183,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
                         alt=""
                         preview={false}
                         className="img"
-                        src={variant.Images[0].Url}
+                        src={variant.Images[0]?.Url}
                         width={270}
                         height={320}
                       ></Image>
@@ -250,6 +248,6 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
             })}
         </Row>
       </WrapperProductMain>
-    </div>
+    </WraperProductContainer>
   );
 };

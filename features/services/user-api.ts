@@ -1,4 +1,4 @@
-import { ICreateEmployees, IUserSignInPayload } from "@/models/user";
+import { IUserRegister, IUserSignInPayload } from "@/models/user";
 import { axiosClient2, axiosClient } from "./axios-client";
 
 class UserApi {
@@ -10,10 +10,10 @@ class UserApi {
       data: payload,
     });
   }
-  CreateEmployees(payload: ICreateEmployees) {
+  userRegister(payload: IUserRegister) {
     return axiosClient({
       method: "post",
-      url: "/api/Users",
+      url: "/msa-identity/api/Users/Register",
       data: payload,
     });
   }

@@ -1,29 +1,29 @@
 import { Button, Form,Input } from "antd";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
-export const Wrapper=styled.div`
-    background: #ffffff;
-    /* background-image: ; */
-    box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
-    margin-top: 0px;
-    border-radius: 20px;
-    width: 65%;
-    height: 610px;
-    display: flex;
-    align-items: center;
-`
-export const WrapperBox=styled.div`
-    width: 50%;
-    height: 100%;
-    border-radius: 10px 0px 0px 10px;
-`
-export const WrapperBox2=styled.div`
-    width: 50%;
-    background-color: #FFFFFF;
-    height: 100%;
-    border-radius: 10px;
+// export const Wrapper=styled.div`
+//     background: #ffffff;
+//     /* background-image: ; */
+//     box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+//     margin-top: 0px;
+//     border-radius: 20px;
+//     width: 65%;
+//     height: 610px;
+//     display: flex;
+//     align-items: center;
+// `
+// export const WrapperBox=styled.div`
+//     width: 50%;
+//     height: 100%;
+//     border-radius: 10px 0px 0px 10px;
+// `
+// export const WrapperBox2=styled.div`
+//     width: 50%;
+//     background-color: #FFFFFF;
+//     height: 100%;
+//     border-radius: 10px;
    
-`
+// `
 export const Content=styled.div`
     font-family: "Open Sans",Arial,sans-serif;
     font-style: normal;
@@ -730,3 +730,137 @@ iframe {
 }
 
 `
+
+// NEW
+export const Wrapper = styled.div`
+  background: #ffffff;
+  box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.12),
+              0px 6px 16px rgba(0, 0, 0, 0.08),
+              0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  width: 65%;
+  height: 610px;
+  display: flex;
+  align-items: center;
+`;
+
+export const WrapperBox = styled.div`
+  width: 50%;
+  height: 100%;
+  border-radius: 20px 0px 0px 20px;
+  background: url('/login-image.jpg') center/cover no-repeat;
+`;
+
+export const WrapperBox2 = styled.div`
+  width: 50%;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 0px 20px 20px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const FormContainer = styled.div`
+  width: 80%;
+`;
+
+export const LoginButton = styled(Button)`
+  width: 100%;
+  height: 40px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  border: none;
+
+  &:hover {
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 242, 254, 0.4);
+  }
+`;
+
+
+const slideIn = keyframes`
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+`;
+
+const slideOut = keyframes`
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+`;
+
+export const Container = styled.div`
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url("https://assets.isu.pub/document-structure/230530104013-516677457fd54e456bfe38a98e2760fe/v1/80d96b2a994829e279f0cc1f44c288eb.jpeg");
+`;
+
+export const ToggleButton = styled.button`
+  margin-bottom: 1.5rem;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 20px;
+  border: none;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: 0.3s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+export const AuthWrapper = styled.div`
+  width: 800px;
+  height: 500px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+`;
+
+export const FormSlide = styled.div<{ isRegistering: boolean }>`
+  display: flex;
+  width: 200%;
+  height: 100%;
+  transition: transform 0.6s ease-in-out;
+
+  ${(props) =>
+    props.isRegistering
+      ? css`
+          transform: translateX(-50%);
+          animation: ${slideIn} 0.6s forwards;
+        `
+      : css`
+          transform: translateX(0%);
+          animation: ${slideOut} 0.6s forwards;
+        `}
+`;
+
+export const FormBox = styled.div`
+  width: 50%;
+  padding: 3rem;
+  box-sizing: border-box;
+`;
+
+export const ActionButton = styled(Button)`
+  width: 100%;
+  height: 40px;
+  font-weight: bold;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  border: none;
+
+  &:hover {
+    background: linear-gradient(to left, #00f2fe, #4facfe);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 242, 254, 0.4);
+  }
+`;

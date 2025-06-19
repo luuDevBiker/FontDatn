@@ -1,25 +1,21 @@
 import { NextPageWithLayout } from "@/models/common";
 import {
-  ButtonExport,
   HeadingTitle,
   WrapperCMSProduct,
   WrapProduct,
 } from "@/styles/CmsProductStylead";
 import {
   CheckCircleOutlined,
-  ClockCircleOutlined,
   CloseCircleOutlined,
   ExclamationCircleOutlined,
-  MinusCircleOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
 import Table, { ColumnsType } from "antd/lib/table";
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, Image, Tag, Modal, Row, Col, Input, message } from "antd";
-import ExportIcon from "@/assets/icon/ExportIcon.svg";
+import { Button, Tag, Modal, Row, Col, Input, message } from "antd";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/app/hooks";
-import { getOrders, confirmOrder, updateStatusOrder } from "@/features/order-slice";
+import { getOrders, updateStatusOrder } from "@/features/order-slice";
 
 interface DataType {
   key: React.Key;
@@ -86,8 +82,6 @@ export const OrdersShipping: NextPageWithLayout = () => {
 
   //#region viewDetail: set data and state view order detail and on edit
   const viewDetail = (data: any) => {
-    console.log(data.Id);
-
     setCanEdit(data.StatusOrder === 2 ? true : false);
     setItems(data.Items);
     setRecordOrder(data?.OrderDetails);
@@ -117,18 +111,13 @@ export const OrdersShipping: NextPageWithLayout = () => {
     let payload = {
       Id: orderId,
       Payload: {
-        StatusOrder: 3
-      }
+        StatusOrder: 3,
+      },
     };
-
-    console.log(payload);
-
-
     dispatch(updateStatusOrder(payload))
       .unwrap()
       .then()
       .then((res: any) => {
-        console.log(res);
         if (res.StatusCode === 200) {
           message.success({
             content: "Đã nhận giao đơn hàng",
@@ -144,11 +133,9 @@ export const OrdersShipping: NextPageWithLayout = () => {
 
     setOpenEdit(false);
   };
-
   //#endregion
 
   //#region Colums: colums of table
-
   const columns: ColumnsType<DataType> = useMemo(
     () => [
       {

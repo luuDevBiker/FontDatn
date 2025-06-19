@@ -1,4 +1,4 @@
-import { CmsProduct } from "@/components/cms/cms-products/cms-product";
+import { CmsCategories } from "@/components/cms/cms-categories/cms-categories";
 import React from "react";
 import { MainLayoutHome } from "../../../components/layout/main-layout/main-layout";
 import { NextPageWithLayout } from "../../../models/common";
@@ -6,7 +6,7 @@ import { NextPageWithLayout } from "../../../models/common";
 const ProductDetailPages:NextPageWithLayout =()=>{
     return(
         <React.Fragment>
-            <CmsProduct/>
+            <CmsCategories/>
         </React.Fragment>
     )
 };

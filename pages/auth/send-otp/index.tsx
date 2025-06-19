@@ -67,7 +67,7 @@ const SendOTP = () => {
           </Content>
           <WrapperLogo>
             <BankTwoTone />
-            <div className='text_logo'>Pet World</div>
+            <div className='text_logo'>F-Shop Computer</div>
           </WrapperLogo>
           <BoxBody>
             <TitleStyle>Xác nhận thông tin</TitleStyle>
@@ -105,7 +105,7 @@ const SendOTP = () => {
               <ButtunSubmit htmlType="submit">Xác thực</ButtunSubmit>
             </Form>
             <div>Quay lại</div>
-            <div>2022 All rights reserved by PetWorld</div>
+            <div>2022 All rights reserved by F-Shop Computer</div>
           </BoxBody>
         </WrapperBox2>
       </Wrapper>

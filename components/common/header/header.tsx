@@ -1,19 +1,8 @@
-import {
-  Avatar,
-  Badge,
-  Button,
-  Dropdown,
-  Form,
-  Input,
-  Menu,
-  PageHeader,
-  Switch,
-} from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import { Badge, Dropdown, Form, Input, Menu } from "antd";
+import React, { useEffect, useState } from "react";
 import type { MenuProps } from "antd";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { Select } from "antd";
-const { Option } = Select;
 import {
   HeaderWrapper,
   HeaderTitle,
@@ -21,22 +10,17 @@ import {
   NotificationMenu,
   MenuAvatarWrapper,
   UserMenu,
-  MenuCustom,
-  ButtonLogin,
-  MenuHeader,
   HeaderTop,
   HeaderItem,
   HeaderBottom,
   MenuItemTop,
   StyleSearch,
   ButtonSearch,
-  MenuItemAnimate,
-} from "./HeaderStyled";
+} from "../../../styles/HeaderStyled";
 import {
   UserOutlined,
   BellOutlined,
   GlobalOutlined,
-  CaretDownOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
   PhoneOutlined,
@@ -45,10 +29,6 @@ import {
   ContainerOutlined,
   KeyOutlined,
 } from "@ant-design/icons";
-import { menuPersonal, menuWareHouse } from "../../../utils/menujson";
-import { round } from "lodash";
-interface IMainHeaderProps {}
-type MenuItem = Required<MenuProps>["items"][number];
 import Logo_Computer from "../../../assets/images/F-Computer.png";
 import { Confirm } from "@/components/popup-confirm/confirm";
 import { WrapperSigin } from "@/styles/AuthStyled";
@@ -56,6 +36,9 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { userSignIn, logout } from "@/features/user-slice";
 import { selectUser } from "@/features/user-slice";
 import jwt_decode from "jwt-decode";
+const { Option } = Select;
+interface IMainHeaderProps {}
+type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
   label: React.ReactNode,
@@ -94,8 +77,13 @@ const renderMenu = (item: any) => {
 const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
   const router = useRouter();
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
+  const [isConfirmRegister, setIsConfirmRegister] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { loginInfo }: any = useAppSelector(selectUser);
+  const count = localStorage.getItem("countItemInCart");
+  const storage =
+    typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
+
   const handlerLogin = (Value: any) => {
     dispatch(userSignIn(Value))
       .unwrap()
@@ -113,11 +101,14 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
       });
   };
 
-  const count = localStorage.getItem("countItemInCart");
-
   const handleOpenPopup = () => {
     setIsConfirm(true);
   };
+
+  const handleOpenPopupSignUp = () => {
+    setIsConfirmRegister(true);
+  };
+
   const onHandleLoguot = () => {
     dispatch(logout())
       .unwrap()
@@ -126,8 +117,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
       });
   };
 
-  const storage =
-    typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
+  //#region Custom Component
   const menu = (
     <Menu style={{ width: 200 }}>
       <Menu.Item
@@ -137,7 +127,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
           fontWeight: 600,
           margin: "5px 20px 10px",
         }}
-        onClick={() => router.push("/auth/sign-up")}
+        onClick={handleOpenPopupSignUp}
       >
         Đăng ký
       </Menu.Item>
@@ -154,6 +144,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
       </Menu.Item>
     </Menu>
   );
+
   const userLogined = (
     <Menu style={{ width: 200 }}>
       <Menu.Item
@@ -174,31 +165,39 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
           fontWeight: 600,
           margin: "5px 20px 10px",
         }}
-        onClick={()=> router.push({
-          pathname:"/orders"
-        })}
+        onClick={() =>
+          router.push({
+            pathname: "/orders",
+          })
+        }
       >
         Đơn hàng của tôi
       </Menu.Item>
     </Menu>
   );
+  //#endregion
+
+  //#region useEffect
   useEffect(() => {
-    // if (storage) {
-    //   let user = JSON.parse(storage);
-    //   let tokeDecode: any = jwt_decode(user.AccessToken);
-    //   let role =
-    //     tokeDecode[
-    //       "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-    //     ];
-    //   if (role === "Users") {
-    //     router.push("/");
-    //   } else {
-    //     router.push("/cms/cms-dashboard");
-    //   }
-    // }
-  },[]);
+    if (storage) {
+      let user = JSON.parse(storage);
+      let tokeDecode: any = jwt_decode(user.AccessToken);
+      let role =
+        tokeDecode[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ];
+      if (role === "Users") {
+        router.push("/");
+      } else {
+        router.push("/cms/cms-dashboard");
+      }
+    }
+  }, [dispatch]);
+  //#endregion
+
   return (
     <React.Fragment>
+      //#region Header
       <HeaderWrapper className="site-layout-background" style={{ padding: 0 }}>
         <HeaderTop>
           <HeaderItem>
@@ -265,7 +264,11 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
             />
             <MenuAvatarWrapper>
               <UserMenu>
-                <Badge count={count === "undefined"?0:count} size="small" showZero>
+                <Badge
+                  count={count === "undefined" ? 0 : count}
+                  size="small"
+                  showZero
+                >
                   <ShoppingCartOutlined
                     onClick={() => router.push("/shopping-cart")}
                     className="cssSVG"
@@ -282,6 +285,9 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
           </NotificationMenu>
         </HeaderBottom>
       </HeaderWrapper>
+      //#endregion
+      {/*  */}
+      //#region SignIn
       <Confirm
         buttonLeft={""}
         buttonRight={""}
@@ -328,11 +334,10 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
 
                     <div className="textForgot">
                       <span className="txt1">Forgot Username</span>
-                      <a className="txt2" href="#">
+                      <a className="txt2" onClick={() => router.push("/")}>
                         / Password?
                       </a>
                     </div>
-
                     <div className="createacc">
                       <a className="txt2" href="#">
                         Create your Account
@@ -349,8 +354,80 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
           </WrapperSigin>
         }
         width={"1000px"}
-        openModalConfirm={isConfirm}
+        openModalConfirm={isConfirmRegister}
       />
+      //#endregion
+      {/*  */}
+      //#region Register
+      <Confirm
+        buttonLeft={""}
+        buttonRight={""}
+        changeActive={(e: any) => setIsConfirmRegister(e)}
+        content={""}
+        handleAction={() => {}}
+        title={"Đăng ký"}
+        stateButton={false}
+        wrapper={
+          <WrapperSigin>
+            <div className="limiter">
+              <div className="container-login100">
+                <div className="wrap-login100">
+                  <div className="login100-pic js-tilt" data-tilt>
+                    <img
+                      src="https://colorlib.com/etc/lf/Login_v1/images/img-01.png"
+                      alt="IMG"
+                    />
+                  </div>
+
+                  <div className="login100-form validate-form">
+                    <span className="login100-form-title">Đăng ký</span>
+                    <Form onFinish={handlerLogin}>
+                      <Form.Item name={"userName"}>
+                        <Input
+                          prefix={<UserOutlined />}
+                          className="inputAuth"
+                          placeholder="Tên tài khoản"
+                        />
+                      </Form.Item>
+                      <Form.Item name={"password"}>
+                        <Input
+                          prefix={<KeyOutlined color="red" />}
+                          className="inputAuth"
+                          placeholder="Mật khẩu"
+                        />
+                      </Form.Item>
+                      <div className="container-login100-form-btn">
+                        <button className="login100-form-btn" type="submit">
+                          Login
+                        </button>
+                      </div>
+                    </Form>
+
+                    <div className="textForgot">
+                      <span className="txt1">Forgot Username</span>
+                      <a className="txt2" onClick={() => router.push("/")}>
+                        / Password?
+                      </a>
+                    </div>
+                    <div className="createacc">
+                      <a className="txt2" href="#">
+                        Create your Account
+                        <i
+                          className="fa fa-long-arrow-right m-l-5"
+                          aria-hidden="true"
+                        ></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </WrapperSigin>
+        }
+        width={"1000px"}
+        openModalConfirm={isConfirmRegister}
+      />
+      //#endregion
     </React.Fragment>
   );
 };

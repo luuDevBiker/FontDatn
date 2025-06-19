@@ -50,6 +50,13 @@ export const CmsDashBoard: NextPageWithLayout = () => {
           <Button
             type="ghost"
             size="small"
+            onClick={() => router.push("/cms/cms-categories")}
+          >
+            Danh Mục
+          </Button>
+          <Button
+            type="ghost"
+            size="small"
             onClick={() => router.push("/cms/cms-warehouse")}
           >
             Kho

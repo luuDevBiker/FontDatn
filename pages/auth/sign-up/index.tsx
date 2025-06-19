@@ -1,96 +1,114 @@
-import { Form, Input } from "antd";
-import { useRouter } from "next/router";
+import React, { useState } from "react";
 import {
-  BoxBody, ButtunSubmit,
-  Content, ContentFooter2, StyledForm,
-  Wrapper,
-  WrapperBox,
-  WrapperBox2
+  ActionButton,
+  AuthWrapper,
+  Container,
+  FormBox,
+  FormSlide,
+  ToggleButton,
 } from "../../../styles/AuthStyled";
-import Image from "next/image";
 import AuthLayout from "../../../components/layout/auth-layout/auth-layout";
+import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { Form, Input, Typography } from "antd";
+
+const { Title } = Typography;
 
 const SignUp = () => {
-  const router = useRouter();
-  const [form] = Form.useForm();
+  const [isRegistering, setIsRegistering] = useState(false);
+
+  const onLogin = (values: any) => {
+    console.log("Login:", values);
+  };
+
+  const onRegister = (values: any) => {
+    console.log("Register:", values);
+  };
 
   return (
-    <div
-      style={{ display: "flex", alignItems: "center", flexDirection: "column" }}
-    >
-      <Wrapper>
-        <WrapperBox>
-          <Image
-            alt=""
-            style={{
-              width: "100%",
-              height: "610px",
-              borderRadius: "10px 0px 0px 10px",
-            }}
-            src={"https://hanoicomputer.net/wp-content/uploads/2022/10/pc-office-2358.jpg"}
-          />
-        </WrapperBox>
-        <WrapperBox2>
-          <Content>Sign up</Content>
-          <BoxBody>
-            <StyledForm>
-              <Form.Item name={"displayName"}>
-                <Input
-                  placeholder="Tên của bạn"
-                  size={"large"}
-                  maxLength={100}
-                  className="signin"
-                />
-              </Form.Item>
-              <Form.Item name="userName">
-                <Input.Password
-                  placeholder="Số điện thoại"
-                  size={"large"}
-                  maxLength={20}
-                  className="signin"
-                />
-              </Form.Item>
-              <Form.Item name="password">
-                <Input.Password
-                  type="password"
-                  placeholder="Password"
-                  size={"large"}
-                  maxLength={20}
-                  className="signin"
-                />
-              </Form.Item>
+    <Container>
+      <ToggleButton onClick={() => setIsRegistering(!isRegistering)}>
+        {isRegistering
+          ? "Đã có tài khoản? Đăng nhập"
+          : "Chưa có tài khoản? Đăng ký"}
+      </ToggleButton>
+
+      <AuthWrapper>
+        <FormSlide isRegistering={isRegistering}>
+          <FormBox>
+            <Title level={2}>Đăng nhập</Title>
+            <Form name="login" layout="vertical" onFinish={onLogin}>
               <Form.Item
-                name="confirmPassWord"
-                label=""
-                dependencies={["password"]}
-                hasFeedback
+                label="Tài khoản"
+                name="username"
                 rules={[
-                  {
-                    required: true,
-                    message: "ok",
-                  },
+                  { required: true, message: "Vui lòng nhập tài khoản!" },
                 ]}
               >
+                <Input prefix={<UserOutlined />} placeholder="Tài khoản" />
+              </Form.Item>
+
+              <Form.Item
+                label="Mật khẩu"
+                name="password"
+                rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+              >
                 <Input.Password
-                  size="large"
-                  placeholder="Nhập lại mật khẩu"
-                  className="signin"
+                  prefix={<LockOutlined />}
+                  placeholder="Mật khẩu"
                 />
               </Form.Item>
-              <ButtunSubmit onClick={() => router.push("/auth/send-otp")}>
-                Đăng ký
-              </ButtunSubmit>
-              <ContentFooter2>
-                <div>bạn đã có tài khoản ?</div>{" "}
-                <span onClick={() => router.push("/auth/")}>Đăng nhập</span>
-              </ContentFooter2>
-            </StyledForm>
-          </BoxBody>
-        </WrapperBox2>
-      </Wrapper>
-    </div>
+
+              <Form.Item>
+                <ActionButton type="primary" htmlType="submit">
+                  Đăng nhập
+                </ActionButton>
+              </Form.Item>
+            </Form>
+          </FormBox>
+
+          <FormBox>
+            <Title level={2}>Đăng ký</Title>
+            <Form name="register" layout="vertical" onFinish={onRegister}>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[{ required: true, message: "Vui lòng nhập email!" }]}
+              >
+                <Input prefix={<MailOutlined />} placeholder="Email" />
+              </Form.Item>
+
+              <Form.Item
+                label="Tài khoản"
+                name="username"
+                rules={[
+                  { required: true, message: "Vui lòng nhập tài khoản!" },
+                ]}
+              >
+                <Input prefix={<UserOutlined />} placeholder="Tài khoản" />
+              </Form.Item>
+
+              <Form.Item
+                label="Mật khẩu"
+                name="password"
+                rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+              >
+                <Input.Password
+                  prefix={<LockOutlined />}
+                  placeholder="Mật khẩu"
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <ActionButton type="primary" htmlType="submit">
+                  Đăng ký
+                </ActionButton>
+              </Form.Item>
+            </Form>
+          </FormBox>
+        </FormSlide>
+      </AuthWrapper>
+    </Container>
   );
 };
-
 SignUp.Layout = AuthLayout;
 export default SignUp;

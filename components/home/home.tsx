@@ -1,14 +1,10 @@
-import {
-  Col, Row,
-  Image, Space,
-  Input,
-  Button
-} from "antd";
+import { Col, Row, Image, Space, Input, Button } from "antd";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../../models/common";
 import {
-  ButtonAddtoCart2, WrapperPopupBody,
-  WrapperPopupHeader
+  ButtonAddtoCart2,
+  WrapperPopupBody,
+  WrapperPopupHeader,
 } from "../../styles/HomeStyled";
 import "antd/dist/antd.css";
 import { Confirm } from "../popup-confirm/confirm";
@@ -30,7 +26,7 @@ export const Home: NextPageWithLayout = (prop) => {
     dispatch(getListProduct())
       .unwrap()
       .then()
-      .then((res) => {
+      .then((res: any) => {
         setData(res);
       });
   }, []);
@@ -54,7 +50,7 @@ export const Home: NextPageWithLayout = (prop) => {
         buttonRight={""}
         changeActive={(e: any) => setIsConfirm(e)}
         content={""}
-        handleAction={() => { }}
+        handleAction={() => {}}
         title={""}
         stateButton={false}
         wrapper={

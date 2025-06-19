@@ -2,11 +2,13 @@ import { NextPageWithLayout } from "@/models/common";
 import {
   HeadingTitle,
   WrapperCMSProduct,
-  WrapProduct
+  WrapProduct,
 } from "@/styles/CmsProductStylead";
 import {
-  CheckCircleOutlined, CloseCircleOutlined,
-  ExclamationCircleOutlined, SyncOutlined
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  ExclamationCircleOutlined,
+  SyncOutlined,
 } from "@ant-design/icons";
 import Table, { ColumnsType } from "antd/lib/table";
 import React, { useEffect, useMemo, useState } from "react";
@@ -57,8 +59,6 @@ export const CmsOder: NextPageWithLayout = () => {
         .unwrap()
         .then()
         .then((res: any) => {
-          console.log(res);
-
           setData(res.Payload);
           setLoading(false);
         });
@@ -130,7 +130,6 @@ export const CmsOder: NextPageWithLayout = () => {
       let elementCheck = recordOrder.find(
         (el: any, indexItem: number) => index === indexItem
       );
-      console.log(elementCheck);
 
       //#region emei empty
       if (element.Note === null || element.Note === "") {
@@ -147,7 +146,7 @@ export const CmsOder: NextPageWithLayout = () => {
       //#endregion
 
       let emeis = element.Note.split("\n");
-      let checkEmeis = emeis.filter((el: any) => el === "")
+      let checkEmeis = emeis.filter((el: any) => el === "");
 
       //#region emei not validate
       if (checkEmeis.length > 0) {
@@ -194,21 +193,19 @@ export const CmsOder: NextPageWithLayout = () => {
     let payload =
       status === 2
         ? {
-          Id: orderId,
-          Payload: {
-            StatusOrder: status,
-            Items: items,
-            Note: note,
-          },
-        }
+            Id: orderId,
+            Payload: {
+              StatusOrder: status,
+              Items: items,
+              Note: note,
+            },
+          }
         : {
-          Id: id,
-          Payload: {
-            StatusOrder: status,
-          },
-        };
-    console.log(payload);
-
+            Id: id,
+            Payload: {
+              StatusOrder: status,
+            },
+          };
     dispatch(status === 2 ? confirmOrder(payload) : updateStatusOrder(payload))
       .unwrap()
       .then()
@@ -366,8 +363,8 @@ export const CmsOder: NextPageWithLayout = () => {
           currStatus === "Xác nhận"
             ? updateOrder(2, orderId)
             : currStatus === "Giao hàng"
-              ? updateOrder(3, orderId)
-              : console.log("update status order");
+            ? updateOrder(3, orderId)
+            : console.log("update status order");
         }}
         onCancel={() => setOpenEdit(false)}
         width={"70%"}
@@ -378,7 +375,11 @@ export const CmsOder: NextPageWithLayout = () => {
       >
         <WrapperCMSProduct>
           {recordOrder?.map((el: any, indexItem: number) => (
-            <WrapProduct key={el.SkuId || indexItem} style={{ width: "90%" }} title={el.OptionValues}>
+            <WrapProduct
+              key={el.SkuId || indexItem}
+              style={{ width: "90%" }}
+              title={el.OptionValues}
+            >
               <Row gutter={[20, 20]} style={{ margin: "5px 0px" }}>
                 <Col span={8}>
                   <div>

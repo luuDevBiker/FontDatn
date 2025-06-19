@@ -1,63 +1,41 @@
+import React, { useEffect, useState } from "react";
 import { NextPageWithLayout } from "@/models/common";
+import { getCategories } from "@/features/product-slice";
+import { useAppDispatch } from "@/app/hooks";
 import {
   HeadingTitle,
   WrapperCMSProduct,
   WrapProduct,
 } from "@/styles/CmsProductStylead";
-import Table from "antd/lib/table";
-import React, { useEffect, useState } from "react";
 import { Button, Tag } from "antd";
+import Table from "antd/lib/table";
 import { useRouter } from "next/router";
-import { useAppDispatch } from "@/app/hooks";
-import { getListProduct } from "@/features/product-slice";
 import Modal from "antd/lib/modal/Modal";
-import EditProduct from "./cms-products-modals/edit-product";
-import { IProduct } from "@/models/product";
+import { ICategory, CategoryTypeLabels } from "@/models/product";
+import UpdateCategories from "./update-categories";
 
-export const CmsProduct: NextPageWithLayout = () => {
-  const router = useRouter();
+export const CmsCategories: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<any>();
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [detail, setDetail] = useState<IProduct>({} as IProduct);
+  const [data, setData] = useState<any>();
+  const [detail, setDetail] = useState<ICategory>({} as ICategory);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
   const columns = [
     {
-      title: "Sản phẩm",
+      title: "Danh mục",
       dataIndex: "Name",
       editTable: true,
       key: "Name",
     },
     {
-      title: "Hãng",
-      dataIndex: "Brand",
-      key: "Brand",
-    },
-    {
-      title: "Loại sản phẩm",
-      dataIndex: "Category",
-      key: "Category",
+      title: "Loại",
+      dataIndex: "Type",
+      key: "Type",
+      render: (value: number) => CategoryTypeLabels[value] || "Không xác định",
     },
     {
       title: "Mô tả",
@@ -66,34 +44,43 @@ export const CmsProduct: NextPageWithLayout = () => {
     },
   ];
 
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+
   useEffect(() => {
-    dispatch(getListProduct())
+    dispatch(getCategories())
       .unwrap()
       .then()
       .then((res: any) => {
         setData(res.Payload);
       });
-  }, [dispatch]);
+  }, []);
 
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
         <div>
-          <h5 className="mx-2">Sản phẩm</h5>
-          <Tag>Quản lý sản phẩm</Tag> <Tag>Quản lý sản phẩm</Tag>
+          <h5 className="mx-2">Danh mục</h5>
+          <Tag>Quản lý danh mục</Tag>
         </div>
         <div>
           <Button
             type="primary"
             size="large"
-            onClick={() => router.push("/cms/cms-products/new-products")}
+            onClick={() => router.push("/cms/cms-categories/create-categories")}
           >
-            +&nbsp;&nbsp;Tạo sản phẩm
+            +&nbsp;&nbsp;Tạo mới danh mục
           </Button>
         </div>
       </HeadingTitle>
       <WrapProduct>
-        <div>Tất cả sản phẩm hiện có</div>
+        <div>Tất cả danh mục</div>
         <div>
           <Table
             rowKey={(record) => record.Id}
@@ -109,12 +96,12 @@ export const CmsProduct: NextPageWithLayout = () => {
           />
         </div>
         <Modal
-          title="Chi tiết sản phẩm"
+          title="Chi tiết danh mục"
           visible={isModalOpen}
           onCancel={handleCancel}
           width={"90%"}
         >
-          <EditProduct {...detail} />
+          <UpdateCategories {...detail} />
         </Modal>
       </WrapProduct>
     </WrapperCMSProduct>

@@ -6,25 +6,34 @@ import {
   WrapProduct,
 } from "@/styles/CmsProductStylead";
 import {
-  Button, Form,
+  Button,
+  Form,
   Input,
   message,
   Row,
   Col,
-  Select, Tag,
-  Image
+  Select,
+  Tag,
+  Image,
 } from "antd";
 import { useEffect, useState } from "react";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 import {
   MinusCircleOutlined,
-  DeleteOutlined, PlusOutlined
+  DeleteOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import { useAppDispatch } from "@/app/hooks";
-import { updateProduct } from "@/features/product-slice";
-import { IProduct, IVariant, IOption, IImage } from "@/models/product";
+import { getCategories, updateProduct } from "@/features/product-slice";
+import {
+  IProduct,
+  IVariant,
+  IOption,
+  IImage,
+  ICategory,
+} from "@/models/product";
 import axios from "axios";
 import { useRouter } from "next/router";
 const { TextArea } = Input;
@@ -42,12 +51,15 @@ const EditProduct = (props: IProduct) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<Boolean>(true);
+
   //#region states product
   const [isOptions, setIsOptions] = useState(false);
   const [isProductVariant, setIsProductVriant] = useState(false);
   const [option, setOption] = useState("");
   const [listOption, setListOption] = useState<IOption[]>([]);
+  const [categories, setCategories] = useState<any>([]);
   //#endregion
+
   //#region state prevew images
   const [indexImgs, setIndexImgs] = useState(0);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -56,6 +68,7 @@ const EditProduct = (props: IProduct) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [Images, setImages] = useState<any>([]);
   //#endregion
+
   //#region Form
   const [form] = Form.useForm();
   const dataForm = [
@@ -77,8 +90,6 @@ const EditProduct = (props: IProduct) => {
     let dataImages: any = [];
     props.ProductVariants.map((variant: IVariant, indexVariant: number) => {
       setIndexImgs(indexVariant);
-      console.log(indexImgs);
-
       variant.Images.map(async (img: IImage, indexImg: number) => {
         const fileImage: UploadFile = {
           uid: img.Uid,
@@ -89,13 +100,12 @@ const EditProduct = (props: IProduct) => {
         imagesVariant = [...imagesVariant, fileImage];
       });
       dataImages = [...dataImages, imagesVariant];
-      console.log(dataImages);
     });
     setImages(dataImages);
   }, [props, indexImgs]);
-  console.log(Images);
   //#endregion
   //#endregion
+
   //#region handlePreview Image
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -168,12 +178,13 @@ const EditProduct = (props: IProduct) => {
     payload.ProductVariants.map((el: any, index: number) => {
       el.Images = Images[index];
     });
+    var category = categories.find((e: any) => e.Id === payload.Category);
+    payload.Category = category.Name;
+    payload.CategoryId = category.Id;
     dispatch(updateProduct(payload as IProduct))
       .unwrap()
       .then()
       .then((res: any) => {
-        console.log(res);
-
         if (res.StatusCode === 200) {
           message.success({
             content: "Cập nhật thành công",
@@ -182,13 +193,10 @@ const EditProduct = (props: IProduct) => {
               marginTop: "3vh",
             },
           });
-
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
         }
       });
   };
+
   //#region Options
   const addNewOptions = () => {
     form.setFieldsValue({ InputOptionName: "" });
@@ -201,7 +209,7 @@ const EditProduct = (props: IProduct) => {
   };
   const onChangeInputOptionName = (e: any) => {
     let value = e.target.value;
-    value !== "" ? setOption(value) : console.log(e);
+    value !== "" ? setOption(value) : console.log();
   };
   const handleRemoveOptions = (index: number) => {
     const list = [...listOption];
@@ -209,12 +217,27 @@ const EditProduct = (props: IProduct) => {
     setListOption(list);
   };
   //#endregion
+
   //#region Variant
   const onCreateVariant = () => {
     setIsProductVriant(true);
   };
   //#endregion
+
   //#endregion
+
+  //#region useEffect
+  useEffect(() => {
+    if (categories.length === 0) {
+      dispatch(getCategories())
+        .unwrap()
+        .then((res: any) => {
+          setCategories(res.Payload);
+        });
+    }
+  }, [dispatch, categories]);
+  //#endregion
+
   return (
     <WrapperCMSProduct>
       <Form
@@ -262,20 +285,24 @@ const EditProduct = (props: IProduct) => {
               <div className="title">Phân loại sản phẩm</div>
               <Form.Item label="Danh mục sản phẩm" name={"Category"}>
                 <Select>
-                  <Option value="LAP-TOP">LAP TOP</Option>
-                  <Option value="PC-GAMMING">PC GAMMING</Option>
-                  <Option value="PC-DO-HOA">PC ĐỒ HỌA</Option>
+                  {categories?.map((el: ICategory, index: number) =>
+                    el.Type === 0 ? (
+                      <Option key={el.Id} value={el.Id}>
+                        {el.Name}
+                      </Option>
+                    ) : null
+                  )}
                 </Select>
               </Form.Item>
               <Form.Item label="Thương hiệu" name="Brand">
                 <Select>
-                  <Option value="ACER">ACER</Option>
-                  <Option value="SAMSUNG">SAMSUNG</Option>
-                  <Option value="ASUS">ASUS</Option>
-                  <Option value="APLE">APLE</Option>
-                  <Option value="KINGDOM">KINGDOM</Option>
-                  <Option value="INTEL">INTEL</Option>
-                  <Option value="AMD">AMD</Option>
+                  {categories?.map((el: ICategory, index: number) =>
+                    el.Type === 2 ? (
+                      <Option key={el.Id} value={el.Id}>
+                        {el.Name}
+                      </Option>
+                    ) : null
+                  )}
                 </Select>
               </Form.Item>
             </WrapProduct>

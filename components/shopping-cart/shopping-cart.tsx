@@ -1,14 +1,6 @@
-import {
-  Box,
-  BoxBody,
-  BoxHeader
-} from "@/styles/CmsDiscountStyled";
+import { Box, BoxBody, BoxHeader } from "@/styles/CmsDiscountStyled";
 import { WrapProduct } from "@/styles/CmsProductStylead";
-import {
-  CartItem,
-  CheckOut,
-  Wrapper
-} from "@/styles/ShoppingCartStyled";
+import { CartItem, CheckOut, Wrapper } from "@/styles/ShoppingCartStyled";
 import { DeleteOutlined } from "@ant-design/icons";
 import {
   Col,
@@ -78,7 +70,7 @@ export const ShoppingCart = () => {
       });
       return;
     }
-  }, [item,itemsOrder]);
+  }, [item, itemsOrder]);
 
   const delItemInCart = (key: any, id: any) => {
     var payload = { key: key, id: id };
@@ -86,7 +78,6 @@ export const ShoppingCart = () => {
       .unwrap()
       .then()
       .then((res: any) => {
-        console.log(res);
         if (res?.StatusCode === 200) {
           message.success({
             content: "Đã xóa sản phẩm khỏi giỏ hàng!",
@@ -100,8 +91,7 @@ export const ShoppingCart = () => {
           setItem(res.Payload);
           setReload(true);
         }
-      })
-      .catch((err) => console.log("err", err));
+      });
   };
 
   const paymentCart = () => {
@@ -218,12 +208,8 @@ export const ShoppingCart = () => {
           return el;
         }
       );
-      console.log(productVariantId);
-
       setItem(newItemsUpdate);
-      let newOrderItems = itemsOrder ;
-      console.log(newOrderItems);
-      
+      let newOrderItems = itemsOrder;
       newOrderItems = newOrderItems?.map((el: any, indexItem: number) => {
         if (el.ProductVariantId === productVariantId) {
           el.Quantity = value;
@@ -231,16 +217,12 @@ export const ShoppingCart = () => {
         }
         return el;
       });
-      console.log(newOrderItems);
-      
       setItemsOrder(newOrderItems);
     }
   };
 
   const checkboxChange = (e: any) => {
     let value = e.target.value;
-    console.log(value);
-
     if (e.target.checked === true) {
       setItemsOrder([
         ...itemsOrder,
@@ -277,7 +259,7 @@ export const ShoppingCart = () => {
   };
 
   return (
-    <Wrapper style={{width:"95%"}}>
+    <Wrapper style={{ width: "95%" }}>
       <Button
         onClick={() => router.push("/")}
         type="primary"
@@ -301,7 +283,7 @@ export const ShoppingCart = () => {
               {item?.ItemDetails?.map((el: any, index: number) => {
                 return (
                   <CartItem
-                  key={el.Name || index}
+                    key={el.Name || index}
                     style={{ boxShadow: "2px 1px lightblue" }}
                     className="mt-4"
                     onClick={() => setSelectIndex(index)}
@@ -335,7 +317,8 @@ export const ShoppingCart = () => {
                         </Space>
                       </Col>
                       <Col span={4}>
-                        {"số lượng: "}{el.Quantity}
+                        {"số lượng: "}
+                        {el.Quantity}
                         <Input
                           min={1}
                           max={el.CurrentQuantity}

@@ -50,7 +50,6 @@ export const getOrdersProfileById = createAsyncThunk(GET_ORDERS_BY_PROFILE_ID, a
   });
 
   export const updateStatusOrder = createAsyncThunk(UPDATE_STATUS_ORDER, async (payload : any) => {
-    console.log("updateStatusOrder",payload);
     try {
       const response = await OrderApi.updateStatusOrder(payload.Id,payload.Payload);
       return response.data;
@@ -58,7 +57,6 @@ export const getOrdersProfileById = createAsyncThunk(GET_ORDERS_BY_PROFILE_ID, a
   });
 
   export const updateOrder = createAsyncThunk(UPDATE_ORDER, async (payload : any) => {
-    console.log("updateOrder",payload);
     try {
       const response = await OrderApi.updateOrder(payload.Id,payload);
       return response.data;
@@ -66,7 +64,6 @@ export const getOrdersProfileById = createAsyncThunk(GET_ORDERS_BY_PROFILE_ID, a
   });
 
   export const deleteItemOrder = createAsyncThunk(Delete_Item_ORDER, async (payload : any) => {
-    console.log("updateOrder",payload);
     try {
       const response = await OrderApi.deleteItemInOrder(payload.Id,payload.ProductVariantId);
       return response.data;

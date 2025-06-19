@@ -1,3 +1,11 @@
+export interface IUserRegister{
+  DisplayName: "string",
+  UserName: "string",
+  Password: "string",
+  ConfirmPassword: "string",
+  LanguageCode: "string"
+}
+
 export interface IUserSignInPayload {
   userKame: string;
   password: string;
@@ -56,7 +64,7 @@ export interface IInitialUserState {
   register: any,
   sendOtp: any,
   otp: any,
-  loading: boolean;   
+  loadding: boolean;   
   newRefreshToken:any;
   error: boolean;
   isAuthentication:boolean;

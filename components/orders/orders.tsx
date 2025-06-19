@@ -1,36 +1,20 @@
 import { NextPageWithLayout } from "@/models/common";
 import {
-  ButtonExport,
   HeadingTitle,
   WrapperCMSProduct,
   WrapProduct,
 } from "@/styles/CmsProductStylead";
 import {
   CheckCircleOutlined,
-  ClockCircleOutlined,
   CloseCircleOutlined,
   ExclamationCircleOutlined,
   MinusCircleOutlined,
   SyncOutlined,
   PlusCircleOutlined,
-  DeleteColumnOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
-import {
-  Box,
-  BoxBody,
-  BoxHeader,
-  ContenRight,
-} from "@/styles/CmsDiscountStyled";
-import {
-  CartItem,
-  CheckOut,
-  Wrapper,
-  WrapperDiscount,
-  WrapperDiscountLeft,
-  WrapperDiscountRigth,
-  WrapperVoucher,
-} from "@/styles/ShoppingCartStyled";
+import { Box, BoxBody } from "@/styles/CmsDiscountStyled";
+import { CartItem, Wrapper } from "@/styles/ShoppingCartStyled";
 import Table, { ColumnsType } from "antd/lib/table";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -43,17 +27,13 @@ import {
   Input,
   message,
   Space,
-  Checkbox,
 } from "antd";
-import ExportIcon from "@/assets/icon/ExportIcon.svg";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/app/hooks";
 import {
-  confirmOrder,
   getOrdersProfileById,
   updateStatusOrder,
   updateOrder,
-  deleteItemOrder,
 } from "@/features/order-slice";
 import { getCart } from "@/features/shopping-slice";
 
@@ -112,7 +92,7 @@ export const Orders: NextPageWithLayout = () => {
             setData(res.Payload);
           }
         })
-        .catch((res: any) => { });
+        .catch((res: any) => {});
 
       let idCart = JSON.parse(storage)?.CartId;
       dispatch(getCart(idCart))
@@ -122,7 +102,7 @@ export const Orders: NextPageWithLayout = () => {
           let cart = res.Payload;
           setItem(cart);
         })
-        .catch((res: any) => { });
+        .catch((res: any) => {});
     }
 
     setLoading(false);
@@ -156,8 +136,6 @@ export const Orders: NextPageWithLayout = () => {
     setOpenEdit(true);
     setOrderId(data.Id);
     setStatusOrder(status);
-
-    console.log(data?.OrderDetails);
   };
 
   const updateNote = (value: any) => {
@@ -197,8 +175,6 @@ export const Orders: NextPageWithLayout = () => {
   const userUpdateOrder = (status: number, id: any) => {
     let payloadUpdateStatus = { ...order };
     payloadUpdateStatus.StatusOrder = status;
-    console.log(payloadUpdateStatus);
-
     let payload = {
       Id: id,
       Payload: {
@@ -280,8 +256,6 @@ export const Orders: NextPageWithLayout = () => {
   //#region get items incart to add order
   const updateQuantityItemCart = (event: any) => {
     let value = event.target.value;
-    console.log(item);
-
     if (index !== -1) {
       let newItemsUpdate = { ...item };
       newItemsUpdate.ItemDetails = item?.ItemDetails.map(

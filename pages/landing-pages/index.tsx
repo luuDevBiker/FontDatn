@@ -1,5 +1,5 @@
 import MainHeader from "@/components/common/header/header";
-import { ButtonLogin } from "@/components/common/header/HeaderStyled";
+import { ButtonLogin } from "@/styles/HeaderStyled";
 import { Footer } from "@/components/footer/footer";
 import CountDownTimer from "@/components/landingpages/CountDownTimer";
 import AuthLayout from "@/components/layout/auth-layout/auth-layout";

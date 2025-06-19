@@ -45,3 +45,24 @@ export interface IItemAdd {
   ProductVariantId: string;
   Quantity: number
 }
+
+export interface ICategory{
+  Name: string;
+  Description: string | null;
+  Type: number;
+  Id: string;
+  ConcurrencyTimestamp: string,
+  CreatedTime: string,
+  CreatedBy: string,
+  ModifiedTime: string,
+  ModifiedBy: string,
+  IsDeleted: boolean,
+  DeletedBy: string,
+  DeletedTime: string,
+}
+
+export const CategoryTypeLabels: Record<number, string> = {
+  0: "Loại Sản Phẩm",
+  1: "Danh Mục",
+  2: "Thương Hiệu",
+};

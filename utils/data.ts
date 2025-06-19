@@ -130,7 +130,18 @@ export const ListCarousel = [
      {
           image:'https://hanoicomputercdn.com/media/banner/16_Nov445eed7fcc7a5f172e6fcc5e50a58000.png'
      },
-    
+     {
+          image:'https://hanoicomputercdn.com/media/banner/05_Junccebe5b1dc03346ab138203aa5441e49.jpg'
+     },
+     {
+          image:'https://hanoicomputercdn.com/media/banner/07_Jund521f800f36bd315fc042324e892c2ed.png'
+     },
+     {
+          image:'https://hanoicomputercdn.com/media/banner/14_Jun3221599ba38bd08750da64d3b6cc7d4b.jpg'
+     },
+     {
+          image:'https://hanoicomputercdn.com/media/banner/17_Jun960fb4337b96cb3ca4def97bb6cf1d6a.jpg'
+     },
 ]
 
 export const ListImageDetail = [

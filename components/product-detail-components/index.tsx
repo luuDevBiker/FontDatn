@@ -77,7 +77,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
               <Col span={10}>
                 <Image
                   alt=""
-                  src={data.Payload.ProductVariants[0].Images[0].Url}
+                  src={data.Payload.ProductVariants[0].Images[0]?.Url}
                   height={300}
                   width={"100%"}
                 />

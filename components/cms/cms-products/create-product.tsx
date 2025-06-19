@@ -7,25 +7,30 @@ import {
   WrapProduct,
 } from "@/styles/CmsProductStylead";
 import {
-  Button, Form,
+  Button,
+  Form,
   Input,
   message,
   Row,
   Col,
-  Select, Tag, Image
+  Select,
+  Tag,
+  Image,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 import {
   MinusCircleOutlined,
-  DeleteOutlined, PlusOutlined
+  DeleteOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import moment from "moment";
 import { useAppDispatch } from "@/app/hooks";
-import { addNewProduct } from "@/features/product-slice";
+import { addNewProduct, getCategories } from "@/features/product-slice";
 import axios from "axios";
+import { ICategory } from "@/models/product";
 const { TextArea } = Input;
 const { Option } = Select;
 const getBase64 = (file: RcFile): Promise<string> =>
@@ -40,7 +45,6 @@ interface Option {
   Name: string;
   DisplayOrder: number;
 }
-
 const ItemInput = Input;
 
 export const CreateProduct: NextPageWithLayout = () => {
@@ -57,11 +61,10 @@ export const CreateProduct: NextPageWithLayout = () => {
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [Images, setImages] = useState<any>([]);
-  //#endregion
-
-  const handleCancel = () => setPreviewOpen(false);
+  const [categories, setCategories] = useState<any>([]);
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
+  //#endregion
 
   //#region handlePreview Image
   const handlePreview = async (file: UploadFile) => {
@@ -89,8 +92,6 @@ export const CreateProduct: NextPageWithLayout = () => {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then(async (res) => {
-          console.log(res);
-
           let dataImg = res.data.data;
           if (res.status == 200) {
             const fileImage: UploadFile = {
@@ -131,6 +132,7 @@ export const CreateProduct: NextPageWithLayout = () => {
     setIndexImgs(index);
   };
   //#endregion
+
   //#region Utilities method
 
   const string2 = moment().format("DD/MM/YY");
@@ -138,7 +140,10 @@ export const CreateProduct: NextPageWithLayout = () => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   //#endregion
+
   //#region Custom methood
+  const handleCancel = () => setPreviewOpen(false);
+
   const handleOnsubmit = (payload: any) => {
     if (!payload.ProductVariants) {
       message.warning({
@@ -154,11 +159,12 @@ export const CreateProduct: NextPageWithLayout = () => {
     payload.ProductVariants.map((el: any, index: number) => {
       el.Images = Images[index];
     });
-
+    var category = categories.find((e: any) => e.Id === payload.Category);
+    payload.Category = category.Name;
+    payload.CategoryId = category.Id;
     dispatch(addNewProduct(payload))
       .unwrap()
       .then((res: any) => {
-        console.log(res);
         if (res.StatusCode === 200) {
           message.success({ content: "Tạo sản phẩm thành công", duration: 2 });
           form.resetFields();
@@ -174,9 +180,6 @@ export const CreateProduct: NextPageWithLayout = () => {
             },
           });
         }
-      })
-      .then((res: any) => {
-        console.log(res);
       });
   };
   //#region Options
@@ -191,7 +194,7 @@ export const CreateProduct: NextPageWithLayout = () => {
   };
   const onChangeInputOptionName = (e: any) => {
     let value = e.target.value;
-    value !== "" ? setOption(value) : console.log(e);
+    value !== "" ? setOption(value) : console.log();
   };
   const handleRemoveOptions = (index: number) => {
     const list = [...listOption];
@@ -214,8 +217,26 @@ export const CreateProduct: NextPageWithLayout = () => {
     setIsProductVriant(true);
   };
   //#endregion
+
   //#endregion
 
+  //#region useEffect
+  useEffect(() => {
+    if (categories.length === 0) {
+      dispatch(getCategories())
+        .unwrap()
+        .then((res: any) => {
+          setCategories(res.Payload);
+        });
+    }
+  }, [dispatch, categories]);
+  //#endregion
+
+  //#region Html Layout
+ 
+  if (categories.length === 0) {
+    return <></>;
+  }
   return (
     <WrapperCMSProduct>
       <Form
@@ -271,9 +292,13 @@ export const CreateProduct: NextPageWithLayout = () => {
                 name={"Category"}
               >
                 <Select>
-                  <Option value="LAP-TOP">LAP TOP</Option>
-                  <Option value="PC-GAMMING">PC GAMMING</Option>
-                  <Option value="PC-DO-HOA">PC ĐỒ HỌA</Option>
+                  {categories?.map((el: ICategory, index: number) =>
+                    el.Type === 0 ? (
+                      <Option key={el.Id} value={el.Id}>
+                        {el.Name}
+                      </Option>
+                    ) : null
+                  )}
                 </Select>
               </Form.Item>
               <Form.Item
@@ -287,13 +312,13 @@ export const CreateProduct: NextPageWithLayout = () => {
                 name="Brand"
               >
                 <Select>
-                  <Option value="ACER">ACER</Option>
-                  <Option value="SAMSUNG">SAMSUNG</Option>
-                  <Option value="ASUS">ASUS</Option>
-                  <Option value="APLE">APLE</Option>
-                  <Option value="KINGDOM">KINGDOM</Option>
-                  <Option value="INTEL">INTEL</Option>
-                  <Option value="AMD">AMD</Option>
+                  {categories?.map((el: ICategory, index: number) =>
+                    el.Type === 2 ? (
+                      <Option key={el.Id} value={el.Id}>
+                        {el.Name}
+                      </Option>
+                    ) : null
+                  )}
                 </Select>
               </Form.Item>
             </WrapProduct>
@@ -357,7 +382,12 @@ export const CreateProduct: NextPageWithLayout = () => {
                           <Form.Item
                             label="Giá nhập"
                             name={[name, "ImportPrice"]}
-                            rules={[{ required: true, message: "Giá nhập không được để trống" }]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Giá nhập không được để trống",
+                              },
+                            ]}
                           >
                             <Input placeholder="Điền giá nhập của sản phẩm" />
                           </Form.Item>
@@ -365,7 +395,12 @@ export const CreateProduct: NextPageWithLayout = () => {
                           <Form.Item
                             label="Giá bán"
                             name={[name, "Price"]}
-                            rules={[{ required: true, message: "Giá bán không được để trống" }]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Giá bán không được để trống",
+                              },
+                            ]}
                           >
                             <Input placeholder="Điền giá bán của sản phẩm" />
                           </Form.Item>
@@ -373,7 +408,12 @@ export const CreateProduct: NextPageWithLayout = () => {
                           <Form.Item
                             label="Số lượng"
                             name={[name, "Quantity"]}
-                            rules={[{ required: true, message: "Số lượng không được để trống" }]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "Số lượng không được để trống",
+                              },
+                            ]}
                           >
                             <Input placeholder="Điền số lượng của sản phẩm" />
                           </Form.Item>
@@ -409,7 +449,9 @@ export const CreateProduct: NextPageWithLayout = () => {
                               <Upload
                                 onPreview={handlePreview}
                                 onChange={handleChange}
-                                fileList={indexImgs == key ? fileList : Images[key]}
+                                fileList={
+                                  indexImgs == key ? fileList : Images[key]
+                                }
                                 listType="picture-card"
                                 customRequest={uploadFile}
                                 className="upload-list-inline"
@@ -462,4 +504,5 @@ export const CreateProduct: NextPageWithLayout = () => {
       </Form>
     </WrapperCMSProduct>
   );
+  //#endregion
 };
