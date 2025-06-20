@@ -2,9 +2,13 @@ import { Col, Rate, Row, Carousel, Space, Button, message, Image } from "antd";
 import { useEffect, useState } from "react";
 import { NextPageWithLayout } from "../../models/common";
 import "antd/dist/antd.css";
-import { CheckOutlined, LaptopOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  LaptopOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 import { ListCarousel } from "@/utils/data";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { getListProduct, getCategories } from "@/features/product-slice";
 import { IProduct, ICategory } from "@/models/product";
 import { addTocart } from "@/features/shopping-slice";
@@ -16,22 +20,26 @@ import {
   WrapperProductMain,
 } from "@/styles/ProductWrapperStyled";
 import { useRouter } from "next/router";
+import { selectUser } from "@/features/user-slice";
 
 export const ProductCategory: NextPageWithLayout = (prop) => {
   const router = useRouter();
   const [data, setData] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const dispatch = useAppDispatch();
+  const { loginInfo }: any = useAppSelector(selectUser);
 
-  const user: any = localStorage.getItem("u");
-  const cartId: any = JSON.parse(user)?.CartId;
+  console.log(loginInfo);
+
   useEffect(() => {
-    dispatch(getListProduct())
-      .unwrap()
-      .then()
-      .then((res) => {
-        setData(res?.Payload as IProduct[]);
-      });
+    if (data.length === 0) {
+      dispatch(getListProduct())
+        .unwrap()
+        .then()
+        .then((res) => {
+          setData(res?.Payload as IProduct[]);
+        });
+    }
     if (categories.length === 0) {
       dispatch(getCategories())
         .unwrap()
@@ -39,18 +47,18 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
           setCategories(res.Payload);
         });
     }
-  }, [dispatch, data, categories]);
+  }, [dispatch, data, categories, loginInfo]);
 
   const addCartItem = (id: any) => {
     let dataAdd: any = {
-      Id: cartId,
+      Id: loginInfo.CartId,
       Items: {
         ProductVariantId: id,
         Quantity: 1,
       },
     };
 
-    if (!user) {
+    if (!loginInfo) {
       message.warning({
         content: "Bạn chưa đăng nhập",
         duration: 3,
@@ -88,8 +96,9 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
         });
       });
   };
+
   if (categories.length === 0 || data.length === 0) {
-    return <></>
+    return <></>;
   }
   return (
     <WraperProductContainer>

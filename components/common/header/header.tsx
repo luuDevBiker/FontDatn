@@ -1,4 +1,4 @@
-import { Badge, Dropdown, Form, Input, Menu } from "antd";
+import { Badge, Dropdown, Input, Menu } from "antd";
 import React, { useEffect, useState } from "react";
 import type { MenuProps } from "antd";
 import { useRouter } from "next/router";
@@ -27,17 +27,13 @@ import {
   GiftOutlined,
   AliwangwangOutlined,
   ContainerOutlined,
-  KeyOutlined,
 } from "@ant-design/icons";
-import Logo_Computer from "../../../assets/images/F-Computer.png";
-import { Confirm } from "@/components/popup-confirm/confirm";
-import { WrapperSigin } from "@/styles/AuthStyled";
+// import Logo_Computer from "../../../assets/images/F-Computer.png";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { userSignIn, logout } from "@/features/user-slice";
-import { selectUser } from "@/features/user-slice";
-import jwt_decode from "jwt-decode";
+import { logout, selectUser } from "@/features/user-slice";
+import { IMainHeaderProps } from "@/models/common";
 const { Option } = Select;
-interface IMainHeaderProps {}
+
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -76,37 +72,14 @@ const renderMenu = (item: any) => {
 
 const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
   const router = useRouter();
-  const [isConfirm, setIsConfirm] = useState<boolean>(false);
-  const [isConfirmRegister, setIsConfirmRegister] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { loginInfo }: any = useAppSelector(selectUser);
   const count = localStorage.getItem("countItemInCart");
   const storage =
     typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
 
-  const handlerLogin = (Value: any) => {
-    dispatch(userSignIn(Value))
-      .unwrap()
-      .then((res: any) => {
-        var tokeDecode: any = jwt_decode(res.AccessToken);
-        let role =
-          tokeDecode[
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-          ];
-        if (role === "Users") {
-          router.push("/");
-        } else {
-          router.push("/cms/cms-dashboard");
-        }
-      });
-  };
-
-  const handleOpenPopup = () => {
-    setIsConfirm(true);
-  };
-
-  const handleOpenPopupSignUp = () => {
-    setIsConfirmRegister(true);
+  const handleAuth = () => {
+    router.push("/auth");
   };
 
   const onHandleLoguot = () => {
@@ -127,20 +100,9 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
           fontWeight: 600,
           margin: "5px 20px 10px",
         }}
-        onClick={handleOpenPopupSignUp}
+        onClick={handleAuth}
       >
         Đăng ký
-      </Menu.Item>
-      <Menu.Item
-        style={{
-          backgroundColor: "#fdd835",
-          textAlign: "center",
-          fontWeight: 600,
-          margin: "0px 20px 10px",
-        }}
-        onClick={handleOpenPopup}
-      >
-        Đăng nhập
       </Menu.Item>
     </Menu>
   );
@@ -175,24 +137,6 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
       </Menu.Item>
     </Menu>
   );
-  //#endregion
-
-  //#region useEffect
-  useEffect(() => {
-    if (storage) {
-      let user = JSON.parse(storage);
-      let tokeDecode: any = jwt_decode(user.AccessToken);
-      let role =
-        tokeDecode[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-        ];
-      if (role === "Users") {
-        router.push("/");
-      } else {
-        router.push("/cms/cms-dashboard");
-      }
-    }
-  }, [dispatch]);
   //#endregion
 
   return (
@@ -240,7 +184,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
         <HeaderBottom>
           <LogoWrapper>
             <HeaderTitle onClick={() => router.push(`/`)}>
-              <img src={Logo_Computer.src} alt="logo" width={150} />
+              {/* <img src={Logo_Computer.src} alt="logo" width={150} /> */}
             </HeaderTitle>
           </LogoWrapper>
           {/* start search */}
@@ -285,148 +229,6 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
           </NotificationMenu>
         </HeaderBottom>
       </HeaderWrapper>
-      //#endregion
-      {/*  */}
-      //#region SignIn
-      <Confirm
-        buttonLeft={""}
-        buttonRight={""}
-        changeActive={(e: any) => setIsConfirm(e)}
-        content={""}
-        handleAction={() => {}}
-        title={""}
-        stateButton={false}
-        wrapper={
-          <WrapperSigin>
-            <div className="limiter">
-              <div className="container-login100">
-                <div className="wrap-login100">
-                  <div className="login100-pic js-tilt" data-tilt>
-                    <img
-                      src="https://colorlib.com/etc/lf/Login_v1/images/img-01.png"
-                      alt="IMG"
-                    />
-                  </div>
-
-                  <div className="login100-form validate-form">
-                    <span className="login100-form-title">Đăng nhập</span>
-                    <Form onFinish={handlerLogin}>
-                      <Form.Item name={"userName"}>
-                        <Input
-                          prefix={<UserOutlined />}
-                          className="inputAuth"
-                          placeholder="Tên tài khoản"
-                        />
-                      </Form.Item>
-                      <Form.Item name={"password"}>
-                        <Input
-                          prefix={<KeyOutlined color="red" />}
-                          className="inputAuth"
-                          placeholder="Mật khẩu"
-                        />
-                      </Form.Item>
-                      <div className="container-login100-form-btn">
-                        <button className="login100-form-btn" type="submit">
-                          Login
-                        </button>
-                      </div>
-                    </Form>
-
-                    <div className="textForgot">
-                      <span className="txt1">Forgot Username</span>
-                      <a className="txt2" onClick={() => router.push("/")}>
-                        / Password?
-                      </a>
-                    </div>
-                    <div className="createacc">
-                      <a className="txt2" href="#">
-                        Create your Account
-                        <i
-                          className="fa fa-long-arrow-right m-l-5"
-                          aria-hidden="true"
-                        ></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </WrapperSigin>
-        }
-        width={"1000px"}
-        openModalConfirm={isConfirmRegister}
-      />
-      //#endregion
-      {/*  */}
-      //#region Register
-      <Confirm
-        buttonLeft={""}
-        buttonRight={""}
-        changeActive={(e: any) => setIsConfirmRegister(e)}
-        content={""}
-        handleAction={() => {}}
-        title={"Đăng ký"}
-        stateButton={false}
-        wrapper={
-          <WrapperSigin>
-            <div className="limiter">
-              <div className="container-login100">
-                <div className="wrap-login100">
-                  <div className="login100-pic js-tilt" data-tilt>
-                    <img
-                      src="https://colorlib.com/etc/lf/Login_v1/images/img-01.png"
-                      alt="IMG"
-                    />
-                  </div>
-
-                  <div className="login100-form validate-form">
-                    <span className="login100-form-title">Đăng ký</span>
-                    <Form onFinish={handlerLogin}>
-                      <Form.Item name={"userName"}>
-                        <Input
-                          prefix={<UserOutlined />}
-                          className="inputAuth"
-                          placeholder="Tên tài khoản"
-                        />
-                      </Form.Item>
-                      <Form.Item name={"password"}>
-                        <Input
-                          prefix={<KeyOutlined color="red" />}
-                          className="inputAuth"
-                          placeholder="Mật khẩu"
-                        />
-                      </Form.Item>
-                      <div className="container-login100-form-btn">
-                        <button className="login100-form-btn" type="submit">
-                          Login
-                        </button>
-                      </div>
-                    </Form>
-
-                    <div className="textForgot">
-                      <span className="txt1">Forgot Username</span>
-                      <a className="txt2" onClick={() => router.push("/")}>
-                        / Password?
-                      </a>
-                    </div>
-                    <div className="createacc">
-                      <a className="txt2" href="#">
-                        Create your Account
-                        <i
-                          className="fa fa-long-arrow-right m-l-5"
-                          aria-hidden="true"
-                        ></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </WrapperSigin>
-        }
-        width={"1000px"}
-        openModalConfirm={isConfirmRegister}
-      />
       //#endregion
     </React.Fragment>
   );

@@ -1,7 +1,5 @@
 import { FooterCustom, FooterItem } from "@/styles/HomeStyled";
 import { Button, Col, Input, Row, Typography } from "antd";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Logo_Computer from "../../assets/images/F-Computer.png";
 
 export const Footer = () => {

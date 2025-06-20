@@ -22,14 +22,6 @@ export const Home: NextPageWithLayout = (prop) => {
   const [data, setData] = useState<any>();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getListProduct())
-      .unwrap()
-      .then()
-      .then((res: any) => {
-        setData(res);
-      });
-  }, []);
   const handleHover = (value: any) => {
     setInitId(value.productId);
     setHover(false);

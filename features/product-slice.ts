@@ -112,6 +112,7 @@ export const getCategories = createAsyncThunk(GET_CATEGORIES, async () => {
 const initialState = {
   productDetails: {},
   categories: [],
+  products: [],
   loadding: false,
   error: false,
 };
@@ -122,6 +123,17 @@ const productSlice = createSlice({
   extraReducers: (builder) => {
     /* Register */
     builder
+      .addCase(getListProduct.pending, (state) => {
+        state.loadding = true;
+      })
+      .addCase(getListProduct.fulfilled, (state, { payload }) => {
+        state.loadding = false;
+        state.products = payload.Payload;
+      })
+      .addCase(getListProduct.rejected, (state, { payload }) => {
+        state.loadding = false;
+        state.error = true;
+      })
       .addCase(addNewProduct.pending, (state) => {
         state.loadding = true;
       })
