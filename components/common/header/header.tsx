@@ -28,7 +28,7 @@ import {
   AliwangwangOutlined,
   ContainerOutlined,
 } from "@ant-design/icons";
-// import Logo_Computer from "../../../assets/images/F-Computer.png";
+import Logo_Computer from "../../../assets/images/F-Computer.png";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { logout, selectUser } from "@/features/user-slice";
 import { IMainHeaderProps } from "@/models/common";
@@ -102,7 +102,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
         }}
         onClick={handleAuth}
       >
-        Đăng ký
+        Đăng nhập - Đăng ký
       </Menu.Item>
     </Menu>
   );
@@ -184,7 +184,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
         <HeaderBottom>
           <LogoWrapper>
             <HeaderTitle onClick={() => router.push(`/`)}>
-              {/* <img src={Logo_Computer.src} alt="logo" width={150} /> */}
+              <img src={Logo_Computer.src} alt="logo" width={150} />
             </HeaderTitle>
           </LogoWrapper>
           {/* start search */}

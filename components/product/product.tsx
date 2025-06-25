@@ -9,7 +9,11 @@ import {
 } from "@ant-design/icons";
 import { ListCarousel } from "@/utils/data";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { getListProduct, getCategories } from "@/features/product-slice";
+import {
+  getListProduct,
+  getCategories,
+  selectProduct,
+} from "@/features/product-slice";
 import { IProduct, ICategory } from "@/models/product";
 import { addTocart } from "@/features/shopping-slice";
 import {
@@ -24,30 +28,17 @@ import { selectUser } from "@/features/user-slice";
 
 export const ProductCategory: NextPageWithLayout = (prop) => {
   const router = useRouter();
-  const [data, setData] = useState<IProduct[]>([]);
-  const [categories, setCategories] = useState<ICategory[]>([]);
   const dispatch = useAppDispatch();
   const { loginInfo }: any = useAppSelector(selectUser);
-
-  console.log(loginInfo);
-
+  const { categories, products }: any = useAppSelector(selectProduct);
   useEffect(() => {
-    if (data.length === 0) {
-      dispatch(getListProduct())
-        .unwrap()
-        .then()
-        .then((res) => {
-          setData(res?.Payload as IProduct[]);
-        });
+    if (products.length === 0) {
+      dispatch(getListProduct());
     }
     if (categories.length === 0) {
-      dispatch(getCategories())
-        .unwrap()
-        .then((res: any) => {
-          setCategories(res.Payload);
-        });
+      dispatch(getCategories());
     }
-  }, [dispatch, data, categories, loginInfo]);
+  }, [dispatch, products, categories]);
 
   const addCartItem = (id: any) => {
     let dataAdd: any = {
@@ -97,9 +88,10 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
       });
   };
 
-  if (categories.length === 0 || data.length === 0) {
-    return <></>;
+  if (products.length === 0 || categories.length === 0) {
+    return <></>
   }
+
   return (
     <WraperProductContainer>
       <Row gutter={10}>
@@ -182,8 +174,8 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
 
       <WrapperProductMain>
         <Row gutter={[20, 20]}>
-          {data &&
-            data.map((item: any, index: number) => {
+          {products &&
+            products.map((item: any, index: number) => {
               return item.ProductVariants.map((variant: any, index: number) => (
                 <Col span={6} key={item.SkuId || index}>
                   <WraperProduct>

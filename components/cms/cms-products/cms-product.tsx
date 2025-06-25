@@ -18,7 +18,6 @@ export const CmsProduct: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [detail, setDetail] = useState<IProduct>({} as IProduct);
@@ -73,14 +72,14 @@ export const CmsProduct: NextPageWithLayout = () => {
       .then((res: any) => {
         setData(res.Payload);
       });
-  }, [dispatch]);
+  }, [dispatch, data]);
 
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
         <div>
-          <h5 className="mx-2">Sản phẩm</h5>
-          <Tag>Quản lý sản phẩm</Tag> <Tag>Quản lý sản phẩm</Tag>
+          <h5 className="mx-2 title-element-1 title-element-3">Sản phẩm</h5>
+          <Tag className="mx-2 title-element-1 title-element-3">Quản lý sản phẩm</Tag>
         </div>
         <div>
           <Button

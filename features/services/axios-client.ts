@@ -16,7 +16,7 @@ if (storage) {
 }
 
 const axiosClient = axios.create({
-  baseURL: "https://localhost:44321",
+  baseURL: "https://192.168.1.43:44321",
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': '*',
@@ -52,7 +52,7 @@ axiosClient.interceptors.response.use(
 );
 
 const axiosClient2 = axios.create({
-  baseURL: "https://kpi-api.dpotech.vn",
+  baseURL: "https://192.168.1.43:44321",
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${

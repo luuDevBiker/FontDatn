@@ -831,7 +831,6 @@ export const AuthWrapper = styled.div`
   border-radius: 20px;
   box-shadow: 0px 12px 30px hsl(156, 78.1%, 53.5%);
   position: relative;
-  background: linear-gradient(135deg, rgb(245, 245, 245), rgb(1, 161, 169));
   background-image: url("../../assets/layout/197860f8241ce.png");
 `;
 
@@ -859,28 +858,25 @@ export const FormBox = styled.div`
   padding: 3rem;
   box-sizing: border-box;
 
-  .ant-form-item-label > label,
+  .ant-form-item-label > label{
+    color: rgb(251, 3, 3);
+    font-size: 20px
+  }
   .ant-form-item-control-input,
   .ant-form-item-control-input input,
-  .ant-input,
-  .ant-input-password,
-  .ant-checkbox-wrapper {
-    color: rgb(255, 255, 255) !important;
+  .ant-checkbox-wrapper,{
+    color: rgb(223, 6, 6);
+    background: linear-gradient(135deg, rgb(14, 13, 13), rgb(1, 161, 169));
   }
 
   .ant-input::placeholder,
-  .ant-input-password input::placeholder {
+  .ant-input input::placeholder,
+  .ant-input-password input::placeholder
+   {
     color: rgba(5, 13, 245, 0.7);
   }
 
   .ant-input,
-  .ant-input-password {
-    background-color: transparent;
-    color: rgb(59, 15, 179);
-    outline: "none";
-    boxshadow: "none";
-    bordercolor: "#ccc";
-  }
 `;
 
 export const ActionButton = styled(Button)`
@@ -888,6 +884,18 @@ export const ActionButton = styled(Button)`
   height: 40px;
   font-weight: bold;
   background: linear-gradient(to right, #4facfe, #00f2fe);
+  border: none;
+  color: rgb(4, 17, 160);
+  &:hover {
+    color: rgb(4, 6, 24);
+    background: linear-gradient(to left, #00f2fe, #4facfe);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 242, 254, 0.4);
+  }
+`;
+
+export const SmallButton = styled(Button)`
+  font-weight: bold;
   border: none;
   color: rgb(4, 17, 160);
   &:hover {

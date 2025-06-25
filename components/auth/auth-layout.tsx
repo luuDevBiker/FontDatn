@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   ActionButton,
   AuthWrapper,
@@ -6,26 +6,40 @@ import {
   ContainerAuth,
   FormBox,
   FormSlide,
+  SmallButton,
   ToggleButton,
   WhiteTitle,
 } from "../../styles/AuthStyled";
 import AuthLayout from "../../components/layout/auth-layout/auth-layout";
-import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
-import { Checkbox, Form, Input, Typography, message } from "antd";
+import {
+  LockOutlined,
+  MobileOutlined,
+  PhoneOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Checkbox, Form, Input, InputNumber, message } from "antd";
 import { useRouter } from "next/router";
-import { userSignIn } from "@/features/user-slice";
-import { useAppDispatch } from "@/app/hooks";
+import {
+  userSignIn,
+  userRegister,
+  selectUser,
+  userConfirmOtp,
+  userForgotPassword,
+} from "@/features/user-slice";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import jwt_decode from "jwt-decode";
+import { error, log } from "console";
 type Mode = "login" | "register" | "otp" | "forgot";
 
 const SignInSignUp = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [mode, setMode] = useState<Mode>("login");
-
+  const [numberPhone, setNumberPhone] = useState<any>("");
+  const { register } = useAppSelector(selectUser);
   const onLogin = (values: any) => {
     console.log(values);
-    if (!values.username || !values.password) {
+    if (!values.UserName || !values.Password) {
       message.error("Vui lòng nhập đầy đủ thông tin đăng nhập");
       return;
     }
@@ -43,6 +57,15 @@ const SignInSignUp = () => {
         } else {
           router.push("/cms/cms-dashboard");
         }
+      })
+      .catch((error) => {
+        if (
+          error.StatusCode === 500 &&
+          error.Message === "You need confirm otp"
+        ) {
+          setMode("otp");
+          setNumberPhone(values.UserName);
+        }
       });
   };
 
@@ -51,28 +74,57 @@ const SignInSignUp = () => {
       message.error("Mật khẩu xác nhận không khớp!");
       return;
     }
-    console.log("Register:", values);
-    setMode("otp");
+    values.LanguageCode = "vi-VN";
+    dispatch(userRegister(values))
+      .unwrap()
+      .then((res: any) => {
+        setMode("otp");
+      });
   };
 
   const onVerifyOtp = (values: any) => {
-    if (!values.otp) {
+    if (!values.Otp) {
       message.error("Vui lòng nhập mã OTP");
       return;
     }
-    console.log("OTP xác nhận:", values.otp);
-    message.success("Đăng ký thành công!");
-    setMode("login");
+    values.PhoneNumber = register.PhoneNumber
+      ? register.PhoneNumber
+      : numberPhone;
+    values.OtpType = 0;
+    dispatch(userConfirmOtp(values))
+      .unwrap()
+      .then((res: any) => {
+        console.log(res);
+
+        message.success("Đăng ký thành công!");
+        setMode("login");
+      });
   };
 
   const onForgotPassword = (values: any) => {
-    if (!values.email) {
-      message.error("Vui lòng nhập email để khôi phục mật khẩu");
+    if (!values.PhoneNumber) {
+      message.error("Vui lòng nhập số điện thoại để khôi phục mật khẩu");
       return;
     }
-    console.log("Khôi phục mật khẩu gửi email:", values);
-    message.success("Mã xác nhận đã được gửi đến email của bạn");
-    setMode("otp");
+    if (values.NewPassword !== values.ConfirmPassword) {
+      message.error("Mật khẩu không giống nhau");
+      return;
+    }
+    if (!values.Otp || values.Otp.length < 6) {
+      message.error("Sai định dạng OTP");
+      return;
+    }
+    values.Otp = `${values.Otp}`;
+    values.OtpType = 0;
+    dispatch(userForgotPassword(values))
+      .unwrap()
+      .then((res: any) => {
+        console.log(res);
+        if (res.StatusCode === 200) {
+          message.success("Khôi phục tài khoản thành công");
+          setMode("login");
+        }
+      });
   };
 
   return (
@@ -87,13 +139,12 @@ const SignInSignUp = () => {
       <ContainerAuth>
         <AuthWrapper>
           <FormSlide isRegistering={mode !== "login"}>
-            {/* LOGIN FORM */}
+            {/* SignIn */}
             <FormBox>
               <WhiteTitle level={2}>Đăng nhập</WhiteTitle>
               <Form name="login" layout="vertical" onFinish={onLogin}>
                 <Form.Item
-                  label="Tài khoản"
-                  name="username"
+                  name="UserName"
                   rules={[
                     { required: true, message: "Vui lòng nhập tài khoản!" },
                   ]}
@@ -102,8 +153,7 @@ const SignInSignUp = () => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Mật khẩu"
-                  name="password"
+                  name="Password"
                   rules={[
                     { required: true, message: "Vui lòng nhập mật khẩu!" },
                   ]}
@@ -113,37 +163,32 @@ const SignInSignUp = () => {
                     placeholder="Mật khẩu"
                   />
                 </Form.Item>
-
-                <Form.Item name="remember" valuePropName="checked">
-                  <Checkbox>Nhớ mật khẩu</Checkbox>
-                </Form.Item>
-
                 <Form.Item>
                   <ActionButton htmlType="submit">Đăng nhập</ActionButton>
                 </Form.Item>
-
                 <Form.Item>
                   <a
                     onClick={() => setMode("forgot")}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", color: "white" }}
                   >
                     Quên mật khẩu?
                   </a>
                 </Form.Item>
               </Form>
             </FormBox>
-
-            {/* OTHER FORM BOX */}
+            {/* Register */}
             <FormBox>
               {mode === "register" && (
                 <>
                   <WhiteTitle level={2}>Đăng ký</WhiteTitle>
                   <Form name="register" layout="vertical" onFinish={onRegister}>
                     <Form.Item
-                      label="Tài khoản"
-                      name="username"
+                      name="DisplayName"
                       rules={[
-                        { required: true, message: "Vui lòng nhập tài khoản!" },
+                        {
+                          required: true,
+                          message: "Vui lòng nhập số điện thoại!",
+                        },
                       ]}
                     >
                       <Input
@@ -151,28 +196,33 @@ const SignInSignUp = () => {
                         placeholder="Tài khoản"
                       />
                     </Form.Item>
-
                     <Form.Item
-                      label="Mật khẩu"
-                      name="password"
+                      name="UserName"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập số điện thoại!",
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={<UserOutlined />}
+                        placeholder="Tài khoản"
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      name="Password"
                       rules={[
                         { required: true, message: "Vui lòng nhập mật khẩu!" },
                       ]}
                     >
                       <Input.Password
-                        style={{
-                          outline: "none",
-                          boxShadow: "none", // loại bỏ shadow xanh
-                          borderColor: "#ccc", // tùy chọn
-                        }}
                         prefix={<LockOutlined />}
                         placeholder="Mật khẩu"
                       />
                     </Form.Item>
-
                     <Form.Item
-                      label="Xác nhận mật khẩu"
-                      name="confirmPassword"
+                      name="ConfirmPassword"
                       rules={[
                         {
                           required: true,
@@ -185,25 +235,19 @@ const SignInSignUp = () => {
                         placeholder="Xác nhận mật khẩu"
                       />
                     </Form.Item>
-
                     <Form.Item>
-                      <ActionButton>Đăng ký</ActionButton>
+                      <ActionButton htmlType="submit">Đăng ký</ActionButton>
                     </Form.Item>
                   </Form>
                 </>
               )}
-
+              {/* region Confirm OTP */}
               {mode === "otp" && (
                 <>
                   <WhiteTitle level={2}>Xác thực OTP</WhiteTitle>
-                  <Form
-                    name="otpVerify"
-                    layout="vertical"
-                    onFinish={onVerifyOtp}
-                  >
+                  <Form name="Otp" layout="vertical" onFinish={onVerifyOtp}>
                     <Form.Item
-                      label="Nhập mã OTP gửi qua email"
-                      name="otp"
+                      name="Otp"
                       rules={[
                         { required: true, message: "Vui lòng nhập mã OTP!" },
                       ]}
@@ -212,12 +256,12 @@ const SignInSignUp = () => {
                     </Form.Item>
 
                     <Form.Item>
-                      <ActionButton>Xác nhận</ActionButton>
+                      <ActionButton htmlType="submit">Xác nhận</ActionButton>
                     </Form.Item>
                   </Form>
                 </>
               )}
-
+              {/* Forgot password */}
               {mode === "forgot" && (
                 <>
                   <WhiteTitle level={2}>Quên mật khẩu</WhiteTitle>
@@ -227,26 +271,66 @@ const SignInSignUp = () => {
                     onFinish={onForgotPassword}
                   >
                     <Form.Item
-                      label="Số điện thoại"
-                      name="PnoneMumber"
+                      name="PhoneNumber"
                       rules={[
-                        { required: true, message: "Vui lòng nhập email!" },
+                        {
+                          required: true,
+                          message: "Vui lòng nhập số điẹno thoại!",
+                        },
                       ]}
                     >
                       <Input
-                        prefix={<MailOutlined />}
+                        prefix={<PhoneOutlined />}
                         placeholder="số điện thoại đăng nhập"
                       />
                     </Form.Item>
-
-                    <Form.Item>
-                      <ActionButton>Gửi mã xác nhận</ActionButton>
+                    <Form.Item
+                      name="NewPassword"
+                      rules={[
+                        { required: true, message: "Vui lòng nhập mật khẩu!" },
+                      ]}
+                    >
+                      <Input.Password
+                        prefix={<LockOutlined />}
+                        placeholder="Mật khẩu"
+                      />
                     </Form.Item>
-
+                    <Form.Item
+                      name="ConfirmPassword"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng xác nhận mật khẩu!",
+                        },
+                      ]}
+                    >
+                      <Input.Password
+                        prefix={<LockOutlined />}
+                        placeholder="Xác nhận mật khẩu"
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      name="Otp"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng xác nhận mật khẩu!",
+                        },
+                      ]}
+                    >
+                      <InputNumber
+                        prefix={<MobileOutlined />}
+                        placeholder="Xác nhận OTP"
+                        style={{ width: "100%" }}
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <ActionButton htmlType="submit">Xác nhận</ActionButton>
+                    </Form.Item>
                     <Form.Item>
                       <a
                         onClick={() => setMode("login")}
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: "pointer", color: "white" }}
                       >
                         ← Quay lại đăng nhập
                       </a>

@@ -11,6 +11,7 @@ import {
 export const USER_SIGNIN: string = "auth/signin";
 export const USER_SLICE_NAME: string = "user";
 export const LOGOUT = "user/logout";
+export const CONFIRM_OTP = "user/confirm-otp";
 export const USER_REGISTER: string = "user/register";
 export const GET_CONFIGURATION: string = "configuration/get-configuration";
 
@@ -46,11 +47,25 @@ export const userRegister = createAsyncThunk(
   }
 );
 
-export const getConfigurations = createAsyncThunk(
-  GET_CONFIGURATION,
+export const userConfirmOtp = createAsyncThunk(
+  CONFIRM_OTP,
   async (payload: any, { rejectWithValue }) => {
     try {
-      const response = await userApi.getConfigurations(payload);
+      const response = await userApi.userConfirmOtp(payload);
+      return response?.data;
+    } catch (err: any) {
+      if (!err.response) {
+        throw err;
+      }
+    }
+  }
+);
+
+export const userForgotPassword = createAsyncThunk(
+  CONFIRM_OTP,
+  async (payload: any, { rejectWithValue }) => {
+    try {
+      const response = await userApi.userForgotPassword(payload);
       return response?.data;
     } catch (err: any) {
       if (!err.response) {
@@ -89,6 +104,9 @@ const userSlice = createSlice({
       .addCase(userRegister.fulfilled, (state, { payload }) => {
         state.loadding = false;
         state.isAuthentication = true;
+        state.register = payload
+        console.log(payload);
+        
       })
       .addCase(userRegister.rejected, (state, { payload }) => {
         state.loadding = false;
@@ -111,15 +129,6 @@ const userSlice = createSlice({
         state.loadding = false;
         state.error = true;
       })
-      .addCase(getConfigurations.pending, (state) => {
-        state.loadding = true;
-      })
-      .addCase(getConfigurations.fulfilled, (state, { payload }) => {
-        state.loadding = false;
-        state.loginInfo = payload as ILoginResponse;
-        state.isAuthentication = true;
-        state.token = payload.Token;
-      })
       .addCase(logout.fulfilled, (state, { payload }) => {
         state.isAuthentication = false;
         state.loadding = false;
@@ -128,7 +137,6 @@ const userSlice = createSlice({
           localStorage.clear();
         }
       })
-      .addCase(getConfigurations.rejected, (state, { payload }) => {});
   },
 });
 

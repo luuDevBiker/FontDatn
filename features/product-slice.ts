@@ -149,7 +149,7 @@ const productSlice = createSlice({
       })
       .addCase(getCategories.fulfilled, (state, { payload }) => {
         state.loadding = false;
-        state.categories = payload.payload;
+        state.categories = payload.Payload;
       })
       .addCase(getCategories.rejected, (state, { payload }) => {
         state.loadding = false;

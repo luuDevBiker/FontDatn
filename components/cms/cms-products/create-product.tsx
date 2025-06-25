@@ -7,6 +7,7 @@ import {
   WrapProduct,
 } from "@/styles/CmsProductStylead";
 import {
+  AutoComplete,
   Button,
   Form,
   Input,
@@ -52,6 +53,7 @@ export const CreateProduct: NextPageWithLayout = () => {
   const [isProductVariant, setIsProductVriant] = useState(false);
   const [option, setOption] = useState("");
   const [listOption, setListOption] = useState<Option[]>([]);
+  const [options, setOptions] = useState<{ value: string }[]>([]);
   //#endregion
 
   //#region state prevew images
@@ -233,7 +235,7 @@ export const CreateProduct: NextPageWithLayout = () => {
   //#endregion
 
   //#region Html Layout
- 
+
   if (categories.length === 0) {
     return <></>;
   }

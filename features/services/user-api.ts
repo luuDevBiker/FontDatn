@@ -17,11 +17,18 @@ class UserApi {
       data: payload,
     });
   }
-  getConfigurations(payload: any) {
-    return axiosClient2({
-      method: "get",
-      url: `/msa-configuration/odata/Configurations`,
-      params: payload,
+  userConfirmOtp(payload: any) {
+    return axiosClient({
+      method: "post",
+      url: `/msa-identity/api/Users/ConfirmOtp`,
+      data: payload,
+    });
+  }
+  userForgotPassword(payload: any) {
+    return axiosClient({
+      method: "put",
+      url: `/msa-identity/api/Users/ForgotPassword`,
+      data: payload,
     });
   }
 }

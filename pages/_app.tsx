@@ -5,7 +5,6 @@ import { AppPropsWithLayout } from "../models/common";
 import { ThemeProvider } from "styled-components";
 import "antd/dist/antd.css";
 import jwt_decode from "jwt-decode";
-// import { light } from '@/components/theme';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -24,19 +23,19 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
     typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
   useEffect(() => {
     setShowChild(true);
-    // if (storage) {
-    //   let user = JSON.parse(storage);
-    //   let tokeDecode: any = jwt_decode(user.AccessToken);
-    //   let role =
-    //     tokeDecode[
-    //       "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-    //     ];
-    //   if (role === "Users") {
-    //     router.push("/");
-    //   } else {
-    //     router.push("/cms/cms-dashboard");
-    //   }
-    // }
+    if (storage) {
+      let user = JSON.parse(storage);
+      let tokeDecode: any = jwt_decode(user.AccessToken);
+      let role =
+        tokeDecode[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ];
+      if (role === "Users") {
+        router.push("/");
+      } else {
+        router.push("/cms/cms-dashboard");
+      }
+    }
   }, []);
 
   if (!showChild) {
@@ -58,5 +57,4 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   }
 };
 
-// export default appWithTranslation(MyApp);
 export default MyApp;

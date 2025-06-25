@@ -32,8 +32,10 @@ export const CmsDashBoard: NextPageWithLayout = () => {
     <WrapperCMSProduct>
       <HeadingTitle>
         <div style={{ listStyle: "none" }}>
-            <b>Manager :</b>{""}
+          <p className="title-element-1 title-element-3">Manager </p>
+          {""}
           <Button
+            className="title-element-2 title-element-1"
             type="ghost"
             size="small"
             onClick={() => router.push("/cms/cms-products")}
@@ -41,6 +43,7 @@ export const CmsDashBoard: NextPageWithLayout = () => {
             Sản Phẩm
           </Button>
           <Button
+            className="title-element-2 title-element-1"
             type="ghost"
             size="small"
             onClick={() => router.push("/cms/cms-order")}
@@ -48,6 +51,7 @@ export const CmsDashBoard: NextPageWithLayout = () => {
             Đơn Hàng
           </Button>
           <Button
+            className="title-element-2 title-element-1"
             type="ghost"
             size="small"
             onClick={() => router.push("/cms/cms-categories")}
@@ -55,6 +59,7 @@ export const CmsDashBoard: NextPageWithLayout = () => {
             Danh Mục
           </Button>
           <Button
+            className="title-element-2 title-element-1"
             type="ghost"
             size="small"
             onClick={() => router.push("/cms/cms-warehouse")}
@@ -62,6 +67,7 @@ export const CmsDashBoard: NextPageWithLayout = () => {
             Kho
           </Button>
           <Button
+            className="title-element-2 title-element-1"
             type="ghost"
             size="small"
             onClick={() => router.push("/cms/cms-employees")}
@@ -72,7 +78,7 @@ export const CmsDashBoard: NextPageWithLayout = () => {
       </HeadingTitle>
       <WrapperHeader>
         {" "}
-        <BreadcrumbStyle>
+        <BreadcrumbStyle className="title-element-1 title-element-2 title-element-1">
           <Breadcrumb.Item>
             <span className={"breadcrumb-item"}>Home</span>
           </Breadcrumb.Item>
