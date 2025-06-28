@@ -1,16 +1,13 @@
-import { Action, configureStore, ThunkAction  } from "@reduxjs/toolkit";
-import {
-    MiddlewareAPI,
-    isRejectedWithValue,
-    Middleware,
-  } from '@reduxjs/toolkit'
+import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import userSlice from '@/features/user-slice';
-import wareHouseSlice from '@/features/warehouse-slice'
-import productSlice from '@/features/product-slice'
+import wareHouseSlice from '@/features/warehouse-slice';
+import productSlice from '@/features/product-slice';
+import optionSlice from "@/features/option-slice";
 const rootReducer = {
     user: userSlice,
     warehouse:wareHouseSlice,
-    product:productSlice
+    product:productSlice,
+    option:optionSlice,
 }
 export const store = configureStore({
     reducer: rootReducer

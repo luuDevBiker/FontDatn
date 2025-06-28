@@ -9,6 +9,13 @@ export interface IProduct {
   Options: [IOption];
   ProductVariants: [IVariant];
 }
+
+export interface IOptionState{
+  options: IOption[],
+  error: boolean,
+  loadding: boolean
+}
+
 export interface IVariant {
   Id: string;
   ProductId: string;

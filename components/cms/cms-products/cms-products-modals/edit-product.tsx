@@ -6,6 +6,7 @@ import {
   WrapProduct,
 } from "@/styles/CmsProductStylead";
 import {
+  AutoComplete,
   Button,
   Form,
   Input,
@@ -25,7 +26,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { getCategories, updateProduct } from "@/features/product-slice";
 import {
   IProduct,
@@ -36,6 +37,7 @@ import {
 } from "@/models/product";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { getOptions, selectOption } from "@/features/option-slice";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -51,10 +53,12 @@ const EditProduct = (props: IProduct) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<Boolean>(true);
-
+  const { options } = useAppSelector(selectOption);
   //#region states product
   const [isOptions, setIsOptions] = useState(false);
   const [isProductVariant, setIsProductVriant] = useState(false);
+  const [optionSearch, setOptionSearch] = useState<any[]>([]);
+  const [optionsSearch, setOptionsSearch] = useState<any[]>([]);
   const [option, setOption] = useState("");
   const [listOption, setListOption] = useState<IOption[]>([]);
   const [categories, setCategories] = useState<any>([]);
@@ -118,7 +122,6 @@ const EditProduct = (props: IProduct) => {
     );
   };
   const handleCancel = () => setPreviewOpen(false);
-
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
     setFileList(newFileList);
 
@@ -142,7 +145,7 @@ const EditProduct = (props: IProduct) => {
               status: "done",
               url: dataImg.media,
             } as UploadFile;
-            await setImageWithIndex(fileImage);
+            setImageWithIndex(fileImage);
           } else {
             message.error({
               content: "Thêm ảnh lỗi",
@@ -178,7 +181,7 @@ const EditProduct = (props: IProduct) => {
     payload.ProductVariants.map((el: any, index: number) => {
       el.Images = Images[index];
     });
-    var category = categories.find((e: any) => e.Id === payload.Category);
+    var category = categories.find((e: any) => e.Name === payload.Category);
     payload.Category = category.Name;
     payload.CategoryId = category.Id;
     dispatch(updateProduct(payload as IProduct))
@@ -197,15 +200,36 @@ const EditProduct = (props: IProduct) => {
       });
   };
 
+  const onCheck = () => {
+    console.log(listOption);
+  };
+
+  // Hàm xử lý khi người dùng gõ
+  const handleSearch = (value: string) => {
+    if (!value) {
+      setOptionsSearch([]);
+      return;
+    }
+    const optionFilter = options.filter((item) =>
+      item.Name.toLowerCase().includes(value.toLowerCase())
+    );
+    setOptionSearch(optionFilter.map((val) => ({ value: val.Name })));
+  };
+
+  const onSelect = (value: string) => {
+    form.setFieldsValue({ InputOptionName: value });
+    setOption(value);
+  };
+
   //#region Options
   const addNewOptions = () => {
-    form.setFieldsValue({ InputOptionName: "" });
     var displayOrder = listOption.length;
     setListOption([
       ...listOption,
       { Name: option, DisplayOrder: displayOrder },
     ]);
     setOption("");
+    form.setFieldsValue({ InputOptionName: "" });
   };
   const onChangeInputOptionName = (e: any) => {
     let value = e.target.value;
@@ -235,7 +259,10 @@ const EditProduct = (props: IProduct) => {
           setCategories(res.Payload);
         });
     }
-  }, [dispatch, categories]);
+    if (options.length === 0) {
+      dispatch(getOptions());
+    }
+  }, [dispatch, categories, options, Images]);
   //#endregion
 
   return (
@@ -315,12 +342,24 @@ const EditProduct = (props: IProduct) => {
                 <OptionWrapp>
                   <div className="border">
                     <Form.Item label="Tên thuộc tính">
-                      <Input
-                        name={"InputOptionName"}
-                        value={option}
-                        onChange={onChangeInputOptionName}
-                        placeholder="Hãy nhập tên thuộc tính : ( Ram, CPU, MainBoard...) "
-                      />
+                      <AutoComplete
+                        options={optionSearch}
+                        onSearch={handleSearch}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter") {
+                            addNewOptions();
+                          }
+                        }}
+                        onSelect={onSelect}
+                        style={{ width: "100%" }}
+                      >
+                        <Input
+                          name={"InputOptionName"}
+                          value={option}
+                          onChange={onChangeInputOptionName}
+                          placeholder="Hãy nhập tên thuộc tính : ( Ram, CPU, MainBoard...) "
+                        />
+                      </AutoComplete>
                     </Form.Item>
                   </div>
                   <div className="btn-box">

@@ -8,8 +8,8 @@ import Table from "antd/lib/table";
 import React, { useEffect, useState } from "react";
 import { Button, Tag } from "antd";
 import { useRouter } from "next/router";
-import { useAppDispatch } from "@/app/hooks";
-import { getListProduct } from "@/features/product-slice";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { getListProduct, selectProduct } from "@/features/product-slice";
 import Modal from "antd/lib/modal/Modal";
 import EditProduct from "./cms-products-modals/edit-product";
 import { IProduct } from "@/models/product";
@@ -17,8 +17,8 @@ import { IProduct } from "@/models/product";
 export const CmsProduct: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { products } = useAppSelector(selectProduct);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [data, setData] = useState<any>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [detail, setDetail] = useState<IProduct>({} as IProduct);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
@@ -66,20 +66,18 @@ export const CmsProduct: NextPageWithLayout = () => {
   ];
 
   useEffect(() => {
-    dispatch(getListProduct())
-      .unwrap()
-      .then()
-      .then((res: any) => {
-        setData(res.Payload);
-      });
-  }, [dispatch, data]);
-
+    if (products.length === 0) {
+      dispatch(getListProduct());
+    }
+  }, [dispatch, products]);
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
         <div>
           <h5 className="mx-2 title-element-1 title-element-3">Sản phẩm</h5>
-          <Tag className="mx-2 title-element-1 title-element-3">Quản lý sản phẩm</Tag>
+          <Tag className="mx-2 title-element-1 title-element-3">
+            Quản lý sản phẩm
+          </Tag>
         </div>
         <div>
           <Button
@@ -95,10 +93,10 @@ export const CmsProduct: NextPageWithLayout = () => {
         <div>Tất cả sản phẩm hiện có</div>
         <div>
           <Table
-            rowKey={(record) => record.Id}
+            rowKey={(record: any) => record.Id}
             rowSelection={rowSelection}
             columns={columns}
-            dataSource={data}
+            dataSource={products}
             onRow={(r) => ({
               onClick: () => {
                 setIsModalOpen(true);

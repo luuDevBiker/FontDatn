@@ -10,13 +10,13 @@ let RefreshToken = "";
 if (storage) {
   let loginInfo = JSON.parse(storage);
   if (loginInfo) {
-    AccessToken = loginInfo.Payload?.AccessToken;
-    RefreshToken = loginInfo.Payload?.RefreshToken;
+    AccessToken = loginInfo.AccessToken;
+    RefreshToken = loginInfo.RefreshToken;
   }
 }
 
 const axiosClient = axios.create({
-  baseURL: "https://192.168.1.43:44321",
+  baseURL: "https://localhost:44321",
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': '*',
@@ -52,11 +52,11 @@ axiosClient.interceptors.response.use(
 );
 
 const axiosClient2 = axios.create({
-  baseURL: "https://192.168.1.43:44321",
+  baseURL: "https://localhost:44321",
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${
-      storage ? JSON.parse(storage).Payload?.AccessToken : null
+      storage ? JSON.parse(storage).AccessToken : null
     }`,
   },
 });
