@@ -27,7 +27,11 @@ import {
 } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { getCategories, updateProduct } from "@/features/product-slice";
+import {
+  getCategories,
+  selectProduct,
+  updateProduct,
+} from "@/features/product-slice";
 import {
   IProduct,
   IVariant,
@@ -38,6 +42,7 @@ import {
 import axios from "axios";
 import { useRouter } from "next/router";
 import { getOptions, selectOption } from "@/features/option-slice";
+import { number } from "framer-motion";
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -50,67 +55,39 @@ const getBase64 = (file: RcFile): Promise<string> =>
   });
 
 const EditProduct = (props: IProduct) => {
+  //#region states product
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState<Boolean>(true);
+  const [product, setProduct] = useState<IProduct>({ ...props });
   const { options } = useAppSelector(selectOption);
-  //#region states product
-  const [isOptions, setIsOptions] = useState(false);
-  const [isProductVariant, setIsProductVriant] = useState(false);
+  const { categories } = useAppSelector(selectProduct);
   const [optionSearch, setOptionSearch] = useState<any[]>([]);
-  const [optionsSearch, setOptionsSearch] = useState<any[]>([]);
   const [option, setOption] = useState("");
   const [listOption, setListOption] = useState<IOption[]>([]);
-  const [categories, setCategories] = useState<any>([]);
-  //#endregion
-
-  //#region state prevew images
-  const [indexImgs, setIndexImgs] = useState(0);
+  // Images
+  const [indexEdit, setIndexEdit] = useState(0);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [imagesEdit, setImagesEdit] = useState<any>([]);
   const [Images, setImages] = useState<any>([]);
   //#endregion
 
   //#region Form
   const [form] = Form.useForm();
   const dataForm = [
-    {
-      name: ["Name"],
-      value: props.Name,
-    },
-    { name: ["Brand"], value: props.Brand },
-    { name: ["Description"], value: props.Description },
-    { name: ["Category"], value: props.Category },
-    { name: ["Options"], value: props.Options },
-    { name: ["ProductVariants"], value: props.ProductVariants },
+    { name: ["Name"], value: product.Name },
+    { name: ["Brand"], value: product.Brand },
+    { name: ["Description"], value: product.Description },
+    { name: ["Category"], value: product.Category },
+    { name: ["Options"], value: product.Options },
+    { name: ["ProductVariants"], value: product.ProductVariants },
   ];
-
-  //#region UseEffect
-  useEffect(() => {
-    setListOption(props.Options);
-    let imagesVariant: any = [];
-    let dataImages: any = [];
-    props.ProductVariants.map((variant: IVariant, indexVariant: number) => {
-      setIndexImgs(indexVariant);
-      variant.Images.map(async (img: IImage, indexImg: number) => {
-        const fileImage: UploadFile = {
-          uid: img.Uid,
-          name: img.Name,
-          status: "done",
-          url: img.Url,
-        } as UploadFile;
-        imagesVariant = [...imagesVariant, fileImage];
-      });
-      dataImages = [...dataImages, imagesVariant];
-    });
-    setImages(dataImages);
-  }, [props, indexImgs]);
-  //#endregion
   //#endregion
 
   //#region handlePreview Image
+  const handleCancel = () => setPreviewOpen(false);
+
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as RcFile);
@@ -121,9 +98,6 @@ const EditProduct = (props: IProduct) => {
       file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
     );
   };
-  const handleCancel = () => setPreviewOpen(false);
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
 
   const uploadFile = (options: any) => {
     const { onSuccess, onError, file } = options;
@@ -131,7 +105,8 @@ const EditProduct = (props: IProduct) => {
       let formData = new FormData();
       let files = file;
       formData.append("media", files);
-      formData.append("key", "000027c23a82224c791a5fa2f82e5c9a");
+      // formData.append("key", "000027c23a82224c791a5fa2f82e5c9a");
+      formData.append("key", "00046640ba0af46891224e838db8dbc6");
       axios
         .post("https://thumbsnap.com/api/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -141,7 +116,7 @@ const EditProduct = (props: IProduct) => {
           if (res.status == 200) {
             const fileImage: UploadFile = {
               uid: dataImg.id,
-              name: file.fileName,
+              name: "",
               status: "done",
               url: dataImg.media,
             } as UploadFile;
@@ -161,27 +136,33 @@ const EditProduct = (props: IProduct) => {
   };
 
   const setImageWithIndex = (prop: UploadFile) => {
-    if (indexImgs + 1 > Images.length) {
-      let images = [...Images, [prop]];
-      setImages([...images]);
-      setFileList([...fileList, prop]);
-    } else {
-      let images = Images;
-      images[indexImgs] = [...images[indexImgs], prop];
-      setImages(images);
-      setFileList([...fileList, prop]);
-    }
+    let images = Images;
+    images[indexEdit] = [...images[indexEdit], prop];
+    setImages(images);
+    let newImageIndex = [...imagesEdit, prop];
+    setImagesEdit(newImageIndex);
   };
   //#endregion
 
   //#region Custom methood
   const handleOnsubmit = (payload: any) => {
-    payload.Id = props.Id;
+    payload.Id = product.Id;
     payload.Options = listOption;
     payload.ProductVariants.map((el: any, index: number) => {
       el.Images = Images[index];
     });
-    var category = categories.find((e: any) => e.Name === payload.Category);
+    var productVariants = payload.ProductVariants;
+    productVariants.map((el: any, index: Number) => {
+      el.OptionValues.map((option: any, indexOption: Number) => {
+        var optionMap = payload.Options.find(
+          (e: any) => e.Name === option.Name
+        );
+        option.OptionId = optionMap.Id;
+      });
+    });
+    var category: any = categories.find(
+      (e: any) => e.Name === payload.Category
+    );
     payload.Category = category.Name;
     payload.CategoryId = category.Id;
     dispatch(updateProduct(payload as IProduct))
@@ -201,13 +182,12 @@ const EditProduct = (props: IProduct) => {
   };
 
   const onCheck = () => {
-    console.log(listOption);
+    console.log(form.getFieldValue("ProductVariants"));
   };
 
-  // Hàm xử lý khi người dùng gõ
   const handleSearch = (value: string) => {
     if (!value) {
-      setOptionsSearch([]);
+      setOptionSearch([]);
       return;
     }
     const optionFilter = options.filter((item) =>
@@ -221,7 +201,6 @@ const EditProduct = (props: IProduct) => {
     setOption(value);
   };
 
-  //#region Options
   const addNewOptions = () => {
     var displayOrder = listOption.length;
     setListOption([
@@ -229,40 +208,79 @@ const EditProduct = (props: IProduct) => {
       { Name: option, DisplayOrder: displayOrder },
     ]);
     setOption("");
+    form.resetFields(["InputOptionName"]);
     form.setFieldsValue({ InputOptionName: "" });
   };
+
   const onChangeInputOptionName = (e: any) => {
     let value = e.target.value;
     value !== "" ? setOption(value) : console.log();
   };
+
   const handleRemoveOptions = (index: number) => {
     const list = [...listOption];
     list.splice(index, 1);
     setListOption(list);
   };
-  //#endregion
 
-  //#region Variant
-  const onCreateVariant = () => {
-    setIsProductVriant(true);
+  const addNewVariant = () => {
+    let productVariants = form.getFieldValue("ProductVariants");
+    if (Images.length < productVariants.length) {
+      setIndexEdit(Images.length);
+      setImages([...Images, []]);
+    }
+    var formProduct = { ...product };
+    var formProductVariant = form.getFieldValue("ProductVariants");
+    formProductVariant[indexEdit] = {
+      ...formProductVariant[indexEdit],
+      Images: [],
+    };
+    formProduct.ProductVariants = formProductVariant;
+    setProduct(formProduct);
+  };
+
+  const setIndexVariant = (index: number) => {
+    let imageCurrentEdit = Images[index];
+    setImagesEdit(imageCurrentEdit);
+    setIndexEdit(index);
+    console.log(imageCurrentEdit, Images, indexEdit);
   };
   //#endregion
 
-  //#endregion
-
   //#region useEffect
+  // Fecth Categories
   useEffect(() => {
     if (categories.length === 0) {
-      dispatch(getCategories())
-        .unwrap()
-        .then((res: any) => {
-          setCategories(res.Payload);
-        });
+      dispatch(getCategories());
     }
+  }, [dispatch, categories]);
+  // Fetch Options
+  useEffect(() => {
     if (options.length === 0) {
       dispatch(getOptions());
     }
-  }, [dispatch, categories, options, Images]);
+  }, [dispatch, options]);
+
+  useEffect(() => {
+    console.log("useEffect product");
+    setListOption(product.Options);
+    let imagesVariant: any = [];
+    let dataImages: any = [];
+    product.ProductVariants.map((variant: IVariant, indexVariant: number) => {
+      imagesVariant = [];
+      variant.Images.map(async (img: IImage, indexImg: number) => {
+        const fileImage: UploadFile = {
+          uid: img.Uid,
+          name: img.Name,
+          status: "done",
+          url: img.Url,
+        } as UploadFile;
+        imagesVariant = [...imagesVariant, fileImage];
+      });
+      dataImages = [...dataImages, imagesVariant];
+    });
+    setImages(dataImages);
+  }, [product]);
   //#endregion
 
   return (
@@ -277,7 +295,6 @@ const EditProduct = (props: IProduct) => {
         <Row gutter={[25, 25]}>
           <Col xs={24} sm={17} md={17} xxl={17} xl={17}>
             <WrapProduct>
-              {/* Product Name */}
               <Form.Item
                 label="Tên sản phẩm"
                 name={"Name"}
@@ -290,7 +307,6 @@ const EditProduct = (props: IProduct) => {
               >
                 <Input placeholder="Tên sản phẩm"></Input>
               </Form.Item>
-              {/* Product Description */}
               <Form.Item
                 label="Mô tả"
                 required
@@ -334,8 +350,6 @@ const EditProduct = (props: IProduct) => {
               </Form.Item>
             </WrapProduct>
           </Col>
-
-          {/* Product variants */}
           <Col xs={24} sm={17} md={17} xxl={17} xl={17}>
             <WrapProduct>
               <WrapperOptions>
@@ -394,9 +408,7 @@ const EditProduct = (props: IProduct) => {
                       );
                     })}
                 </div>
-                <Button onClick={onCreateVariant} className="addnew">
-                  Tạo chi tiết sản phẩm
-                </Button>
+                <Button className="addnew">Tạo chi tiết sản phẩm</Button>
               </WrapperOptions>
             </WrapProduct>
           </Col>
@@ -406,7 +418,10 @@ const EditProduct = (props: IProduct) => {
                 <>
                   {fields.map(({ key, name }) => {
                     return (
-                      <WrapProduct key={key}>
+                      <WrapProduct
+                        key={key}
+                        onClick={() => setIndexVariant(key)}
+                      >
                         <Form.Item
                           label="Giá nhập"
                           name={[name, "ImportPrice"]}
@@ -472,17 +487,13 @@ const EditProduct = (props: IProduct) => {
                             );
                           }}
                         </Form.List>
-                        <WrapProduct
-                          key={key}
-                          onClick={() => setIndexImgs(key)}
-                        >
+                        <WrapProduct key={key}>
                           <div className="title">Media</div>
                           <BoxMedia>
                             <Upload
                               onPreview={handlePreview}
-                              onChange={handleChange}
                               fileList={
-                                indexImgs !== key ? fileList : Images[key]
+                                indexEdit === key ? imagesEdit : Images[key]
                               }
                               listType="picture-card"
                               customRequest={uploadFile}
@@ -516,7 +527,10 @@ const EditProduct = (props: IProduct) => {
                   <Form.Item>
                     <Button
                       type="dashed"
-                      onClick={() => add()}
+                      onClick={() => {
+                        add();
+                        addNewVariant();
+                      }}
                       block
                       icon={<PlusOutlined />}
                     >
@@ -526,7 +540,12 @@ const EditProduct = (props: IProduct) => {
                 </>
               )}
             </Form.List>
+          </Col>
+          <Col xs={24} sm={17} md={17} xxl={17} xl={17}>
             <Button htmlType="submit">Lưu chỉnh sửa</Button>
+            <Button htmlType="button" onClick={() => onCheck()}>
+              Check
+            </Button>
           </Col>
         </Row>
       </Form>

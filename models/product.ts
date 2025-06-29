@@ -7,7 +7,7 @@ export interface IProduct {
   Category: string;
   Brand: string;
   Options: [IOption];
-  ProductVariants: [IVariant];
+  ProductVariants: IVariant[];
 }
 
 export interface IOptionState{
