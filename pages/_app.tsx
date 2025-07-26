@@ -19,10 +19,11 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const [showChild, setShowChild] = useState(false);
   const router = useRouter();
 
-  const storage =
-    typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
+
   useEffect(() => {
     setShowChild(true);
+    const storage =
+    typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
     if (storage) {
       let user = JSON.parse(storage);
       let tokeDecode: any = jwt_decode(user.AccessToken);

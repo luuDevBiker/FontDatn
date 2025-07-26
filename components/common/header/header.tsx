@@ -1,5 +1,5 @@
-import { Badge, Dropdown, Input, Menu } from "antd";
-import React, { useEffect, useState } from "react";
+import { Badge, Dropdown, Input, Menu, Image } from "antd";
+import React from "react";
 import type { MenuProps } from "antd";
 import { useRouter } from "next/router";
 import { Select } from "antd";
@@ -31,8 +31,6 @@ import {
 import Logo_Computer from "../../../assets/images/F-Computer.png";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { logout, selectUser } from "@/features/user-slice";
-import { IMainHeaderProps } from "@/models/common";
-const { Option } = Select;
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -70,7 +68,7 @@ const renderMenu = (item: any) => {
   );
 };
 
-const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
+const MainHeader: React.FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { loginInfo }: any = useAppSelector(selectUser);
@@ -141,7 +139,6 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
 
   return (
     <React.Fragment>
-      //#region Header
       <HeaderWrapper className="site-layout-background" style={{ padding: 0 }}>
         <HeaderTop>
           <HeaderItem>
@@ -184,7 +181,7 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
         <HeaderBottom>
           <LogoWrapper>
             <HeaderTitle onClick={() => router.push(`/`)}>
-              <img src={Logo_Computer.src} alt="logo" width={150} />
+              <Image  preview={false} src={Logo_Computer.src} alt="logo" width={150} />
             </HeaderTitle>
           </LogoWrapper>
           {/* start search */}
@@ -229,7 +226,6 @@ const MainHeader: React.FC<IMainHeaderProps> = (props: IMainHeaderProps) => {
           </NotificationMenu>
         </HeaderBottom>
       </HeaderWrapper>
-      //#endregion
     </React.Fragment>
   );
 };

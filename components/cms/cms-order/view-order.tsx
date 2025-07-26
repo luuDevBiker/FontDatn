@@ -287,7 +287,7 @@ export const CmsOder: NextPageWithLayout = () => {
           }
           if (record.StatusOrder === 2) {
             return (
-              <Tag icon={<SyncOutlined spin />} color="processing">
+              <Tag icon={<SyncOutlined spin />} color="magenta">
                 Đang xử lý
               </Tag>
             );
@@ -295,7 +295,7 @@ export const CmsOder: NextPageWithLayout = () => {
 
           if (record.StatusOrder === 3) {
             return (
-              <Tag icon={<SyncOutlined spin />} color="processing">
+              <Tag icon={<SyncOutlined spin />} color="gold">
                 Đang giao
               </Tag>
             );
@@ -342,7 +342,9 @@ export const CmsOder: NextPageWithLayout = () => {
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
-        <h5>Quản lý hóa đơn</h5>
+        <h5 className="mx-2 title-element-1 title-element-3">
+          Quản lý hóa đơn
+        </h5>
       </HeadingTitle>
 
       <WrapProduct>

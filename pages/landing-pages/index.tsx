@@ -16,15 +16,16 @@ import {
 import { Carousel, Col, Layout, Rate, Row } from "antd";
 import Image from "next/image";
 import { useState } from "react";
+import { useAppSelector } from "@/app/hooks";
+import { IMainHeaderProps } from "@/models/common";
+import { selectUser } from "@/features/user-slice";
 
 export const LandingPage = () => {
   const [isConfirm, setIsConfirm] = useState<boolean>(true);
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
 
   return (
     <Layout>
-      <MainHeader />
+      <MainHeader/>
       <SliderLandingPage>
         <Carousel autoplay>
           <BackgroundCarousel></BackgroundCarousel>

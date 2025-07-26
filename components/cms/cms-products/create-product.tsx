@@ -82,8 +82,13 @@ export const CreateProduct: NextPageWithLayout = () => {
       file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
     );
   };
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+    if (indexImgs + 1 > Images.length) {
+      let images = [...Images, []];
+      setImages([...images]);
+    }
+  };
   const uploadFile = (options: any) => {
     const { onSuccess, onError, file } = options;
     if (file) {
@@ -95,8 +100,9 @@ export const CreateProduct: NextPageWithLayout = () => {
         .post("https://thumbsnap.com/api/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
-        .then(async (res) => {
+        .then((res) => {
           let dataImg = res.data.data;
+
           if (res.status == 200) {
             const fileImage: UploadFile = {
               uid: dataImg.id,
@@ -104,7 +110,7 @@ export const CreateProduct: NextPageWithLayout = () => {
               status: "done",
               url: dataImg.media,
             } as UploadFile;
-            await setImageWithIndex(fileImage);
+            setImageWithIndex(fileImage);
           } else {
             message.error({
               content: "Thêm ảnh lỗi",
@@ -118,17 +124,21 @@ export const CreateProduct: NextPageWithLayout = () => {
     }
   };
 
-  const setImageWithIndex = (prop: UploadFile) => {
-    if (indexImgs + 1 > Images.length) {
-      let images = [...Images, [prop]];
-      setImages([...images]);
-      setFileList([...fileList, prop]);
-    } else {
-      let images = Images;
-      images[indexImgs] = [...images[indexImgs], prop];
-      setImages(images);
-      setFileList([...fileList, prop]);
-    }
+  const setImageWithIndex = async (prop: UploadFile) => {
+    setTimeout(() => {
+      if (indexImgs + 1 > Images.length) {
+        let images = [...Images, [prop]];
+        setImages([...images]);
+        setFileList([...fileList, prop]);
+        console.log(images);
+      } else {
+        let images = Images;
+        images[indexImgs] = [...images[indexImgs], prop];
+        setImages(images);
+        setFileList([...fileList, prop]);
+        console.log(images);
+      }
+    }, 2000);
   };
 
   const setIndex = (index: number) => {
@@ -139,10 +149,6 @@ export const CreateProduct: NextPageWithLayout = () => {
 
   //#region Utilities method
 
-  const string2 = moment().format("DD/MM/YY");
-  const generateDay = string2.split("/", 3);
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   //#endregion
 
   //#region Custom methood
@@ -166,25 +172,27 @@ export const CreateProduct: NextPageWithLayout = () => {
     var category = categories.find((e: any) => e.Id === payload.Category);
     payload.Category = category.Name;
     payload.CategoryId = category.Id;
-    dispatch(addNewProduct(payload))
-      .unwrap()
-      .then((res: any) => {
-        if (res.StatusCode === 200) {
-          message.success({ content: "Tạo sản phẩm thành công", duration: 2 });
-          form.resetFields();
-          setIndex(-1);
-          setListOption([]);
-          setImages([]);
-        } else {
-          message.error({
-            content: "Tạo sản phẩm thất bại",
-            duration: 2,
-            style: {
-              marginTop: "3vh",
-            },
-          });
-        }
-      });
+    console.log(payload);
+
+    // dispatch(addNewProduct(payload))
+    //   .unwrap()
+    //   .then((res: any) => {
+    //     if (res.StatusCode === 200) {
+    //       message.success({ content: "Tạo sản phẩm thành công", duration: 2 });
+    //       form.resetFields();
+    //       setIndex(-1);
+    //       setListOption([]);
+    //       setImages([]);
+    //     } else {
+    //       message.error({
+    //         content: "Tạo sản phẩm thất bại",
+    //         duration: 2,
+    //         style: {
+    //           marginTop: "3vh",
+    //         },
+    //       });
+    //     }
+    //   });
   };
   //#region Options
   const addNewOptions = () => {
@@ -240,7 +248,7 @@ export const CreateProduct: NextPageWithLayout = () => {
           setOptions(res.Payload);
         });
     }
-  }, [dispatch, categories]);
+  }, [dispatch]);
   //#endregion
 
   // Hàm xử lý khi người dùng gõ
@@ -249,7 +257,7 @@ export const CreateProduct: NextPageWithLayout = () => {
       setOptions([]);
       return;
     }
-    
+
     const optionFilter = options.filter((item) =>
       item.Name.toLowerCase().includes(value.toLowerCase())
     );
@@ -258,7 +266,7 @@ export const CreateProduct: NextPageWithLayout = () => {
 
   const onSelect = (value: string) => {
     form.setFieldsValue({ InputOptionName: value });
-    setOption(value)
+    setOption(value);
   };
 
   //#region Html Layout

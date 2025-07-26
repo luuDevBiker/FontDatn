@@ -1,5 +1,5 @@
 import { FooterCustom, FooterItem } from "@/styles/HomeStyled";
-import { Button, Col, Input, Row, Typography } from "antd";
+import { Button, Col, Input, Row, Typography, Image } from "antd";
 import Logo_Computer from "../../assets/images/F-Computer.png";
 
 export const Footer = () => {
@@ -13,7 +13,7 @@ export const Footer = () => {
           <Row gutter={[20, 20]}>
             <Col span={6}>
               {/* <h5 style={{color:'white'}}>F-Computer</h5> */}
-              <img src={Logo_Computer.src} alt="logo" width={200} />
+              <Image src={Logo_Computer.src} alt="logo" width={200} />
               <p className="mb-2">
                 <i className="fa fa-map-marker-alt me-3"></i>123 Phố Trịnh Văn
                 Bô, Nam Từ Liêm, Hà Nội

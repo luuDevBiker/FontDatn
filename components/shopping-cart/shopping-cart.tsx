@@ -70,7 +70,7 @@ export const ShoppingCart = () => {
       });
       return;
     }
-  }, [item, itemsOrder]);
+  }, [item, itemsOrder, dispatch, reload, storage]);
 
   const delItemInCart = (key: any, id: any) => {
     var payload = { key: key, id: id };

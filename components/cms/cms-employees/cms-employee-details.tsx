@@ -10,7 +10,7 @@ import type { UploadProps } from "antd";
 import { message, Upload } from "antd";
 import { useAppDispatch } from "@/app/hooks";
 import { ICreateEmployees } from "@/models/user";
-import { createEmployees, getConfigurations } from "@/features/user-slice";
+// import { createEmployees, getConfigurations } from "@/features/user-slice";
 
 const { Dragger } = Upload;
 const props: UploadProps = {
@@ -57,18 +57,18 @@ export const CreateEmployees: NextPageWithLayout = () => {
       roleId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       userName: values.userName,
     };
-    dispatch(createEmployees(payload))
-      .unwrap()
-      .then()
-      .then((res: any) => {
-        message.success({
-          content: "Tạo mới nhân viên thành công",
-          className: "erroNotFound-class",
-          style: {
-            marginTop: "3vh",
-          },
-        });
-      });
+    // dispatch(createEmployees(payload))
+    //   .unwrap()
+    //   .then()
+    //   .then((res: any) => {
+    //     message.success({
+    //       content: "Tạo mới nhân viên thành công",
+    //       className: "erroNotFound-class",
+    //       style: {
+    //         marginTop: "3vh",
+    //       },
+    //     });
+    //   });
   };
 
   const onFieldsChange = (changedFields: any, allValues: any) => {
@@ -83,14 +83,14 @@ export const CreateEmployees: NextPageWithLayout = () => {
       }
       let payload: any = {};
       payload.$filter = `Context eq '${changedFields[0].value}'`;
-      dispatch(getConfigurations(payload))
-        .unwrap()
-        .then()
-        .then((res: any) => {
-          if (res) {
-            setDistrictData(res.Payload);
-          }
-        });
+      // dispatch(getConfigurations(payload))
+      //   .unwrap()
+      //   .then()
+      //   .then((res: any) => {
+      //     if (res) {
+      //       setDistrictData(res.Payload);
+      //     }
+      //   });
     }
     if (changedFields && changedFields[0].name[0] === "District") {
       setCheckWard(false);
@@ -99,28 +99,28 @@ export const CreateEmployees: NextPageWithLayout = () => {
         Ward: "",
       });
       payload.$filter = `Context eq '${changedFields[0].value}'`;
-      dispatch(getConfigurations(payload))
-        .unwrap()
-        .then()
-        .then((res: any) => {
-          if (res) {
-            setWardData(res.Payload);
-          }
-        });
+      // dispatch(getConfigurations(payload))
+      //   .unwrap()
+      //   .then()
+      //   .then((res: any) => {
+      //     if (res) {
+      //       setWardData(res.Payload);
+      //     }
+      //   });
     }
   };
 
   useEffect(() => {
     let payload: any = {};
     payload.$filter = `Context eq 'Province'`;
-    dispatch(getConfigurations(payload))
-      .unwrap()
-      .then()
-      .then((res: any) => {
-        if (res) {
-          setProvinceData(res.Payload);
-        }
-      });
+    // dispatch(getConfigurations(payload))
+    //   .unwrap()
+    //   .then()
+    //   .then((res: any) => {
+    //     if (res) {
+    //       setProvinceData(res.Payload);
+    //     }
+    //   });
   }, [dispatch]);
 
   return (

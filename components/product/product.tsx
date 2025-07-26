@@ -1,5 +1,5 @@
 import { Col, Rate, Row, Carousel, Space, Button, message, Image } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { NextPageWithLayout } from "../../models/common";
 import "antd/dist/antd.css";
 import {
@@ -14,7 +14,7 @@ import {
   getCategories,
   selectProduct,
 } from "@/features/product-slice";
-import { IProduct, ICategory } from "@/models/product";
+import { ICategory } from "@/models/product";
 import { addTocart } from "@/features/shopping-slice";
 import {
   ButtonAddtoCartCustom,
@@ -64,7 +64,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
     dispatch(addTocart(dataAdd))
       .unwrap()
       .then()
-      .then((res) => {
+      .then((res: any) => {
         if (res?.status === 200) {
           message.success({
             content: "Thêm sản phẩm thành công vào giỏ hàng!",
@@ -76,7 +76,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
           });
         }
       })
-      .catch((err) => {
+      .catch((err: any) => {
         message.error({
           content: "Xảy ra lỗi khi thêm sản phẩm! " + err.message,
           duration: 3,
@@ -89,7 +89,7 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
   };
 
   if (products.length === 0 || categories.length === 0) {
-    return <></>
+    return <></>;
   }
 
   return (
@@ -98,14 +98,18 @@ export const ProductCategory: NextPageWithLayout = (prop) => {
         {/* left menu */}
         <Col span={4}>
           <LeftMenu>
-            {categories.map((item: ICategory, index: number) => (
-              <div className="wrapper" key={index}>
-                <Space>
-                  <LaptopOutlined />
-                  <div>{item.Name}</div>
-                </Space>
-              </div>
-            ))}
+            {categories.map((item: ICategory, index: number) =>
+              item.Type === 1 ? (
+                <div className="wrapper" key={index}>
+                  <Space>
+                    <LaptopOutlined />
+                    <div>{item.Name}</div>
+                  </Space>
+                </div>
+              ) : (
+                <></>
+              )
+            )}
           </LeftMenu>
         </Col>
         {/* Slide show */}

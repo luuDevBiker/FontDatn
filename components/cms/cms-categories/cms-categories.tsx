@@ -60,13 +60,13 @@ export const CmsCategories: NextPageWithLayout = () => {
       .then((res: any) => {
         setData(res.Payload);
       });
-  }, []);
+  }, [dispatch]);
 
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
         <div>
-          <h5 className="mx-2">Danh mục</h5>
+          <h5 className="mx-2 title-element-1 title-element-3">Danh mục</h5>
           <Tag>Quản lý danh mục</Tag>
         </div>
         <div>

@@ -42,7 +42,7 @@ export const VerifyTransfer: NextPageWithLayout = () => {
       .then((res: any) => {
         setData(res);
       });
-  }, []);
+  }, [router.query.id, dispatch]);
 
   let sumOfProduct = 0;
   if (data) {
@@ -141,7 +141,7 @@ export const VerifyTransfer: NextPageWithLayout = () => {
         title: "Tổng cộng",
       },
     ],
-    [percent]
+    [onChangeImport, onChangeReject, router, sumOfProduct]
   );
 
   return (

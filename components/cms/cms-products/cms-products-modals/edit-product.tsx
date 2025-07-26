@@ -165,6 +165,8 @@ const EditProduct = (props: IProduct) => {
     );
     payload.Category = category.Name;
     payload.CategoryId = category.Id;
+    console.log(payload);
+    
     dispatch(updateProduct(payload as IProduct))
       .unwrap()
       .then()
@@ -182,7 +184,9 @@ const EditProduct = (props: IProduct) => {
   };
 
   const onCheck = () => {
-    console.log(form.getFieldValue("ProductVariants"));
+    Images.map((el: any, index: Number) => {
+      console.log(index, el.url);
+    });
   };
 
   const handleSearch = (value: string) => {
@@ -262,7 +266,8 @@ const EditProduct = (props: IProduct) => {
   }, [dispatch, options]);
 
   useEffect(() => {
-    console.log("useEffect product");
+    setImages([]);
+    console.log("images clear");
     setListOption(product.Options);
     let imagesVariant: any = [];
     let dataImages: any = [];
@@ -280,7 +285,7 @@ const EditProduct = (props: IProduct) => {
       dataImages = [...dataImages, imagesVariant];
     });
     setImages(dataImages);
-  }, [product]);
+  }, [product, props]);
   //#endregion
 
   return (
@@ -341,7 +346,7 @@ const EditProduct = (props: IProduct) => {
                 <Select>
                   {categories?.map((el: ICategory, index: number) =>
                     el.Type === 2 ? (
-                      <Option key={el.Id} value={el.Id}>
+                      <Option key={el.Id} value={el.Name}>
                         {el.Name}
                       </Option>
                     ) : null

@@ -16,7 +16,7 @@ import {
 import { Box, BoxBody } from "@/styles/CmsDiscountStyled";
 import { CartItem, Wrapper } from "@/styles/ShoppingCartStyled";
 import Table, { ColumnsType } from "antd/lib/table";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Image,
@@ -106,7 +106,7 @@ export const Orders: NextPageWithLayout = () => {
     }
 
     setLoading(false);
-  }, [loading, order, dispatch]);
+  }, [loading, order, dispatch, storage]);
   //#endregion
 
   //#region  onSelectChange: set data record selected
@@ -171,16 +171,17 @@ export const Orders: NextPageWithLayout = () => {
       order.Note = value;
     }
   };
-
-  const userUpdateOrder = (status: number, id: any) => {
+  const userUpdateOrder = useCallback((status: number, id: any) => {
     let payloadUpdateStatus = { ...order };
     payloadUpdateStatus.StatusOrder = status;
+  
     let payload = {
       Id: id,
       Payload: {
         StatusOrder: status,
       },
     };
+  
     dispatch(
       status !== 0
         ? updateStatusOrder(payload)
@@ -201,10 +202,10 @@ export const Orders: NextPageWithLayout = () => {
         }
         setLoading(true);
       });
-
+  
     setOpenEdit(false);
-  };
-
+  }, [dispatch, order]);
+  
   const onCancelModal = () => {
     setIsAddItem(true);
     setOpenEdit(false);
@@ -401,7 +402,7 @@ export const Orders: NextPageWithLayout = () => {
           }
           if (record.StatusOrder === 2) {
             return (
-              <Tag icon={<SyncOutlined spin />} color="processing">
+              <Tag icon={<SyncOutlined spin />} color="magenta">
                 Đang xử lý
               </Tag>
             );
@@ -409,7 +410,7 @@ export const Orders: NextPageWithLayout = () => {
 
           if (record.StatusOrder === 3) {
             return (
-              <Tag icon={<SyncOutlined spin />} color="processing">
+              <Tag icon={<SyncOutlined spin />} color="gold">
                 Đang giao
               </Tag>
             );

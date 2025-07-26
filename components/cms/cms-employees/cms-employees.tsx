@@ -1,14 +1,12 @@
 import { NextPageWithLayout } from "@/models/common";
 import {
-  ButtonExport,
   HeadingTitle,
   WrapperCMSProduct,
-  WrapProduct,
+  WrapProduct
 } from "@/styles/CmsProductStylead";
 import Table, { ColumnsType } from "antd/lib/table";
 import React, { useMemo, useState } from "react";
-import { Button, Image, Space } from "antd";
-import ExportIcon from "@/assets/icon/ExportIcon.svg";
+import { Space } from "antd";
 import { useRouter } from "next/router";
 import { EditOutlined } from "@ant-design/icons";
 import { LockCustom, UnLockCustom } from "@/styles/EmployeesStyled";
@@ -110,23 +108,8 @@ export const CmsEmployees: NextPageWithLayout = () => {
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
-        <h5>Nhân Viên</h5>
-
-        <div>
-          <ButtonExport type="default">
-            <Image src={ExportIcon.src} alt="" />
-            <div>Export</div>
-          </ButtonExport>
-          <Button
-            type="primary"
-            size="large"
-            onClick={() => router.push("/cms/cms-employees/employees")}
-          >
-            +&nbsp;&nbsp;Thêm nhân viên
-          </Button>
-        </div>
+        <h5 className="mx-2 title-element-1 title-element-3">Nhân Viên</h5>
       </HeadingTitle>
-      <div>Tất cả nhân viên</div>
       <div>
         <WrapProduct>
           <Table columns={columns} dataSource={data} />

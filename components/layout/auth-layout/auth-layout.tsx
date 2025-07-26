@@ -38,7 +38,7 @@ const AuthLayout = ({ children }: LayoutProps) => {
           </Select>
         </LanguageWrapper>
         {auth?<LogoAuth>
-          <Image  src=''/>
+          <Image  src='' alt=''/>
           <div className='text_logo'>KPI</div>
         </LogoAuth>:null}
         {auth?<LayoutAuthCenter>{children}</LayoutAuthCenter>:<LayoutAuthOrganization>{children}</LayoutAuthOrganization>}

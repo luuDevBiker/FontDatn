@@ -8,7 +8,6 @@ import {
 import Table, { ColumnsType } from "antd/lib/table";
 import React, { useEffect, useMemo, useState } from "react";
 import { Button, Form } from "antd";
-import ExportIcon from "@/assets/icon/ExportIcon.svg";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/app/hooks";
 import { getAllTransfer } from "@/features/warehouse-slice";
@@ -38,7 +37,7 @@ export const CmsWareHouse: NextPageWithLayout = () => {
       .then((res: any) => {
         setData(res);
       });
-  }, []);
+  }, [dispatch]);
   const start = () => {
     setLoading(true);
     // ajax request after empty completing
@@ -92,27 +91,13 @@ export const CmsWareHouse: NextPageWithLayout = () => {
         },
       },
     ],
-    []
+    [router]
   );
 
   return (
     <WrapperCMSProduct>
       <HeadingTitle>
-        <h5>Sản phẩm</h5>
-
-        <div>
-          <ButtonExport type="default">
-            <img src={ExportIcon.src} alt="" />
-            <div>Export</div>
-          </ButtonExport>
-          <Button
-            type="primary"
-            size="large"
-            onClick={() => router.push("/cms/cms-warehouse/create-tranfers")}
-          >
-            +&nbsp;&nbsp;Tạo phiếu xuất kho
-          </Button>
-        </div>
+        <h5 className="mx-2 title-element-1 title-element-3">Quản lý kho</h5>
       </HeadingTitle>
       <WrapProduct>
         <div>Tất cả sản phẩm</div>

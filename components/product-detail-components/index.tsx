@@ -5,22 +5,22 @@ import {
   Row,
   Image,
   Breadcrumb,
-  Card, Divider,
+  Card,
+  Divider,
   Space,
   InputNumber,
   Typography,
-  Button
+  Button,
 } from "antd";
 import { NextPageWithLayout } from "../../models/common";
 import "antd/dist/antd.css";
 import {
-  CheckOutlined, ShoppingCartOutlined, GiftOutlined
+  CheckOutlined,
+  ShoppingCartOutlined,
+  GiftOutlined,
 } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import {
-  getProductDetails,
-  selectProduct
-} from "@/features/product-slice";
+import { getProductDetails, selectProduct } from "@/features/product-slice";
 import {
   ButtonAddtoCartCustom,
   WraperProduct,
@@ -60,7 +60,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
       .then((res) => {
         setData(res);
       });
-  }, []);
+  }, [dispatch, id, key]);
 
   return data != undefined && data ? (
     <ProductDetailWrapper>
@@ -91,7 +91,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                       <Card>
                         <Image
                           alt=""
-                          src={item.Thumbnail}
+                          src={item.Url}
                           height={90}
                           width={90}
                         />
@@ -155,7 +155,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                       </Typography.Text>
                       <Typography.Text className="del">
                         <del className="del">
-                          {Number(21699000).toLocaleString("vi")}
+                          {Number((data.Payload.ProductVariants[0].Price - data.Payload.ProductVariants[0].ImportPrice) + data.Payload.ProductVariants[0].ImportPrice ).toLocaleString("vi")}
                           <sup>đ</sup>
                         </del>
                       </Typography.Text>
@@ -226,7 +226,7 @@ export const ProductDetailComponents: NextPageWithLayout = (prop) => {
                         size="small"
                         min={1}
                         max={100000}
-                        defaultValue={3}
+                        defaultValue={1}
                       />
                     </div>
                     <Button

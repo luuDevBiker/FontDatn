@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Home } from "../../components/home/home";
+import { Home } from "../../components/home";
 import { MainLayoutHome } from "../../components/layout/main-layout/main-layout";
 import { NextPageWithLayout } from "../../models/common";
 import jwt_decode from "jwt-decode";

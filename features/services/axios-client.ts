@@ -1,8 +1,8 @@
 import axios from "axios";
-import { store } from "@/app/store";
+import { env } from "process";
 const https = require("https");
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const storage =
   typeof window !== "undefined" ? localStorage.getItem("u") : undefined;
 let AccessToken = "";
@@ -16,7 +16,7 @@ if (storage) {
 }
 
 const axiosClient = axios.create({
-  baseURL: "https://localhost:44321",
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': '*',
@@ -52,7 +52,7 @@ axiosClient.interceptors.response.use(
 );
 
 const axiosClient2 = axios.create({
-  baseURL: "https://localhost:44321",
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${

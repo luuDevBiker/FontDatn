@@ -9,3 +9,16 @@ export const RegexValidation={
 	REGEXWHITESPACE:/\s/,
 	REGEXNUMBER:/([1|2|3|4|5|6|7|8|9]+(3|5|7|8|9|1[2|6|8|9]))+([0-9])\b/,
 }
+
+
+export const formatStringSmart = (str: any) => {
+	const maxLength = 30;
+	if (str.length <= maxLength) return str;
+
+	let trimmed = str.substring(0, maxLength);
+	const lastSpace = trimmed.lastIndexOf(" ");
+	if (lastSpace > 0) {
+		trimmed = trimmed.substring(0, lastSpace);
+	}
+	return trimmed + "...";
+};

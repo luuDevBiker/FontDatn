@@ -60,7 +60,7 @@ export const OrdersShipping: NextPageWithLayout = () => {
         setData(res.Payload);
         setLoading(false);
       });
-  }, [loading]);
+  }, [loading, dispatch]);
   //#endregion
 
   //#region  onSelectChange: set data record selected
@@ -193,7 +193,7 @@ export const OrdersShipping: NextPageWithLayout = () => {
           }
           if (record.StatusOrder === 2) {
             return (
-              <Tag icon={<SyncOutlined spin />} color="processing">
+              <Tag icon={<SyncOutlined spin />} color="magenta">
                 Đang xử lý
               </Tag>
             );
@@ -201,7 +201,7 @@ export const OrdersShipping: NextPageWithLayout = () => {
 
           if (record.StatusOrder === 3) {
             return (
-              <Tag icon={<SyncOutlined spin />} color="processing">
+              <Tag icon={<SyncOutlined spin />} color="gold">
                 Đang giao
               </Tag>
             );

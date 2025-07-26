@@ -1,4 +1,4 @@
-import { Home } from "../components/home/home";
+import { Home } from "../components/home";
 import { MainLayoutHome } from "../components/layout/main-layout/main-layout";
 import { NextPageWithLayout } from "../models/common";
 

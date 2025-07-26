@@ -13,11 +13,10 @@ interface DataType {
   key: React.Key;
   image: string;
   product: string;
-  type: string;
-  brand: string;
-  sales: string;
-  status: string;
-  import: string;
+  countSale: Number;
+  sumImPrice: Number;
+  sumSalePrice: Number;
+  profit: Number;
 }
 export const BestSeller: NextPageWithLayout = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -51,7 +50,7 @@ export const BestSeller: NextPageWithLayout = () => {
           <React.Fragment>
             <Image
               preview={false}
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsyz5moQV9LR5P7gEmg51wUe2iq35A0GcbCw&usqp=CAU"
+              src="https://thumbsnap.com/i/TMfukg2s.jpg"
               alt=""
               width={"35px"}
               height={"100%"}
@@ -64,24 +63,20 @@ export const BestSeller: NextPageWithLayout = () => {
         dataIndex: "product",
       },
       {
-        title: "Loại",
-        dataIndex: "type",
+        title: "Số lượng đã bán",
+        dataIndex: "countSale",
       },
       {
-        title: "Nhãn hiệu",
-        dataIndex: "brand",
+        title: "Tổng tiền nhập",
+        dataIndex: "sumImPrice",
       },
       {
-        title: "Có thể bán",
-        dataIndex: "sales",
+        title: "Doanh thu",
+        dataIndex: "sumSalePrice",
       },
       {
-        title: "Trạng thái",
-        dataIndex: "status",
-      },
-      {
-        title: "Ngày nhập",
-        dataIndex: "import",
+        title: "Lợi nhuận",
+        dataIndex: "profit",
       },
     ],
     []
@@ -92,12 +87,11 @@ export const BestSeller: NextPageWithLayout = () => {
     data.push({
       key: i,
       image: `London, Park Lane no. ${i}`,
-      product: `Sản phẩm` + i,
-      type: `Áo`,
-      brand: `Gucci`,
-      sales: `London, Park Lane no. ${i}`,
-      status: `Đang bán`,
-      import: `20/01/2002`,
+      product: `Máy tính bảng`,
+      countSale: 100 + i * 12,
+      sumImPrice: 100,
+      sumSalePrice: 100,
+      profit: 100,
     });
   }
 
